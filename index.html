@@ -123,6 +123,7 @@
 </head>
 <body class="font-sans pb-[100px] max-w-md mx-auto min-h-screen relative shadow-2xl border-x border-lavender-200/50">
 
+    <!-- Toast 容器 -->
     <div id="toast-container"></div>
 
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
@@ -374,7 +375,7 @@
                 <h4 id="pv-title" class="font-bold text-sm text-lavender-800 truncate pr-4">憑證預覽</h4>
                 <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
             </div>
-            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[260px] flex items-center justify-center bg-lavender-50 rounded-2xl p-2 mb-3 border border-lavender-100">
+            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100">
                 <!-- 動態載入憑證內容 -->
             </div>
             <div class="flex gap-2">
@@ -457,6 +458,13 @@
         const DB_VERSION = 1;
         const STORE_NAME = 'vouchers';
 
+        // 內建 PDF 憑證對應表
+        const PRESET_DOCS = {
+            'd1_i2': [{ id: 'preset_d1_i2', itemId: 'd1_i2', name: '泰文訂單.pdf', type: 'preset/pdf', presetKey: 'hotel' }],
+            'd2_i1': [{ id: 'preset_d2_i1', itemId: 'd2_i1', name: 'safari world包車.pdf', type: 'preset/pdf', presetKey: 'safari' }],
+            'd3_i5': [{ id: 'preset_d3_i5', itemId: 'd3_i5', name: 'Rajada拳擊.pdf', type: 'preset/pdf', presetKey: 'boxing' }]
+        };
+
         function getDB() {
             return new Promise((resolve, reject) => {
                 const req = indexedDB.open(DB_NAME, DB_VERSION);
@@ -492,6 +500,12 @@
                 req.onsuccess = () => resolve(req.result || []);
                 req.onerror = () => reject(req.error);
             });
+        }
+
+        async function getDocsForCard(itemId) {
+            const userDocs = await dbGetDocs(itemId);
+            const presets = PRESET_DOCS[itemId] || [];
+            return [...presets, ...userDocs];
         }
 
         async function dbGetAllDocs() {
@@ -642,10 +656,16 @@
                 }
             }
 
-            const allDocs = await dbGetAllDocs();
+            const allUserDocs = await dbGetAllDocs();
             const docsCountMap = {};
-            allDocs.forEach(d => {
+            
+            allUserDocs.forEach(d => {
                 docsCountMap[d.itemId] = (docsCountMap[d.itemId] || 0) + 1;
+            });
+
+            // 加入內建 PDF 憑證數量
+            Object.keys(PRESET_DOCS).forEach(itemId => {
+                docsCountMap[itemId] = (docsCountMap[itemId] || 0) + PRESET_DOCS[itemId].length;
             });
 
             const list = document.getElementById('schedule-list');
@@ -671,8 +691,8 @@
                 let voucherBadgeHtml = '';
                 if (docCount > 0) {
                     voucherBadgeHtml = `
-                        <div class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2">
-                            <span>📄 已附加 ${docCount} 份憑證</span>
+                        <div onclick="event.stopPropagation(); openNoteModal('${dayNum}', '${idx}', '${item.title}', '${item.time}')" class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 hover:bg-dustypink-200 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2 shadow-sm transition active:scale-95 cursor-pointer">
+                            <span>📄 已內嵌憑證檔案 (${docCount} 份 - 點擊查看)</span>
                         </div>
                     `;
                 }
@@ -760,7 +780,7 @@
         async function renderModalDocs(itemId) {
             const listEl = document.getElementById('m-doc-list');
             listEl.innerHTML = '';
-            const docs = await dbGetDocs(itemId);
+            const docs = await getDocsForCard(itemId);
 
             if (docs.length === 0) {
                 listEl.innerHTML = '<div class="text-[11px] text-lavender-400 italic py-1 text-center">尚未上傳任何憑證</div>';
@@ -768,18 +788,21 @@
             }
 
             docs.forEach(doc => {
-                const isPdf = doc.type.includes('pdf');
-                const icon = isPdf ? '📄' : '🖼️';
-                
+                const isPreset = doc.id.startsWith('preset_');
+                const icon = '📄';
+                const tagHtml = isPreset ? '<span class="bg-dustypink-100 text-dustypink-600 text-[9px] font-bold px-1.5 py-0.5 rounded ml-1">內建憑證</span>' : '';
+                const deleteBtnHtml = isPreset ? '' : `<button onclick="removeDoc('${doc.id}', '${itemId}')" class="w-6 h-6 flex items-center justify-center text-lavender-300 hover:text-red-500 rounded transition text-xs">✕</button>`;
+
                 listEl.innerHTML += `
                     <div class="flex items-center justify-between bg-white border border-lavender-200 p-2.5 rounded-xl shadow-sm">
                         <div class="flex items-center gap-2 overflow-hidden flex-1 mr-2">
                             <span class="text-base flex-none">${icon}</span>
                             <span class="text-xs text-lavender-800 font-medium truncate">${doc.name}</span>
+                            ${tagHtml}
                         </div>
                         <div class="flex items-center gap-1.5 flex-none">
-                            <button onclick="viewDoc('${doc.id}')" class="px-2.5 py-1 bg-lavender-500 text-white rounded-lg text-[10px] font-bold hover:bg-lavender-600 transition active:scale-95">查看</button>
-                            <button onclick="removeDoc('${doc.id}', '${itemId}')" class="w-6 h-6 flex items-center justify-center text-lavender-300 hover:text-red-500 rounded transition text-xs">✕</button>
+                            <button onclick="viewDoc('${doc.id}')" class="px-2.5 py-1 bg-lavender-500 text-white rounded-lg text-[10px] font-bold hover:bg-lavender-600 transition active:scale-95 shadow-sm">查看</button>
+                            ${deleteBtnHtml}
                         </div>
                     </div>
                 `;
@@ -812,7 +835,155 @@
 
         let activeBlobUrl = null;
 
+        // 產生內建憑證 HTML
+        function getPresetVoucherHtml(presetKey) {
+            if (presetKey === 'hotel') {
+                return `
+                    <div class="p-4 bg-white rounded-xl text-left border border-lavender-200 text-xs space-y-3 font-sans shadow-sm">
+                        <div class="flex justify-between items-center border-b pb-2 border-lavender-200">
+                            <span class="font-bold text-sm text-blue-700">Trip.com เอกสารเช็คอิน (Hotel Voucher)</span>
+                            <span class="bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded text-[10px]">ชำระเงินแล้ว 已付款</span>
+                        </div>
+                        <div class="bg-lavender-50 p-3 rounded-xl border border-lavender-200 space-y-1">
+                            <div class="font-bold text-sm text-lavender-800">แกรนด์ เซนเตอร์ พอยต์ สุรวงศ์</div>
+                            <div class="text-[11px] text-lavender-600 font-medium">Grande Centre Point Surawong Bangkok</div>
+                            <div class="text-[11px] text-lavender-500">ที่อยู่: ถ.สุรวงศ์, 299, เขตบางรัก, กรุงเทพฯ, 10500</div>
+                            <div class="text-[11px] text-lavender-500">โทรศัพท์: +66-2-0795888</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] bg-white p-2.5 rounded-lg border border-gray-200">
+                            <div><span class="text-gray-400 block text-[10px]">หมายเลขยืนยัน (Confirm No):</span><strong class="text-gray-800">128726</strong></div>
+                            <div><span class="text-gray-400 block text-[10px]">รหัส PIN:</span><strong class="text-gray-800">7779</strong></div>
+                            <div class="col-span-2 pt-1 border-t border-gray-100"><span class="text-gray-400 block text-[10px]">หมายเลขการจอง (Booking No):</span><strong class="text-gray-800">1616332029793183</strong></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-[11px]">
+                            <div class="bg-lavender-50 p-2.5 rounded-xl border border-lavender-200">
+                                <span class="text-lavender-500 block text-[10px]">เช็คอิน Check-in</span>
+                                <strong class="text-lavender-800 text-xs">10 ก.ย. 2026</strong><br>หลัง 14:00 (เวลาท้องถิ่น)
+                            </div>
+                            <div class="bg-lavender-50 p-2.5 rounded-xl border border-lavender-200">
+                                <span class="text-lavender-500 block text-[10px]">เช็คเอาท์ Check-out</span>
+                                <strong class="text-lavender-800 text-xs">14 ก.ย. 2026</strong><br>ก่อน 12:00 (เวลาท้องถิ่น)
+                            </div>
+                        </div>
+                        <div class="border-t pt-2.5 space-y-1.5 text-[11px] text-lavender-700">
+                            <div><strong>ผู้เข้าพัก (Lead Guest):</strong> YUHSIN LIU (成人 2 人)</div>
+                            <div><strong>ห้องพัก (Room):</strong> 豪華特大雙人床房 (Deluxe King Bed) • 1 房 4 晚</div>
+                            <div><strong>金額 (Total Paid):</strong> TWD 13,382 (已線上預付全額)</div>
+                            <div class="text-dustypink-600 bg-dustypink-50 p-2.5 rounded-xl border border-dustypink-200 mt-2">
+                                🎁 <strong>包裝包含服務：</strong><br>
+                                • Mini bar 免費 (1 次)<br>
+                                • 免費接駁車 A 路線: 飯店 ➔ BTS Sala Daeng Exit 1<br>
+                                • 免費接駁車 B 路線: 飯店 ➔ BTS Saphan Taksin Exit 3
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (presetKey === 'safari') {
+                return `
+                    <div class="p-4 bg-white rounded-xl text-left border border-lavender-200 text-xs space-y-3 font-sans shadow-sm">
+                        <div class="flex justify-between items-center border-b pb-2 border-lavender-200">
+                            <span class="font-bold text-sm text-cyan-600">KKday 旅遊憑證 Voucher</span>
+                            <span class="bg-cyan-50 text-cyan-700 font-bold px-2 py-0.5 rounded text-[10px]">包團專車</span>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="font-bold text-sm text-gray-800">泰國｜曼谷野生動物園包團之旅</div>
+                            <div class="text-[11px] text-gray-500">Bangkok Safari World Private Tour | Thailand</div>
+                        </div>
+                        <div class="bg-lavender-50 p-3 rounded-xl border border-lavender-200 space-y-1.5 text-[11px]">
+                            <div><span class="text-lavender-500">訂單編號 (Booking No):</span> <strong class="text-gray-800">26KK218394966</strong></div>
+                            <div><span class="text-lavender-500">使用日期 (Date):</span> <strong class="text-gray-800">2026-09-11 (五)</strong></div>
+                            <div><span class="text-lavender-500">旅客代表 (Lead Traveler):</span> <strong class="text-gray-800">YUHSIN, LIU</strong> (數量: 2 人)</div>
+                            <div><span class="text-lavender-500">集合時間 (Meeting Time):</span> <strong class="text-dustypink-600 text-xs">08:20 (GMT+07:00)</strong></div>
+                            <div><span class="text-lavender-500">接送地點 (Meeting Point):</span> <strong class="text-gray-800">Grande Centre Point Surawong Bangkok 飯店大廳</strong></div>
+                        </div>
+                        <div class="text-[11px] bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-1 text-amber-900 leading-relaxed">
+                            <div class="font-bold text-amber-800">⚠️ 使用說明與注意事項：</div>
+                            <div>• 現場請向司機出示此憑證</div>
+                            <div>• 長頸鹿露台（海洋公園內自選活動）入場費每人 THB300 請於現場支付</div>
+                            <div>• 每位乘客限攜帶 1 件 20-24 吋行李</div>
+                            <div>• 當地服務商: SST Global (+66 0826890083)</div>
+                        </div>
+                    </div>
+                `;
+            } else if (presetKey === 'boxing') {
+                return `
+                    <div class="p-4 bg-white rounded-xl text-left border border-lavender-200 text-xs space-y-3 font-sans shadow-sm">
+                        <div class="flex justify-between items-center border-b pb-2 border-lavender-200">
+                            <span class="font-bold text-sm text-indigo-900">KKday 門票憑證 Voucher</span>
+                            <span class="bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded text-[10px]">辛哈場邊席</span>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="font-bold text-sm text-gray-800">泰國曼谷｜Rajadamnern 體育場泰拳比賽</div>
+                            <div class="text-[11px] text-gray-500">Muay Thai Boxing at Rajadamnern Stadium in Bangkok</div>
+                        </div>
+                        <div class="bg-lavender-50 p-3 rounded-xl border border-lavender-200 space-y-1.5 text-[11px]">
+                            <div><span class="text-lavender-500">訂單編號 (Booking No):</span> <strong class="text-gray-800">26KK218394366</strong></div>
+                            <div><span class="text-lavender-500">使用日期 (Date):</span> <strong class="text-gray-800">2026-09-12 (六)</strong></div>
+                            <div><span class="text-lavender-500">旅客代表 (Lead Traveler):</span> <strong class="text-gray-800">YUHSIN, LIU</strong> (數量: 2 人)</div>
+                            <div><span class="text-lavender-500">門票方案 (Option):</span> <strong class="text-indigo-800">辛哈拳擊場邊門票 (Singha Ringside Ticket)</strong></div>
+                        </div>
+                        <div class="text-[11px] bg-red-50 p-3 rounded-xl border border-red-200 space-y-1 text-red-900 leading-relaxed">
+                            <div class="font-bold text-red-800">🚨 入場注意事項：</div>
+                            <div>• 現場請出示此憑證兌換入場</div>
+                            <div>• 場內禁止攜帶外來食物及飲料</div>
+                            <div>• 禁止使用閃光燈拍照，嚴禁移動或調換座位</div>
+                            <div>• 場館電話: Rajadamnern Stadium (+66 827230664)</div>
+                        </div>
+                    </div>
+                `;
+            }
+            return '';
+        }
+
         async function viewDoc(docId) {
+            const titleEl = document.getElementById('pv-title');
+            const bodyEl = document.getElementById('pv-body');
+            const dlBtn = document.getElementById('pv-download-btn');
+
+            if (activeBlobUrl) {
+                URL.revokeObjectURL(activeBlobUrl);
+                activeBlobUrl = null;
+            }
+
+            if (docId.startsWith('preset_')) {
+                // 處理內建 PDF 憑證
+                let docObj = null;
+                Object.values(PRESET_DOCS).forEach(arr => {
+                    const found = arr.find(d => d.id === docId);
+                    if (found) docObj = found;
+                });
+
+                if (!docObj) { showToast('找不到該憑證'); return; }
+
+                titleEl.innerText = docObj.name;
+                const innerHtml = getPresetVoucherHtml(docObj.presetKey);
+                bodyEl.innerHTML = innerHtml;
+
+                // 生成獨立 HTML 檔案供開放下載/在新分頁開啟
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${docObj.name}</title>
+                        <script src="https://cdn.tailwindcss.com"><\/script>
+                    </head>
+                    <body class="bg-gray-100 p-4 max-w-md mx-auto min-h-screen flex items-center justify-center">
+                        ${innerHtml}
+                    </body>
+                    </html>
+                `;
+                const blob = new Blob([fullHtml], { type: 'text/html' });
+                activeBlobUrl = URL.createObjectURL(blob);
+                dlBtn.href = activeBlobUrl;
+                dlBtn.download = docObj.name.replace('.pdf', '.html');
+
+                document.getElementById('doc-preview-modal').classList.add('active');
+                return;
+            }
+
+            // 處理使用者上傳之檔案
             const allDocs = await dbGetAllDocs();
             const doc = allDocs.find(d => d.id === docId);
             if (!doc || !doc.blob) {
@@ -820,14 +991,7 @@
                 return;
             }
 
-            if (activeBlobUrl) {
-                URL.revokeObjectURL(activeBlobUrl);
-            }
             activeBlobUrl = URL.createObjectURL(doc.blob);
-
-            const titleEl = document.getElementById('pv-title');
-            const bodyEl = document.getElementById('pv-body');
-            const dlBtn = document.getElementById('pv-download-btn');
 
             titleEl.innerText = doc.name;
             dlBtn.href = activeBlobUrl;
@@ -837,7 +1001,7 @@
             const isImage = doc.type.includes('image');
 
             if (isImage) {
-                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm" alt="憑證圖檔">`;
+                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="憑證圖檔">`;
             } else if (isPdf) {
                 bodyEl.innerHTML = `
                     <object data="${activeBlobUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
