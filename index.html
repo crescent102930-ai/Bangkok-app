@@ -105,6 +105,20 @@
             transform: scale(0.985);
             box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.14);
         }
+
+        /* Safari input WebKit 跑版與超出邊框修復 */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: none;
+        }
+        input, select, textarea {
+            min-width: 0;
+        }
     </style>
 </head>
 <body class="font-sans pb-[100px] max-w-md mx-auto min-h-screen relative shadow-2xl border-x border-lavender-200/50">
@@ -186,10 +200,10 @@
 
             <div class="bg-white p-4 rounded-2xl border border-lavender-200 shadow-sm mb-5">
                 <div class="text-[11px] font-bold text-lavender-600 mb-2">＋ 臨時新增想吃的餐廳</div>
-                <div class="flex gap-2">
-                    <input type="text" id="new-food-name" class="flex-1 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-dustypink-400" placeholder="餐廳名稱...">
-                    <input type="text" id="new-food-note" class="flex-1 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-dustypink-400" placeholder="備註...">
-                    <button onclick="addCustomFood()" class="bg-dustypink-400 text-white px-4 py-2 rounded-xl font-bold active:scale-95 transition">新增</button>
+                <div class="grid grid-cols-7 gap-2">
+                    <input type="text" id="new-food-name" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-dustypink-400" placeholder="餐廳名稱...">
+                    <input type="text" id="new-food-note" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-dustypink-400" placeholder="備註...">
+                    <button onclick="addCustomFood()" class="col-span-1 bg-dustypink-400 text-white rounded-xl font-bold active:scale-95 transition text-xs flex items-center justify-center">新增</button>
                 </div>
             </div>
 
@@ -307,9 +321,9 @@
 
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 mb-6 shadow-sm">
                 <div class="text-[11px] font-bold text-lavender-600 mb-3">＋ 新增消費</div>
-                <div class="flex gap-3 mb-3">
-                    <input type="text" id="exp-name" class="flex-[2] bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="項目 (例: 泰奶)">
-                    <input type="number" id="exp-amount" class="flex-[1] bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="泰銖 ฿">
+                <div class="grid grid-cols-5 gap-2.5 mb-3">
+                    <input type="text" id="exp-name" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="項目 (例: 泰奶)">
+                    <input type="number" id="exp-amount" class="col-span-2 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="泰銖 ฿">
                 </div>
                 <button onclick="addExpense()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">
                     記一筆
