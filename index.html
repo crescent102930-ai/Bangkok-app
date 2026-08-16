@@ -371,6 +371,27 @@
         </div>
     </div>
 
+    <!-- 憑證圖片/PDF 內嵌預覽視窗 -->
+    <div id="doc-preview-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-5 shadow-2xl relative max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center mb-3 pb-2 border-b border-lavender-100">
+                <h4 id="pv-title" class="font-bold text-sm text-lavender-800 truncate pr-4">憑證預覽</h4>
+                <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
+            </div>
+            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[260px] flex items-center justify-center bg-lavender-50 rounded-2xl p-2 mb-3 border border-lavender-100">
+                <!-- 動態載入憑證內容 -->
+            </div>
+            <div class="flex gap-2">
+                <a id="pv-download-btn" href="#" download="" target="_blank" class="flex-1 bg-lavender-500 text-white text-center py-2.5 rounded-xl font-bold text-xs shadow-md active:scale-95 transition flex items-center justify-center gap-1.5">
+                    ⬇️ 下載 / 原檔開啟
+                </a>
+                <button onclick="closeDocPreview()" class="px-4 bg-lavender-100 text-lavender-700 py-2.5 rounded-xl font-bold text-xs active:scale-95 transition">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 新增行程彈跳窗 -->
     <div id="add-schedule-modal" class="modal-overlay fixed inset-0 bg-lavender-900/40 backdrop-blur-sm z-[1000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative">
@@ -793,6 +814,8 @@
             showToast('憑證上傳成功！');
         }
 
+        let activeBlobUrl = null;
+
         async function viewDoc(docId) {
             const allDocs = await dbGetAllDocs();
             const doc = allDocs.find(d => d.id === docId);
@@ -800,8 +823,50 @@
                 showToast('找不到該憑證檔案');
                 return;
             }
-            const blobUrl = URL.createObjectURL(doc.blob);
-            window.open(blobUrl, '_blank');
+
+            if (activeBlobUrl) {
+                URL.revokeObjectURL(activeBlobUrl);
+            }
+            activeBlobUrl = URL.createObjectURL(doc.blob);
+
+            const titleEl = document.getElementById('pv-title');
+            const bodyEl = document.getElementById('pv-body');
+            const dlBtn = document.getElementById('pv-download-btn');
+
+            titleEl.innerText = doc.name;
+            dlBtn.href = activeBlobUrl;
+            dlBtn.download = doc.name;
+
+            const isPdf = doc.type.includes('pdf');
+            const isImage = doc.type.includes('image');
+
+            if (isImage) {
+                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm" alt="憑證圖檔">`;
+            } else if (isPdf) {
+                bodyEl.innerHTML = `
+                    <object data="${activeBlobUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
+                        <iframe src="${activeBlobUrl}" class="w-full h-[55vh] rounded-xl border-0">
+                            <div class="p-4 text-center text-xs text-lavender-600">
+                                手機瀏覽器限制內嵌顯示 PDF<br>
+                                <a href="${activeBlobUrl}" download="${doc.name}" target="_blank" class="text-dustypink-600 underline font-bold mt-2 inline-block">點此直接開啟 / 下載 PDF</a>
+                            </div>
+                        </iframe>
+                    </object>
+                `;
+            } else {
+                bodyEl.innerHTML = `
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-2">📄</div>
+                        <div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('doc-preview-modal').classList.add('active');
+        }
+
+        function closeDocPreview() {
+            document.getElementById('doc-preview-modal').classList.remove('active');
         }
 
         async function removeDoc(docId, itemId) {
