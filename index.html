@@ -123,6 +123,7 @@
 </head>
 <body class="font-sans pb-[100px] max-w-md mx-auto min-h-screen relative shadow-2xl border-x border-lavender-200/50">
 
+    <!-- Toast 容器 -->
     <div id="toast-container"></div>
 
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
@@ -374,7 +375,7 @@
                 <h4 id="pv-title" class="font-bold text-sm text-lavender-800 truncate pr-4">憑證預覽</h4>
                 <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
             </div>
-            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[260px] flex items-center justify-center bg-lavender-50 rounded-2xl p-2 mb-3 border border-lavender-100">
+            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100">
                 <!-- 動態載入憑證內容 -->
             </div>
             <div class="flex gap-2">
@@ -642,9 +643,10 @@
                 }
             }
 
-            const allDocs = await dbGetAllDocs();
+            const allUserDocs = await dbGetAllDocs();
             const docsCountMap = {};
-            allDocs.forEach(d => {
+            
+            allUserDocs.forEach(d => {
                 docsCountMap[d.itemId] = (docsCountMap[d.itemId] || 0) + 1;
             });
 
@@ -671,8 +673,8 @@
                 let voucherBadgeHtml = '';
                 if (docCount > 0) {
                     voucherBadgeHtml = `
-                        <div class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2">
-                            <span>📄 已附加 ${docCount} 份憑證</span>
+                        <div onclick="event.stopPropagation(); openNoteModal('${dayNum}', '${idx}', '${item.title}', '${item.time}')" class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 hover:bg-dustypink-200 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2 shadow-sm transition active:scale-95 cursor-pointer">
+                            <span>📄 已附加憑證 (${docCount} 份 - 點擊查看)</span>
                         </div>
                     `;
                 }
@@ -770,7 +772,7 @@
             docs.forEach(doc => {
                 const isPdf = doc.type.includes('pdf');
                 const icon = isPdf ? '📄' : '🖼️';
-                
+
                 listEl.innerHTML += `
                     <div class="flex items-center justify-between bg-white border border-lavender-200 p-2.5 rounded-xl shadow-sm">
                         <div class="flex items-center gap-2 overflow-hidden flex-1 mr-2">
@@ -778,7 +780,7 @@
                             <span class="text-xs text-lavender-800 font-medium truncate">${doc.name}</span>
                         </div>
                         <div class="flex items-center gap-1.5 flex-none">
-                            <button onclick="viewDoc('${doc.id}')" class="px-2.5 py-1 bg-lavender-500 text-white rounded-lg text-[10px] font-bold hover:bg-lavender-600 transition active:scale-95">查看</button>
+                            <button onclick="viewDoc('${doc.id}')" class="px-2.5 py-1 bg-lavender-500 text-white rounded-lg text-[10px] font-bold hover:bg-lavender-600 transition active:scale-95 shadow-sm">查看</button>
                             <button onclick="removeDoc('${doc.id}', '${itemId}')" class="w-6 h-6 flex items-center justify-center text-lavender-300 hover:text-red-500 rounded transition text-xs">✕</button>
                         </div>
                     </div>
@@ -813,6 +815,16 @@
         let activeBlobUrl = null;
 
         async function viewDoc(docId) {
+            const titleEl = document.getElementById('pv-title');
+            const bodyEl = document.getElementById('pv-body');
+            const dlBtn = document.getElementById('pv-download-btn');
+
+            if (activeBlobUrl) {
+                URL.revokeObjectURL(activeBlobUrl);
+                activeBlobUrl = null;
+            }
+
+            // 處理使用者上傳之檔案
             const allDocs = await dbGetAllDocs();
             const doc = allDocs.find(d => d.id === docId);
             if (!doc || !doc.blob) {
@@ -820,14 +832,7 @@
                 return;
             }
 
-            if (activeBlobUrl) {
-                URL.revokeObjectURL(activeBlobUrl);
-            }
             activeBlobUrl = URL.createObjectURL(doc.blob);
-
-            const titleEl = document.getElementById('pv-title');
-            const bodyEl = document.getElementById('pv-body');
-            const dlBtn = document.getElementById('pv-download-btn');
 
             titleEl.innerText = doc.name;
             dlBtn.href = activeBlobUrl;
@@ -837,7 +842,7 @@
             const isImage = doc.type.includes('image');
 
             if (isImage) {
-                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm" alt="憑證圖檔">`;
+                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="憑證圖檔">`;
             } else if (isPdf) {
                 bodyEl.innerHTML = `
                     <object data="${activeBlobUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
