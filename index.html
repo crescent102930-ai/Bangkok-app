@@ -106,32 +106,34 @@
             box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.14);
         }
 
-        /* Safari input WebKit 跑版與超出邊框修復 */
+        /* Safari input WebKit 修復 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
             margin: 0; 
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-            appearance: none;
-        }
-        input, select, textarea {
-            min-width: 0;
-        }
+        input[type=number] { -moz-appearance: textfield; appearance: none; }
+        input, select, textarea { min-width: 0; }
     </style>
 </head>
 <body class="font-sans pb-[100px] max-w-md mx-auto min-h-screen relative shadow-2xl border-x border-lavender-200/50">
 
-    <!-- Toast 容器 -->
+    <!-- Toast 提示容器 -->
     <div id="toast-container"></div>
 
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-1.5">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
-            <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-                <span class="text-[10px] font-bold text-lavender-700">🇹🇭 BKK Time</span>
-                <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
+            <div class="flex items-center gap-2">
+                <!-- 雲端同步狀態標籤 -->
+                <div id="sync-status" class="bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-[9px] font-bold text-emerald-700">雲端同步中</span>
+                </div>
+                <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+                    <span class="text-[10px] font-bold text-lavender-700">🇹🇭 BKK</span>
+                    <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
+                </div>
             </div>
         </div>
 
@@ -188,7 +190,7 @@
         <div id="tab-food" class="tab-content">
             <div class="mb-4">
                 <h2 class="font-serif text-2xl text-lavender-700 mb-0.5">Food Wishlist</h2>
-                <p class="text-xs text-lavender-500">待吃清單與打卡紀錄</p>
+                <p class="text-xs text-lavender-500">待吃清單與打卡紀錄 (多人即時同步)</p>
             </div>
 
             <div class="bg-white p-4 rounded-2xl border border-lavender-200 shadow-sm mb-5">
@@ -206,7 +208,7 @@
         <!-- TAB 3: 航班 -->
         <div id="tab-flight" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Flight Info</h2>
-            <p class="text-xs text-lavender-500 mb-5">自訂輸入與儲存航班資訊</p>
+            <p class="text-xs text-lavender-500 mb-5">自訂輸入與雲端儲存航班資訊</p>
 
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 shadow-sm mb-4 relative overflow-hidden">
                 <div class="flex items-center gap-2 mb-4">
@@ -255,7 +257,7 @@
             </div>
 
             <button onclick="saveFlights()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">
-                💾 儲存航班資訊
+                💾 儲存航班資訊 (雲端同步)
             </button>
         </div>
 
@@ -317,13 +319,13 @@
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 mb-6 shadow-sm">
-                <div class="text-[11px] font-bold text-lavender-600 mb-3">＋ 新增消費</div>
+                <div class="text-[11px] font-bold text-lavender-600 mb-3">＋ 新增消費 (共同記帳)</div>
                 <div class="grid grid-cols-5 gap-2.5 mb-3">
                     <input type="text" id="exp-name" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="項目 (例: 泰奶)">
                     <input type="number" id="exp-amount" class="col-span-2 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="泰銖 ฿">
                 </div>
                 <button onclick="addExpense()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">
-                    記一筆
+                    記一筆 (同步給旅伴)
                 </button>
             </div>
 
@@ -363,7 +365,7 @@
             <input type="hidden" id="m-day">
             <input type="hidden" id="m-idx">
             <button onclick="saveNote()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">
-                💾 儲存資訊
+                💾 儲存並同步
             </button>
         </div>
     </div>
@@ -376,7 +378,6 @@
                 <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
             </div>
             <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100">
-                <!-- 動態載入憑證內容 -->
             </div>
             <div class="flex gap-2">
                 <a id="pv-download-btn" href="#" download="" target="_blank" class="flex-1 bg-lavender-500 text-white text-center py-2.5 rounded-xl font-bold text-xs shadow-md active:scale-95 transition flex items-center justify-center gap-1.5">
@@ -424,7 +425,7 @@
             
             <input type="hidden" id="add-s-day">
             <button onclick="saveNewSchedule()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-lg shadow-dustypink-400/30 hover:bg-dustypink-600 active:scale-95 transition">
-                ＋ 加入行程表
+                ＋ 加入行程表 (即時同步)
             </button>
         </div>
     </div>
@@ -452,6 +453,96 @@
             <span class="text-[10px] font-bold">記帳</span>
         </button>
     </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase 雲端初始化配置
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bangkok-2026-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : { apiKey: "", authDomain: `${appId}.firebaseapp.com`, projectId: appId };
+
+        let db = null;
+        let auth = null;
+        let isCloudActive = false;
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+            isCloudActive = true;
+        } catch (e) {
+            console.log("進入備用本地模式", e);
+        }
+
+        // 雲端即時同步資料路徑 (與所有連線夥伴共享此 Trip ID)
+        const tripDocRef = isCloudActive ? doc(db, 'artifacts', appId, 'public', 'data', 'trips', 'bkk2026_shared_session') : null;
+
+        // 監聽雲端即時異動
+        if (tripDocRef) {
+            onSnapshot(tripDocRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    if (data.scheduleData) { scheduleData = data.scheduleData; localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); }
+                    if (data.notesData) { notesData = data.notesData; localStorage.setItem('bk26_notes', JSON.stringify(notesData)); }
+                    if (data.foodWishlist) { foodWishlist = data.foodWishlist; localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); }
+                    if (data.foodData) { foodData = data.foodData; localStorage.setItem('bk26_food', JSON.stringify(foodData)); }
+                    if (data.expenses) { expenses = data.expenses; localStorage.setItem('bk26_expense', JSON.stringify(expenses)); }
+                    if (data.flight) { 
+                        const flight = data.flight;
+                        if (document.getElementById('f-go-no')) {
+                            document.getElementById('f-go-no').value = flight.goN || '';
+                            document.getElementById('f-go-dep').value = flight.goT || '';
+                            document.getElementById('f-go-arr').value = flight.goA || '';
+                            document.getElementById('f-back-no').value = flight.bkN || '';
+                            document.getElementById('f-back-dep').value = flight.bkT || '';
+                            document.getElementById('f-back-arr').value = flight.bkA || '';
+                        }
+                    }
+
+                    // 重新刷新目前頁面畫面
+                    if (window.selectDay) window.selectDay(currentDay);
+                    if (window.renderFood) window.renderFood();
+                    if (window.renderExpenses) window.renderExpenses();
+                }
+            }, (err) => console.log("Cloud sync listener error", err));
+        }
+
+        // 全局雲端同步推送函式
+        window.syncToCloud = async function() {
+            if (!isCloudActive || !tripDocRef) return;
+            const payload = {
+                scheduleData,
+                notesData,
+                foodWishlist,
+                foodData,
+                expenses,
+                flight: {
+                    goN: document.getElementById('f-go-no')?.value || '',
+                    goT: document.getElementById('f-go-dep')?.value || '',
+                    goA: document.getElementById('f-go-arr')?.value || '',
+                    bkN: document.getElementById('f-back-no')?.value || '',
+                    bkT: document.getElementById('f-back-dep')?.value || '',
+                    bkA: document.getElementById('f-back-arr')?.value || ''
+                },
+                updatedAt: Date.now()
+            };
+            try {
+                await setDoc(tripDocRef, payload, { merge: true });
+            } catch(err) {
+                console.log("Cloud sync write error", err);
+            }
+        };
+    </script>
 
     <script>
         const DB_NAME = 'Bangkok2026DocsDB';
@@ -708,6 +799,7 @@
             event.stopPropagation();
             scheduleData[dayNum].splice(idx, 1);
             try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             selectDay(dayNum);
             showToast('已刪除該筆行程');
         }
@@ -737,6 +829,7 @@
 
             scheduleData[dayNum].push({ time, title, type, note });
             try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             
             closeAddModal();
             selectDay(dayNum);
@@ -824,7 +917,6 @@
                 activeBlobUrl = null;
             }
 
-            // 處理使用者上傳之檔案
             const allDocs = await dbGetAllDocs();
             const doc = allDocs.find(d => d.id === docId);
             if (!doc || !doc.blob) {
@@ -888,6 +980,7 @@
             else { notesData[id] = text; }
             
             try { localStorage.setItem('bk26_notes', JSON.stringify(notesData)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             closeNoteModal();
             selectDay(parseInt(dayNum));
             showToast('行程資訊已更新');
@@ -920,6 +1013,7 @@
         function toggleFood(id) {
             foodData[id] = !foodData[id];
             try { localStorage.setItem('bk26_food', JSON.stringify(foodData)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             renderFood();
         }
 
@@ -931,6 +1025,7 @@
             const newId = 'fw_c_' + Date.now();
             foodWishlist.push({ id: newId, name, note });
             try { localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             
             document.getElementById('new-food-name').value = '';
             document.getElementById('new-food-note').value = '';
@@ -941,6 +1036,7 @@
         function deleteFood(index) {
             foodWishlist.splice(index, 1);
             try { localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             renderFood();
         }
 
@@ -949,7 +1045,9 @@
                 goN: document.getElementById('f-go-no').value, goT: document.getElementById('f-go-dep').value, goA: document.getElementById('f-go-arr').value,
                 bkN: document.getElementById('f-back-no').value, bkT: document.getElementById('f-back-dep').value, bkA: document.getElementById('f-back-arr').value
             };
-            try { localStorage.setItem('bk26_flight', JSON.stringify(data)); showToast('航班資訊儲存成功'); } catch(e){}
+            try { localStorage.setItem('bk26_flight', JSON.stringify(data)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
+            showToast('航班資訊儲存成功');
         }
 
         function speakThai(text) {
@@ -981,6 +1079,7 @@
             
             expenses.unshift({ id: Date.now(), name, amt });
             try { localStorage.setItem('bk26_expense', JSON.stringify(expenses)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             document.getElementById('exp-name').value = ''; document.getElementById('exp-amount').value = '';
             renderExpenses();
             showToast('已記錄一筆花費');
@@ -989,6 +1088,7 @@
         function delExpense(id) {
             expenses = expenses.filter(e => e.id !== id);
             try { localStorage.setItem('bk26_expense', JSON.stringify(expenses)); } catch(e){}
+            if (window.syncToCloud) window.syncToCloud();
             renderExpenses();
             showToast('記錄已刪除');
         }
