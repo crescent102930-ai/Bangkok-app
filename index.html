@@ -106,7 +106,7 @@
             box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.14);
         }
 
-        /* Safari input WebKit 修復 */
+        /* Safari WebKit 相容修復 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -118,14 +118,12 @@
 </head>
 <body class="font-sans pb-[100px] max-w-md mx-auto min-h-screen relative shadow-2xl border-x border-lavender-200/50">
 
-    <!-- Toast 提示容器 -->
     <div id="toast-container"></div>
 
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-1.5">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
             <div class="flex items-center gap-2">
-                <!-- 雲端同步狀態標籤 -->
                 <div id="sync-status" class="bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-[9px] font-bold text-emerald-700">雲端同步中</span>
@@ -348,7 +346,6 @@
             <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">預約資訊 / 備註 (貼上網址自動變連結)</label>
             <textarea id="m-note" class="w-full h-24 bg-lavender-50 border border-lavender-200 rounded-xl p-3 text-sm focus:outline-none focus:border-dustypink-400 resize-none mb-4" placeholder="在此輸入筆記..."></textarea>
             
-            <!-- 憑證/門票上傳區域 -->
             <div class="border-t border-lavender-100 pt-3 mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <label class="text-[11px] text-lavender-700 font-bold flex items-center gap-1">
@@ -362,7 +359,7 @@
                     <span>📄 ＋ 上傳 PDF 或圖片憑證</span>
                     <input type="file" id="m-doc-upload" accept="application/pdf,image/*" onchange="handleDocUpload(event)" class="hidden">
                 </label>
-                <div class="text-[10px] text-lavender-400 text-center mt-1">憑證保存在手機本機，離線時亦可開啟</div>
+                <div class="text-[10px] text-lavender-400 text-center mt-1">憑證將自動備份至本機與雲端庫</div>
             </div>
 
             <input type="hidden" id="m-day">
@@ -462,7 +459,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase 雲端初始化配置
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'bangkok-2026-app';
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
             ? JSON.parse(__firebase_config) 
@@ -487,15 +483,16 @@
             console.log("進入備用本地模式", e);
         }
 
-        // 雲端即時同步資料路徑 (與所有連線夥伴共享此 Trip ID)
         const tripDocRef = isCloudActive ? doc(db, 'artifacts', appId, 'public', 'data', 'trips', 'bkk2026_shared_session') : null;
 
-        // 監聽雲端即時異動
         if (tripDocRef) {
             onSnapshot(tripDocRef, (snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.data();
-                    if (data.scheduleData) { scheduleData = data.scheduleData; localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); }
+                    if (data.scheduleData && Object.keys(data.scheduleData).length > 0) { 
+                        scheduleData = data.scheduleData; 
+                        localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); 
+                    }
                     if (data.notesData) { notesData = data.notesData; localStorage.setItem('bk26_notes', JSON.stringify(notesData)); }
                     if (data.foodWishlist) { foodWishlist = data.foodWishlist; localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); }
                     if (data.foodData) { foodData = data.foodData; localStorage.setItem('bk26_food', JSON.stringify(foodData)); }
@@ -512,7 +509,6 @@
                         }
                     }
 
-                    // 重新刷新目前頁面畫面
                     if (window.selectDay) window.selectDay(currentDay);
                     if (window.renderFood) window.renderFood();
                     if (window.renderExpenses) window.renderExpenses();
@@ -520,7 +516,6 @@
             }, (err) => console.log("Cloud sync listener error", err));
         }
 
-        // 監聽雲端憑證檔案 (Public Vouchers Collection)
         const vouchersColRef = isCloudActive ? collection(db, 'artifacts', appId, 'public', 'data', 'vouchers') : null;
         if (vouchersColRef) {
             onSnapshot(vouchersColRef, (snapshot) => {
@@ -538,7 +533,6 @@
             }, (err) => console.log("Voucher cloud sync error", err));
         }
 
-        // 全局憑證雲端儲存與刪除函式
         window.saveVoucherToCloud = async function(docObj) {
             if (!isCloudActive || !db) return;
             try {
@@ -559,7 +553,6 @@
             }
         };
 
-        // 全局雲端同步推送函式
         window.syncToCloud = async function() {
             if (!isCloudActive || !tripDocRef) return;
             const payload = {
@@ -607,49 +600,58 @@
         }
 
         async function dbSaveDoc(doc) {
-            const db = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).put(doc);
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
+            try {
+                const db = await getDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readwrite');
+                    tx.objectStore(STORE_NAME).put(doc);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            } catch(e) { console.log(e); }
         }
 
         async function dbGetDocs(itemId) {
-            const db = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const store = tx.objectStore(STORE_NAME);
-                const index = store.index('itemId');
-                const req = index.getAll(itemId);
-                req.onsuccess = () => resolve(req.result || []);
-                req.onerror = () => reject(req.error);
-            });
+            try {
+                const db = await getDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readonly');
+                    const store = tx.objectStore(STORE_NAME);
+                    const index = store.index('itemId');
+                    const req = index.getAll(itemId);
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch(e) { return []; }
         }
 
         async function dbGetAllDocs() {
-            const db = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const req = tx.objectStore(STORE_NAME).getAll();
-                req.onsuccess = () => resolve(req.result || []);
-                req.onerror = () => reject(req.error);
-            });
+            try {
+                const db = await getDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readonly');
+                    const req = tx.objectStore(STORE_NAME).getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch(e) { return []; }
         }
 
         async function dbDeleteDoc(id) {
-            const db = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).delete(id);
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
+            try {
+                const db = await getDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction(STORE_NAME, 'readwrite');
+                    tx.objectStore(STORE_NAME).delete(id);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            } catch(e) { console.log(e); }
         }
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
+            if(!container) return;
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.innerText = message;
@@ -674,50 +676,57 @@
         }
 
         setInterval(() => {
-            const options = { timeZone: 'Asia/Bangkok', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('bkk-clock').innerText = new Date().toLocaleTimeString('en-US', options);
+            const clockEl = document.getElementById('bkk-clock');
+            if(clockEl) {
+                const options = { timeZone: 'Asia/Bangkok', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                clockEl.innerText = new Date().toLocaleTimeString('en-US', options);
+            }
         }, 1000);
 
-        let scheduleData = {
-            1: [
-                { time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" },
-                { time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" },
-                { time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" },
-                { time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" },
-                { time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" },
-                { time: "17:00 - 20:00", title: "晚餐：Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" },
-                { time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" }
-            ],
-            2: [
-                { time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" },
-                { time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" },
-                { time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" },
-                { time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" },
-                { time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" }
-            ],
-            3: [
-                { time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" },
-                { time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" },
-                { time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" },
-                { time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" },
-                { time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" },
-                { time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" },
-                { time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" }
-            ],
-            4: [
-                { time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" },
-                { time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" },
-                { time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" },
-                { time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" },
-                { time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" }
-            ],
-            5: [
-                { time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" },
-                { time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" },
-                { time: "14:00 - 14:40", title: "前往 BKK 機場", note: "ARL 機場快線", type: "transport" },
-                { time: "17:50 - 22:40", title: "航班返台", note: "飛抵桃園機場，接送回家", type: "flight" }
-            ]
-        };
+        function getDefaultSchedules() {
+            return {
+                1: [
+                    { time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" },
+                    { time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" },
+                    { time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" },
+                    { time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" },
+                    { time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" },
+                    { time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" },
+                    { time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" }
+                ],
+                2: [
+                    { time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" },
+                    { time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" },
+                    { time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" },
+                    { time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" },
+                    { time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" }
+                ],
+                3: [
+                    { time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" },
+                    { time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" },
+                    { time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" },
+                    { time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" },
+                    { time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" },
+                    { time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" },
+                    { time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" }
+                ],
+                4: [
+                    { time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" },
+                    { time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" },
+                    { time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" },
+                    { time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" },
+                    { time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" }
+                ],
+                5: [
+                    { time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" },
+                    { time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" },
+                    { time: "14:00 - 14:40", title: "前往 BKK 機場", note: "ARL 機場快線", type: "transport" },
+                    { time: "17:50 - 22:40", title: "航班返台", note: "飛抵桃園機場，接送回家", type: "flight" }
+                ]
+            };
+        }
+
+        let scheduleData = getDefaultSchedules();
 
         let foodWishlist = [
             { id: 'fw1', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon 炒河粉" },
@@ -736,22 +745,22 @@
         window.onload = async () => {
             try {
                 const savedSchedule = JSON.parse(localStorage.getItem('bk26_schedule_v2'));
-                if (savedSchedule) scheduleData = savedSchedule;
+                if (savedSchedule && Object.keys(savedSchedule).length > 0) scheduleData = savedSchedule;
 
                 notesData = JSON.parse(localStorage.getItem('bk26_notes')) || {};
                 foodData = JSON.parse(localStorage.getItem('bk26_food')) || {};
                 
                 const savedCustomFood = JSON.parse(localStorage.getItem('bk26_custom_food'));
-                if (savedCustomFood) foodWishlist = savedCustomFood;
+                if (savedCustomFood && savedCustomFood.length > 0) foodWishlist = savedCustomFood;
 
                 const flight = JSON.parse(localStorage.getItem('bk26_flight'));
                 if(flight) {
-                    document.getElementById('f-go-no').value = flight.goN || '';
-                    document.getElementById('f-go-dep').value = flight.goT || '';
-                    document.getElementById('f-go-arr').value = flight.goA || '';
-                    document.getElementById('f-back-no').value = flight.bkN || '';
-                    document.getElementById('f-back-dep').value = flight.bkT || '';
-                    document.getElementById('f-back-arr').value = flight.bkA || '';
+                    if(document.getElementById('f-go-no')) document.getElementById('f-go-no').value = flight.goN || '';
+                    if(document.getElementById('f-go-dep')) document.getElementById('f-go-dep').value = flight.goT || '';
+                    if(document.getElementById('f-go-arr')) document.getElementById('f-go-arr').value = flight.goA || '';
+                    if(document.getElementById('f-back-no')) document.getElementById('f-back-no').value = flight.bkN || '';
+                    if(document.getElementById('f-back-dep')) document.getElementById('f-back-dep').value = flight.bkT || '';
+                    if(document.getElementById('f-back-arr')) document.getElementById('f-back-arr').value = flight.bkA || '';
                 }
             } catch(e) {}
             
@@ -767,7 +776,8 @@
                 n.classList.add('text-lavender-300');
             });
             
-            document.getElementById('tab-' + tabId).classList.add('active');
+            const targetTab = document.getElementById('tab-' + tabId);
+            if(targetTab) targetTab.classList.add('active');
             el.classList.add('text-lavender-600');
             el.classList.remove('text-lavender-300');
         }
@@ -776,26 +786,34 @@
             currentDay = dayNum;
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById('btn-day-' + i);
-                if (i === dayNum) {
-                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-[0_8px_16px_rgba(122,107,130,0.35)] text-center transition active:scale-95";
-                    btn.querySelector('.text-lavender-400')?.classList.replace('text-lavender-400', 'text-white/80');
-                } else {
-                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95";
-                    btn.querySelector('.text-white\\/80')?.classList.replace('text-white/80', 'text-lavender-400');
+                if (btn) {
+                    if (i === dayNum) {
+                        btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-[0_8px_16px_rgba(122,107,130,0.35)] text-center transition active:scale-95";
+                        btn.querySelector('.text-lavender-400')?.classList.replace('text-lavender-400', 'text-white/80');
+                    } else {
+                        btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95";
+                        btn.querySelector('.text-white\\/80')?.classList.replace('text-white/80', 'text-lavender-400');
+                    }
                 }
             }
 
-            const allUserDocs = await dbGetAllDocs();
+            let allDocs = [];
+            try {
+                allDocs = await dbGetAllDocs();
+            } catch(e) {}
+
             const docsCountMap = {};
-            
-            allUserDocs.forEach(d => {
-                docsCountMap[d.itemId] = (docsCountMap[d.itemId] || 0) + 1;
+            allDocs.forEach(d => {
+                if(d && d.itemId) docsCountMap[d.itemId] = (docsCountMap[d.itemId] || 0) + 1;
             });
 
             const list = document.getElementById('schedule-list');
+            if(!list) return;
             list.innerHTML = '';
             
-            scheduleData[dayNum].forEach((item, idx) => {
+            const dayItems = (scheduleData && scheduleData[dayNum]) ? scheduleData[dayNum] : (getDefaultSchedules()[dayNum] || []);
+
+            dayItems.forEach((item, idx) => {
                 let icon = "📍";
                 if (item.type === 'food') icon = "🍽️";
                 if (item.type === 'transport' || item.type === 'flight') icon = "✈️";
@@ -848,11 +866,13 @@
 
         function deleteSchedule(dayNum, idx, event) {
             event.stopPropagation();
-            scheduleData[dayNum].splice(idx, 1);
-            try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            selectDay(dayNum);
-            showToast('已刪除該筆行程');
+            if(scheduleData[dayNum]) {
+                scheduleData[dayNum].splice(idx, 1);
+                try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
+                if (window.syncToCloud) window.syncToCloud();
+                selectDay(dayNum);
+                showToast('已刪除該筆行程');
+            }
         }
 
         function openAddModal(dayNum) {
@@ -878,6 +898,7 @@
                 showToast('請填寫時間與行程標題'); return;
             }
 
+            if(!scheduleData[dayNum]) scheduleData[dayNum] = [];
             scheduleData[dayNum].push({ time, title, type, note });
             try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
             if (window.syncToCloud) window.syncToCloud();
@@ -905,6 +926,7 @@
 
         async function renderModalDocs(itemId) {
             const listEl = document.getElementById('m-doc-list');
+            if(!listEl) return;
             listEl.innerHTML = '';
             const docs = await dbGetDocs(itemId);
 
@@ -1043,71 +1065,6 @@
             showToast('憑證已刪除（同步雲端）');
         }
 
-        let activeBlobUrl = null;
-
-        async function viewDoc(docId) {
-            const titleEl = document.getElementById('pv-title');
-            const bodyEl = document.getElementById('pv-body');
-            const dlBtn = document.getElementById('pv-download-btn');
-
-            if (activeBlobUrl) {
-                URL.revokeObjectURL(activeBlobUrl);
-                activeBlobUrl = null;
-            }
-
-            const allDocs = await dbGetAllDocs();
-            const doc = allDocs.find(d => d.id === docId);
-            if (!doc || !doc.blob) {
-                showToast('找不到該憑證檔案');
-                return;
-            }
-
-            activeBlobUrl = URL.createObjectURL(doc.blob);
-
-            titleEl.innerText = doc.name;
-            dlBtn.href = activeBlobUrl;
-            dlBtn.download = doc.name;
-
-            const isPdf = doc.type.includes('pdf');
-            const isImage = doc.type.includes('image');
-
-            if (isImage) {
-                bodyEl.innerHTML = `<img src="${activeBlobUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="憑證圖檔">`;
-            } else if (isPdf) {
-                bodyEl.innerHTML = `
-                    <object data="${activeBlobUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
-                        <iframe src="${activeBlobUrl}" class="w-full h-[55vh] rounded-xl border-0">
-                            <div class="p-4 text-center text-xs text-lavender-600">
-                                手機瀏覽器限制內嵌顯示 PDF<br>
-                                <a href="${activeBlobUrl}" download="${doc.name}" target="_blank" class="text-dustypink-600 underline font-bold mt-2 inline-block">點此直接開啟 / 下載 PDF</a>
-                            </div>
-                        </iframe>
-                    </object>
-                `;
-            } else {
-                bodyEl.innerHTML = `
-                    <div class="text-center p-6">
-                        <div class="text-4xl mb-2">📄</div>
-                        <div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div>
-                    </div>
-                `;
-            }
-
-            document.getElementById('doc-preview-modal').classList.add('active');
-        }
-
-        function closeDocPreview() {
-            document.getElementById('doc-preview-modal').classList.remove('active');
-        }
-
-        async function removeDoc(docId, itemId) {
-            await dbDeleteDoc(docId);
-            await renderModalDocs(itemId);
-            const dayNum = parseInt(document.getElementById('m-day').value);
-            selectDay(dayNum);
-            showToast('憑證已刪除');
-        }
-
         function saveNote() {
             const dayNum = document.getElementById('m-day').value;
             const idx = document.getElementById('m-idx').value;
@@ -1126,6 +1083,7 @@
 
         function renderFood() {
             const list = document.getElementById('food-list');
+            if(!list) return;
             list.innerHTML = '';
             
             foodWishlist.forEach((f, index) => {
@@ -1180,8 +1138,12 @@
 
         function saveFlights() {
             const data = {
-                goN: document.getElementById('f-go-no').value, goT: document.getElementById('f-go-dep').value, goA: document.getElementById('f-go-arr').value,
-                bkN: document.getElementById('f-back-no').value, bkT: document.getElementById('f-back-dep').value, bkA: document.getElementById('f-back-arr').value
+                goN: document.getElementById('f-go-no')?.value || '', 
+                goT: document.getElementById('f-go-dep')?.value || '', 
+                goA: document.getElementById('f-go-arr')?.value || '',
+                bkN: document.getElementById('f-back-no')?.value || '', 
+                bkT: document.getElementById('f-back-dep')?.value || '', 
+                bkA: document.getElementById('f-back-arr')?.value || ''
             };
             try { localStorage.setItem('bk26_flight', JSON.stringify(data)); } catch(e){}
             if (window.syncToCloud) window.syncToCloud();
@@ -1233,6 +1195,7 @@
 
         function renderExpenses() {
             const list = document.getElementById('expense-list');
+            if(!list) return;
             list.innerHTML = '';
             let total = 0;
             expenses.forEach(e => {
@@ -1247,8 +1210,10 @@
                     </div>
                 `;
             });
-            document.getElementById('total-thb').innerText = total.toLocaleString();
-            document.getElementById('total-twd').innerText = Math.round(total * 0.92).toLocaleString();
+            const thbEl = document.getElementById('total-thb');
+            const twdEl = document.getElementById('total-twd');
+            if(thbEl) thbEl.innerText = total.toLocaleString();
+            if(twdEl) twdEl.innerText = Math.round(total * 0.92).toLocaleString();
         }
     </script>
 </body>
