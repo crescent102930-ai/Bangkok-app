@@ -124,16 +124,20 @@
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-1.5">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
                 <!-- 雲端同步狀態標籤 -->
                 <div id="sync-status" class="bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-[9px] font-bold text-emerald-700">雲端同步中</span>
                 </div>
-                <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+                <div class="bg-white/90 border border-lavender-200 px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
                     <span class="text-[10px] font-bold text-lavender-700">🇹🇭 BKK</span>
-                    <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
+                    <span id="bkk-clock" class="font-mono text-[10px] text-dustypink-600 font-bold">--:--:--</span>
                 </div>
+                <!-- 重新整理可愛小按鈕 -->
+                <button onclick="manualRefresh()" title="重新整理" class="bg-white/90 border border-lavender-200 hover:bg-lavender-100 text-lavender-600 w-7 h-7 rounded-full shadow-sm flex items-center justify-center active:scale-90 transition-transform active:rotate-180" aria-label="重新整理">
+                    <span id="refresh-icon" class="text-xs inline-block transition-transform duration-300">🔄</span>
+                </button>
             </div>
         </div>
 
@@ -613,6 +617,15 @@
             toast.innerText = message;
             container.appendChild(toast);
             setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        function manualRefresh() {
+            const icon = document.getElementById('refresh-icon');
+            if (icon) icon.style.transform = 'rotate(360deg)';
+            showToast('🔄 正在同步最新頁面與資料...');
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
         }
 
         function linkify(text) {
