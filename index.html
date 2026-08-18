@@ -460,7 +460,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Firebase 雲端初始化配置
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'bangkok-2026-app';
@@ -519,6 +519,45 @@
                 }
             }, (err) => console.log("Cloud sync listener error", err));
         }
+
+        // 監聽雲端憑證檔案 (Public Vouchers Collection)
+        const vouchersColRef = isCloudActive ? collection(db, 'artifacts', appId, 'public', 'data', 'vouchers') : null;
+        if (vouchersColRef) {
+            onSnapshot(vouchersColRef, (snapshot) => {
+                snapshot.docChanges().forEach(async (change) => {
+                    const docData = change.doc.data();
+                    if (change.type === "added" || change.type === "modified") {
+                        if (docData && docData.id) {
+                            await dbSaveDoc(docData);
+                        }
+                    } else if (change.type === "removed") {
+                        await dbDeleteDoc(change.doc.id);
+                    }
+                });
+                if (window.selectDay) window.selectDay(currentDay);
+            }, (err) => console.log("Voucher cloud sync error", err));
+        }
+
+        // 全局憑證雲端儲存與刪除函式
+        window.saveVoucherToCloud = async function(docObj) {
+            if (!isCloudActive || !db) return;
+            try {
+                const voucherRef = doc(db, 'artifacts', appId, 'public', 'data', 'vouchers', docObj.id);
+                await setDoc(voucherRef, docObj);
+            } catch(e) {
+                console.log("Save voucher to cloud error", e);
+            }
+        };
+
+        window.deleteVoucherFromCloud = async function(docId) {
+            if (!isCloudActive || !db) return;
+            try {
+                const voucherRef = doc(db, 'artifacts', appId, 'public', 'data', 'vouchers', docId);
+                await deleteDoc(voucherRef);
+            } catch(e) {
+                console.log("Delete voucher from cloud error", e);
+            }
+        };
 
         // 全局雲端同步推送函式
         window.syncToCloud = async function() {
@@ -897,24 +936,111 @@
             const file = event.target.files[0];
             if (!file) return;
 
+            if (file.size > 800 * 1024) {
+                showToast('⚠️ 憑證檔案需小於 800KB，請改用截圖或壓縮後上傳！');
+                event.target.value = '';
+                return;
+            }
+
             const dayNum = document.getElementById('m-day').value;
             const idx = document.getElementById('m-idx').value;
             const itemId = `d${dayNum}_i${idx}`;
 
-            const doc = {
-                id: 'doc_' + Date.now(),
-                itemId: itemId,
-                name: file.name,
-                type: file.type || 'application/pdf',
-                blob: file,
-                createdAt: Date.now()
-            };
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Data = e.target.result;
+                const docObj = {
+                    id: 'doc_' + Date.now(),
+                    itemId: itemId,
+                    name: file.name,
+                    type: file.type || 'application/pdf',
+                    base64Data: base64Data,
+                    createdAt: Date.now()
+                };
 
-            await dbSaveDoc(doc);
-            event.target.value = '';
+                await dbSaveDoc(docObj);
+                if (window.saveVoucherToCloud) {
+                    await window.saveVoucherToCloud(docObj);
+                }
+
+                event.target.value = '';
+                await renderModalDocs(itemId);
+                selectDay(parseInt(dayNum));
+                showToast('憑證上傳成功，已同步至雲端！');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        let activeBlobUrl = null;
+
+        async function viewDoc(docId) {
+            const titleEl = document.getElementById('pv-title');
+            const bodyEl = document.getElementById('pv-body');
+            const dlBtn = document.getElementById('pv-download-btn');
+
+            if (activeBlobUrl) {
+                URL.revokeObjectURL(activeBlobUrl);
+                activeBlobUrl = null;
+            }
+
+            const allDocs = await dbGetAllDocs();
+            const doc = allDocs.find(d => d.id === docId);
+            if (!doc) {
+                showToast('找不到該憑證檔案');
+                return;
+            }
+
+            let fileUrl = doc.base64Data;
+            if (!fileUrl && doc.blob) {
+                activeBlobUrl = URL.createObjectURL(doc.blob);
+                fileUrl = activeBlobUrl;
+            }
+
+            titleEl.innerText = doc.name;
+            dlBtn.href = fileUrl;
+            dlBtn.download = doc.name;
+
+            const isPdf = doc.type.includes('pdf');
+            const isImage = doc.type.includes('image');
+
+            if (isImage) {
+                bodyEl.innerHTML = `<img src="${fileUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="憑證圖檔">`;
+            } else if (isPdf) {
+                bodyEl.innerHTML = `
+                    <object data="${fileUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
+                        <iframe src="${fileUrl}" class="w-full h-[55vh] rounded-xl border-0">
+                            <div class="p-4 text-center text-xs text-lavender-600">
+                                手機瀏覽器限制內嵌顯示 PDF<br>
+                                <a href="${fileUrl}" download="${doc.name}" target="_blank" class="text-dustypink-600 underline font-bold mt-2 inline-block">點此直接開啟 / 下載 PDF</a>
+                            </div>
+                        </iframe>
+                    </object>
+                `;
+            } else {
+                bodyEl.innerHTML = `
+                    <div class="text-center p-6">
+                        <div class="text-4xl mb-2">📄</div>
+                        <div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('doc-preview-modal').classList.add('active');
+        }
+
+        function closeDocPreview() {
+            document.getElementById('doc-preview-modal').classList.remove('active');
+        }
+
+        async function removeDoc(docId, itemId) {
+            await dbDeleteDoc(docId);
+            if (window.deleteVoucherFromCloud) {
+                await window.deleteVoucherFromCloud(docId);
+            }
             await renderModalDocs(itemId);
-            selectDay(parseInt(dayNum));
-            showToast('憑證上傳成功！');
+            const dayNum = parseInt(document.getElementById('m-day').value);
+            selectDay(dayNum);
+            showToast('憑證已刪除（同步雲端）');
         }
 
         let activeBlobUrl = null;
