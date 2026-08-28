@@ -16,26 +16,8 @@
             theme: {
                 extend: {
                     colors: {
-                        lavender: { 
-                            50: '#F8F6F9', 
-                            100: '#F1ECF3', 
-                            200: '#E0D6E4', 
-                            300: '#BDABC4', 
-                            400: '#9B83A4', 
-                            500: '#7A6B82', 
-                            600: '#5C4A65', 
-                            700: '#42334A', 
-                            900: '#231828' 
-                        },
-                        dustypink: { 
-                            50: '#FDF8F9', 
-                            100: '#F9ECEF', 
-                            200: '#EECBD2', 
-                            300: '#DCB1BE', 
-                            400: '#C98A9B', 
-                            500: '#B06F81', 
-                            600: '#9B5B6E' 
-                        }
+                        lavender: { 50: '#F8F6F9', 100: '#F1ECF3', 200: '#E0D6E4', 300: '#BDABC4', 400: '#9B83A4', 500: '#7A6B82', 600: '#5C4A65', 700: '#42334A', 900: '#231828' },
+                        dustypink: { 50: '#FDF8F9', 100: '#F9ECEF', 200: '#EECBD2', 300: '#DCB1BE', 400: '#C98A9B', 500: '#B06F81', 600: '#9B5B6E' }
                     },
                     fontFamily: {
                         serif: ['Playfair Display', 'serif'],
@@ -97,21 +79,12 @@
             box-shadow: 0 10px 25px -4px rgba(66, 51, 74, 0.13), 0 6px 12px -4px rgba(66, 51, 74, 0.07);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .card-3d:hover {
-            box-shadow: 0 14px 30px -4px rgba(66, 51, 74, 0.18), 0 8px 16px -4px rgba(66, 51, 74, 0.1);
-            transform: translateY(-2px);
-        }
-        .card-3d:active {
-            transform: scale(0.985);
-            box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.14);
-        }
+        .card-3d:hover { box-shadow: 0 14px 30px -4px rgba(66, 51, 74, 0.18), 0 8px 16px -4px rgba(66, 51, 74, 0.1); transform: translateY(-2px); }
+        .card-3d:active { transform: scale(0.985); box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.14); }
 
-        /* Safari WebKit 相容修復 */
+        /* Safari WebKit 輸入框跑版修復 */
         input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; appearance: none; }
         input, select, textarea { min-width: 0; }
     </style>
@@ -123,22 +96,17 @@
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-1.5">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
-            <div class="flex items-center gap-2">
-                <div id="sync-status" class="bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-[9px] font-bold text-emerald-700">雲端同步中</span>
-                </div>
-                <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-                    <span class="text-[10px] font-bold text-lavender-700">🇹🇭 BKK</span>
-                    <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
-                </div>
+            <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+                <span id="sync-status" class="text-[10px] font-bold text-lavender-700">🟡 連線中</span>
+                <span class="text-[10px] text-lavender-300">|</span>
+                <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
             </div>
         </div>
 
         <h1 class="font-serif text-[34px] font-semibold text-lavender-700 tracking-tight leading-none mb-1.5 mt-1">
             BANGKOK <span class="italic text-dustypink-400 font-normal">Journal</span>
         </h1>
-        <p class="text-xs text-lavender-600 font-light flex items-center justify-center gap-1.5 mt-1">
+        <p class="text-[11px] text-lavender-600 font-medium flex items-center justify-center gap-1.5 mt-1">
             📍 Grande Centre Point Surawong Bangkok
         </p>
 
@@ -153,7 +121,7 @@
                 🎒 打包清單
             </a>
             <button onclick="manualRefresh()" title="重新整理" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
-                <span id="refresh-icon" class="inline-block transition-transform duration-300">🔄</span> 重新整理
+                <span id="refresh-icon" class="inline-block transition-transform duration-300">🔄</span> 重整
             </button>
         </div>
     </header>
@@ -191,7 +159,7 @@
         <div id="tab-food" class="tab-content">
             <div class="mb-4">
                 <h2 class="font-serif text-2xl text-lavender-700 mb-0.5">Food Wishlist</h2>
-                <p class="text-xs text-lavender-500">待吃清單與打卡紀錄 (多人即時同步)</p>
+                <p class="text-xs text-lavender-500">待吃清單與打卡紀錄 (雲端即時同步)</p>
             </div>
 
             <div class="bg-white p-4 rounded-2xl border border-lavender-200 shadow-sm mb-5">
@@ -209,7 +177,7 @@
         <!-- TAB 3: 航班 -->
         <div id="tab-flight" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Flight Info</h2>
-            <p class="text-xs text-lavender-500 mb-5">自訂輸入與雲端儲存航班資訊</p>
+            <p class="text-xs text-lavender-500 mb-5">自訂輸入與儲存航班資訊 (雲端同步)</p>
 
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 shadow-sm mb-4 relative overflow-hidden">
                 <div class="flex items-center gap-2 mb-4">
@@ -258,10 +226,9 @@
             </div>
 
             <button onclick="saveFlights()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">
-                💾 儲存航班資訊 (雲端同步)
+                ☁️ 儲存航班資訊至雲端
             </button>
         </div>
-
         <!-- TAB 4: 交通 -->
         <div id="tab-transport" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Transport</h2>
@@ -278,7 +245,7 @@
                 </a>
                 <a href="https://www.google.com/maps/d/u/1/edit?mid=1a9X8KcYLAFFrqUhJQlcyU4C69tySuI4&usp=sharing" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
                     <div class="text-2xl sm:text-3xl mb-1.5">📌</div>
-                    <div class="font-bold text-xs text-lavender-700 leading-tight">Google 旅遊地圖</div>
+                    <div class="font-bold text-xs text-lavender-700 leading-tight">旅遊地圖</div>
                 </a>
                 <a href="https://www.grab.com/th/" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
                     <div class="text-2xl sm:text-3xl mb-1.5">🚖</div>
@@ -320,13 +287,15 @@
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 mb-6 shadow-sm">
-                <div class="text-[11px] font-bold text-lavender-600 mb-3">＋ 新增消費 (共同記帳)</div>
+                <div class="text-[11px] font-bold text-lavender-600 mb-3 flex justify-between">
+                    <span>＋ 新增消費 (雲端即時同步)</span>
+                </div>
                 <div class="grid grid-cols-5 gap-2.5 mb-3">
                     <input type="text" id="exp-name" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="項目 (例: 泰奶)">
                     <input type="number" id="exp-amount" class="col-span-2 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="泰銖 ฿">
                 </div>
                 <button onclick="addExpense()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">
-                    記一筆 (同步給旅伴)
+                    記一筆 ☁️
                 </button>
             </div>
 
@@ -343,29 +312,31 @@
             <div class="text-[10px] tracking-widest text-dustypink-500 uppercase font-bold mb-1" id="m-time">Time</div>
             <h3 class="font-serif text-2xl text-lavender-700 mb-4 leading-tight" id="m-title">Title</h3>
             
-            <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">預約資訊 / 備註 (貼上網址自動變連結)</label>
-            <textarea id="m-note" class="w-full h-24 bg-lavender-50 border border-lavender-200 rounded-xl p-3 text-sm focus:outline-none focus:border-dustypink-400 resize-none mb-4" placeholder="在此輸入筆記..."></textarea>
+            <!-- 備註區 -->
+            <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium flex justify-between">
+                <span>📝 預約資訊 / 備註</span>
+            </label>
+            <textarea id="m-note" class="w-full h-20 bg-lavender-50 border border-lavender-200 rounded-xl p-3 text-sm focus:outline-none focus:border-dustypink-400 resize-none mb-4" placeholder="輸入筆記 (貼上網址自動轉為連結)"></textarea>
             
-            <div class="border-t border-lavender-100 pt-3 mb-4">
+            <div class="border-t border-lavender-100 pt-4 mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <label class="text-[11px] text-lavender-700 font-bold flex items-center gap-1">
-                        📎 門票 / 行程憑證 (PDF & 截圖)
+                        ☁️ 雲端共享憑證 (所有同行者可見)
                     </label>
                 </div>
 
                 <div id="m-doc-list" class="space-y-2 mb-3"></div>
 
                 <label class="w-full flex items-center justify-center gap-2 py-2.5 bg-lavender-50 border border-dashed border-lavender-300 hover:border-dustypink-400 hover:bg-dustypink-50 text-lavender-600 rounded-xl cursor-pointer text-xs font-bold transition active:scale-95">
-                    <span>📄 ＋ 上傳 PDF 或圖片憑證</span>
+                    <span>📄 ＋ 上傳 PDF 或圖片</span>
                     <input type="file" id="m-doc-upload" accept="application/pdf,image/*" onchange="handleDocUpload(event)" class="hidden">
                 </label>
-                <div class="text-[10px] text-lavender-400 text-center mt-1">憑證將自動備份至本機與雲端庫</div>
             </div>
 
             <input type="hidden" id="m-day">
-            <input type="hidden" id="m-idx">
+            <input type="hidden" id="m-item-id">
             <button onclick="saveNote()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">
-                💾 儲存並同步
+                💾 儲存資訊至雲端
             </button>
         </div>
     </div>
@@ -374,14 +345,15 @@
     <div id="doc-preview-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-5 shadow-2xl relative max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-3 pb-2 border-b border-lavender-100">
-                <h4 id="pv-title" class="font-bold text-sm text-lavender-800 truncate pr-4">憑證預覽</h4>
+                <h4 id="pv-title" class="font-bold text-sm text-lavender-800 truncate pr-4">雲端憑證預覽</h4>
                 <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
             </div>
-            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100">
+            <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100 relative">
+                <!-- Content injected here -->
             </div>
             <div class="flex gap-2">
                 <a id="pv-download-btn" href="#" download="" target="_blank" class="flex-1 bg-lavender-500 text-white text-center py-2.5 rounded-xl font-bold text-xs shadow-md active:scale-95 transition flex items-center justify-center gap-1.5">
-                    ⬇️ 下載 / 原檔開啟
+                    ⬇️ 下載 / 開啟原檔
                 </a>
                 <button onclick="closeDocPreview()" class="px-4 bg-lavender-100 text-lavender-700 py-2.5 rounded-xl font-bold text-xs active:scale-95 transition">
                     關閉
@@ -425,8 +397,28 @@
             
             <input type="hidden" id="add-s-day">
             <button onclick="saveNewSchedule()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-lg shadow-dustypink-400/30 hover:bg-dustypink-600 active:scale-95 transition">
-                ＋ 加入行程表 (即時同步)
+                ＋ 雲端同步加入
             </button>
+        </div>
+    </div>
+
+    <!-- 導遊go AI 彈跳窗 -->
+    <div id="tour-guide-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+            <button onclick="closeTourGuideModal()" class="absolute top-4 right-5 text-2xl text-lavender-300 hover:text-lavender-700 transition leading-none">&times;</button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl drop-shadow-sm">🧞‍♂️</span>
+                <div>
+                    <div class="text-[10px] tracking-widest text-indigo-500 uppercase font-bold mb-0.5">AI Tour Guide</div>
+                    <h3 class="font-serif text-[22px] text-lavender-800 font-bold leading-tight">導遊 Go！</h3>
+                </div>
+            </div>
+            <div id="tour-guide-content" class="flex-1 overflow-y-auto no-scrollbar bg-lavender-50/70 rounded-2xl p-4 border border-lavender-100 text-[13.5px] text-lavender-800 leading-relaxed shadow-inner">
+                <!-- Content injected here -->
+            </div>
+            <div class="mt-4 pt-3 border-t border-lavender-100 flex justify-center">
+                <span class="text-[10px] text-lavender-400 font-medium">✨ Powered by AI 在地隨身嚮導</span>
+            </div>
         </div>
     </div>
 
@@ -454,204 +446,139 @@
         </button>
     </nav>
 
+    <!-- Firebase Cloud Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bangkok-2026-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : { apiKey: "", authDomain: `${appId}.firebaseapp.com`, projectId: appId };
+        // 用戶提供的專屬資料庫鑰匙
+        const firebaseConfig = {
+            apiKey: "AIzaSyAq1YGhqmkBv-r4WjgfmHccAitV8VS0q3g",
+            authDomain: "bangkok2026-ad367.firebaseapp.com",
+            projectId: "bangkok2026-ad367",
+            storageBucket: "bangkok2026-ad367.firebasestorage.app",
+            messagingSenderId: "444288311548",
+            appId: "1:444288311548:web:71666adcba178bb72fb779"
+        };
 
-        let db = null;
-        let auth = null;
-        let isCloudActive = false;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
 
-        try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+        // 共用雲端路徑 (綁定 App ID 避免衝突)
+        const APP_ID = 'bangkok-trip-2026';
+        const basePath = `artifacts/${APP_ID}/public/data`;
+        
+        // 全域狀態儲存 (即時同步用)
+        window.currentUser = null;
+        window.sharedNotes = {};
+        window.sharedVouchers = [];
+        window.sharedExpenses = [];
+        window.sharedFoodStatus = {};
+        window.sharedCustomFood = [];
+        window.sharedDeletedFoods = [];
+        window.sharedCustomSchedules = [];
+        window.sharedDeletedSchedules = [];
+        window.currentDay = 1;
 
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
+        // 導出給全域使用的 Firebase 函式
+        window.fbAddDoc = addDoc;
+        window.fbSetDoc = setDoc;
+        window.fbDeleteDoc = deleteDoc;
+        window.fbCollection = collection;
+        window.fbDoc = doc;
+        window.fbDb = db;
+        window.fbBasePath = basePath;
+        window.fbUploadBytes = uploadBytes;
+        window.fbGetDownloadURL = getDownloadURL;
+        window.fbDeleteObject = deleteObject;
+        window.fbSRef = sRef;
+        window.fbStorage = storage;
+
+        async function initCloudSync() {
+            try {
                 await signInAnonymously(auth);
-            }
-            isCloudActive = true;
-        } catch (e) {
-            console.log("進入備用本地模式", e);
-        }
+                window.currentUser = auth.currentUser;
+                document.getElementById('sync-status').innerText = '🟢 已連線';
+                
+                // 啟動 5 大資料庫即時監聽 (Real-time listeners)
+                
+                // 1. 監聽花費
+                onSnapshot(collection(db, basePath, 'expenses'), (snap) => {
+                    window.sharedExpenses = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    window.sharedExpenses.sort((a,b) => b.createdAt - a.createdAt);
+                    if(window.renderExpenses) window.renderExpenses();
+                }, e => console.error(e));
 
-        const tripDocRef = isCloudActive ? doc(db, 'artifacts', appId, 'public', 'data', 'trips', 'bkk2026_shared_session') : null;
-
-        if (tripDocRef) {
-            onSnapshot(tripDocRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.data();
-                    if (data.scheduleData && Object.keys(data.scheduleData).length > 0) { 
-                        scheduleData = data.scheduleData; 
-                        localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); 
+                // 2. 監聽憑證檔案
+                onSnapshot(collection(db, basePath, 'vouchers'), (snap) => {
+                    window.sharedVouchers = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    if(window.selectDay) window.selectDay(window.currentDay);
+                    if(document.getElementById('note-modal').classList.contains('active')) {
+                        window.renderModalDocs(document.getElementById('m-item-id').value);
                     }
-                    if (data.notesData) { notesData = data.notesData; localStorage.setItem('bk26_notes', JSON.stringify(notesData)); }
-                    if (data.foodWishlist) { foodWishlist = data.foodWishlist; localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); }
-                    if (data.foodData) { foodData = data.foodData; localStorage.setItem('bk26_food', JSON.stringify(foodData)); }
-                    if (data.expenses) { expenses = data.expenses; localStorage.setItem('bk26_expense', JSON.stringify(expenses)); }
-                    if (data.flight) { 
-                        const flight = data.flight;
-                        if (document.getElementById('f-go-no')) {
-                            document.getElementById('f-go-no').value = flight.goN || '';
-                            document.getElementById('f-go-dep').value = flight.goT || '';
-                            document.getElementById('f-go-arr').value = flight.goA || '';
-                            document.getElementById('f-back-no').value = flight.bkN || '';
-                            document.getElementById('f-back-dep').value = flight.bkT || '';
-                            document.getElementById('f-back-arr').value = flight.bkA || '';
-                        }
-                    }
+                }, e => console.error(e));
 
-                    if (window.selectDay) window.selectDay(currentDay);
-                    if (window.renderFood) window.renderFood();
-                    if (window.renderExpenses) window.renderExpenses();
-                }
-            }, (err) => console.log("Cloud sync listener error", err));
-        }
+                // 3. 監聽筆記
+                onSnapshot(collection(db, basePath, 'notes'), (snap) => {
+                    window.sharedNotes = {};
+                    snap.docs.forEach(d => { window.sharedNotes[d.id] = d.data().text; });
+                    if(window.selectDay) window.selectDay(window.currentDay);
+                }, e => console.error(e));
 
-        const vouchersColRef = isCloudActive ? collection(db, 'artifacts', appId, 'public', 'data', 'vouchers') : null;
-        if (vouchersColRef) {
-            onSnapshot(vouchersColRef, (snapshot) => {
-                snapshot.docChanges().forEach(async (change) => {
-                    const docData = change.doc.data();
-                    if (change.type === "added" || change.type === "modified") {
-                        if (docData && docData.id) {
-                            await dbSaveDoc(docData);
-                        }
-                    } else if (change.type === "removed") {
-                        await dbDeleteDoc(change.doc.id);
+                // 4. 監聽自訂行程與刪除狀態
+                onSnapshot(collection(db, basePath, 'customSchedules'), (snap) => {
+                    window.sharedCustomSchedules = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    if(window.selectDay) window.selectDay(window.currentDay);
+                });
+                onSnapshot(collection(db, basePath, 'deletedSchedules'), (snap) => {
+                    window.sharedDeletedSchedules = snap.docs.map(d => d.id);
+                    if(window.selectDay) window.selectDay(window.currentDay);
+                });
+
+                // 5. 監聽美食與航班
+                onSnapshot(collection(db, basePath, 'foodStatus'), (snap) => {
+                    window.sharedFoodStatus = {};
+                    snap.docs.forEach(d => { window.sharedFoodStatus[d.id] = d.data().checked; });
+                    if(window.renderFood) window.renderFood();
+                });
+                onSnapshot(collection(db, basePath, 'customFood'), (snap) => {
+                    window.sharedCustomFood = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    if(window.renderFood) window.renderFood();
+                });
+                onSnapshot(collection(db, basePath, 'deletedFoods'), (snap) => {
+                    window.sharedDeletedFoods = snap.docs.map(d => d.id);
+                    if(window.renderFood) window.renderFood();
+                });
+
+                onSnapshot(doc(db, basePath, 'settings', 'flights'), (d) => {
+                    if (d.exists()) {
+                        const f = d.data();
+                        ['goN', 'goT', 'goA', 'bkN', 'bkT', 'bkA'].forEach(k => {
+                            if(document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`)) {
+                                document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`).value = f[k] || '';
+                            }
+                        });
                     }
                 });
-                if (window.selectDay) window.selectDay(currentDay);
-            }, (err) => console.log("Voucher cloud sync error", err));
+
+            } catch (error) {
+                console.error("Firebase Sync Error", error);
+                document.getElementById('sync-status').innerText = '🔴 連線失敗';
+            }
         }
-
-        window.saveVoucherToCloud = async function(docObj) {
-            if (!isCloudActive || !db) return;
-            try {
-                const voucherRef = doc(db, 'artifacts', appId, 'public', 'data', 'vouchers', docObj.id);
-                await setDoc(voucherRef, docObj);
-            } catch(e) {
-                console.log("Save voucher to cloud error", e);
-            }
-        };
-
-        window.deleteVoucherFromCloud = async function(docId) {
-            if (!isCloudActive || !db) return;
-            try {
-                const voucherRef = doc(db, 'artifacts', appId, 'public', 'data', 'vouchers', docId);
-                await deleteDoc(voucherRef);
-            } catch(e) {
-                console.log("Delete voucher from cloud error", e);
-            }
-        };
-
-        window.syncToCloud = async function() {
-            if (!isCloudActive || !tripDocRef) return;
-            const payload = {
-                scheduleData,
-                notesData,
-                foodWishlist,
-                foodData,
-                expenses,
-                flight: {
-                    goN: document.getElementById('f-go-no')?.value || '',
-                    goT: document.getElementById('f-go-dep')?.value || '',
-                    goA: document.getElementById('f-go-arr')?.value || '',
-                    bkN: document.getElementById('f-back-no')?.value || '',
-                    bkT: document.getElementById('f-back-dep')?.value || '',
-                    bkA: document.getElementById('f-back-arr')?.value || ''
-                },
-                updatedAt: Date.now()
-            };
-            try {
-                await setDoc(tripDocRef, payload, { merge: true });
-            } catch(err) {
-                console.log("Cloud sync write error", err);
-            }
-        };
+        
+        // 確保視窗載入後立即啟動雲端連線
+        window.addEventListener('load', initCloudSync);
     </script>
 
+    <!-- 應用程式主邏輯 -->
     <script>
-        const DB_NAME = 'Bangkok2026DocsDB';
-        const DB_VERSION = 1;
-        const STORE_NAME = 'vouchers';
-
-        function getDB() {
-            return new Promise((resolve, reject) => {
-                const req = indexedDB.open(DB_NAME, DB_VERSION);
-                req.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                        store.createIndex('itemId', 'itemId', { unique: false });
-                    }
-                };
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = () => reject(req.error);
-            });
-        }
-
-        async function dbSaveDoc(doc) {
-            try {
-                const db = await getDB();
-                return new Promise((resolve, reject) => {
-                    const tx = db.transaction(STORE_NAME, 'readwrite');
-                    tx.objectStore(STORE_NAME).put(doc);
-                    tx.oncomplete = () => resolve();
-                    tx.onerror = () => reject(tx.error);
-                });
-            } catch(e) { console.log(e); }
-        }
-
-        async function dbGetDocs(itemId) {
-            try {
-                const db = await getDB();
-                return new Promise((resolve, reject) => {
-                    const tx = db.transaction(STORE_NAME, 'readonly');
-                    const store = tx.objectStore(STORE_NAME);
-                    const index = store.index('itemId');
-                    const req = index.getAll(itemId);
-                    req.onsuccess = () => resolve(req.result || []);
-                    req.onerror = () => reject(req.error);
-                });
-            } catch(e) { return []; }
-        }
-
-        async function dbGetAllDocs() {
-            try {
-                const db = await getDB();
-                return new Promise((resolve, reject) => {
-                    const tx = db.transaction(STORE_NAME, 'readonly');
-                    const req = tx.objectStore(STORE_NAME).getAll();
-                    req.onsuccess = () => resolve(req.result || []);
-                    req.onerror = () => reject(req.error);
-                });
-            } catch(e) { return []; }
-        }
-
-        async function dbDeleteDoc(id) {
-            try {
-                const db = await getDB();
-                return new Promise((resolve, reject) => {
-                    const tx = db.transaction(STORE_NAME, 'readwrite');
-                    tx.objectStore(STORE_NAME).delete(id);
-                    tx.oncomplete = () => resolve();
-                    tx.onerror = () => reject(tx.error);
-                });
-            } catch(e) { console.log(e); }
-        }
-
         function showToast(message) {
             const container = document.getElementById('toast-container');
-            if(!container) return;
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.innerText = message;
@@ -662,10 +589,8 @@
         function manualRefresh() {
             const icon = document.getElementById('refresh-icon');
             if (icon) icon.style.transform = 'rotate(360deg)';
-            showToast('🔄 正在同步最新頁面與資料...');
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
+            showToast('🔄 正在強制拉取雲端最新資料...');
+            setTimeout(() => { window.location.reload(); }, 600);
         }
 
         function linkify(text) {
@@ -676,98 +601,70 @@
         }
 
         setInterval(() => {
-            const clockEl = document.getElementById('bkk-clock');
-            if(clockEl) {
-                const options = { timeZone: 'Asia/Bangkok', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                clockEl.innerText = new Date().toLocaleTimeString('en-US', options);
-            }
+            const options = { timeZone: 'Asia/Bangkok', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('bkk-clock').innerText = new Date().toLocaleTimeString('en-US', options);
         }, 1000);
 
-        function getDefaultSchedules() {
-            return {
-                1: [
-                    { time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" },
-                    { time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" },
-                    { time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" },
-                    { time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" },
-                    { time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" },
-                    { time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" },
-                    { time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" }
-                ],
-                2: [
-                    { time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" },
-                    { time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" },
-                    { time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" },
-                    { time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" },
-                    { time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" }
-                ],
-                3: [
-                    { time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" },
-                    { time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" },
-                    { time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" },
-                    { time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" },
-                    { time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" },
-                    { time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" },
-                    { time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" }
-                ],
-                4: [
-                    { time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" },
-                    { time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" },
-                    { time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" },
-                    { time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" },
-                    { time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" }
-                ],
-                5: [
-                    { time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" },
-                    { time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" },
-                    { time: "14:00 - 14:40", title: "前往 BKK 機場", note: "ARL 機場快線", type: "transport" },
-                    { time: "17:50 - 22:40", title: "航班返台", note: "飛抵桃園機場，接送回家", type: "flight" }
-                ]
-            };
-        }
-
-        let scheduleData = getDefaultSchedules();
-
-        let foodWishlist = [
-            { id: 'fw1', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon 炒河粉" },
-            { id: 'fw2', name: "Khao-So-i", note: "Soi Convent 泰北金麵" },
-            { id: 'fw3', name: "KHAO", note: "Ekkamai 米其林" },
-            { id: 'fw4', name: "潘氏店 (Sae Phun)", note: "百年雞肉飯" },
-            { id: 'fw5', name: "Krua Apsorn", note: "Dinso 總店" },
-            { id: 'fw6', name: "Fran's Sathorn", note: "人氣早午餐" },
-            { id: 'fw7', name: "Factory Coffee", note: "世界冠軍咖啡" }
-        ];
-
-        let notesData = {};
-        let foodData = {};
-        let currentDay = 1;
-
-        window.onload = async () => {
-            try {
-                const savedSchedule = JSON.parse(localStorage.getItem('bk26_schedule_v2'));
-                if (savedSchedule && Object.keys(savedSchedule).length > 0) scheduleData = savedSchedule;
-
-                notesData = JSON.parse(localStorage.getItem('bk26_notes')) || {};
-                foodData = JSON.parse(localStorage.getItem('bk26_food')) || {};
-                
-                const savedCustomFood = JSON.parse(localStorage.getItem('bk26_custom_food'));
-                if (savedCustomFood && savedCustomFood.length > 0) foodWishlist = savedCustomFood;
-
-                const flight = JSON.parse(localStorage.getItem('bk26_flight'));
-                if(flight) {
-                    if(document.getElementById('f-go-no')) document.getElementById('f-go-no').value = flight.goN || '';
-                    if(document.getElementById('f-go-dep')) document.getElementById('f-go-dep').value = flight.goT || '';
-                    if(document.getElementById('f-go-arr')) document.getElementById('f-go-arr').value = flight.goA || '';
-                    if(document.getElementById('f-back-no')) document.getElementById('f-back-no').value = flight.bkN || '';
-                    if(document.getElementById('f-back-dep')) document.getElementById('f-back-dep').value = flight.bkT || '';
-                    if(document.getElementById('f-back-arr')) document.getElementById('f-back-arr').value = flight.bkA || '';
-                }
-            } catch(e) {}
-            
-            await selectDay(1);
-            renderFood();
-            loadExpenses();
+        // 泰國 9 月分區天氣預報數據
+        const dailyWeather = {
+            1: { area: "曼谷市區 (Bangkok)", temp: "26°C - 33°C", desc: "多雲短暫陣雨", icon: "⛅️", pop: "40%" },
+            2: { area: "明武里區 (Safari)", temp: "27°C - 34°C", desc: "晴時多雲", icon: "☀️", pop: "10%" },
+            3: { area: "昭披耶河畔 / 舊城區", temp: "26°C - 32°C", desc: "午後雷陣雨", icon: "🌦️", pop: "60%" },
+            4: { area: "沙吞 / 吞武里", temp: "27°C - 33°C", desc: "多雲", icon: "⛅️", pop: "20%" },
+            5: { area: "帕亞泰 / 機場", temp: "26°C - 33°C", desc: "晴朗", icon: "☀️", pop: "5%" }
         };
+
+        // 預設行程資料 (賦予唯一固定 ID 方便同步修改與刪除)
+        const defaultSchedules = {
+            1: [
+                { id: "def_1_0", time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" },
+                { id: "def_1_1", time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" },
+                { id: "def_1_2", time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" },
+                { id: "def_1_3", time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" },
+                { id: "def_1_4", time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" },
+                { id: "def_1_5", time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" },
+                { id: "def_1_6", time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" }
+            ],
+            2: [
+                { id: "def_2_0", time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" },
+                { id: "def_2_1", time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" },
+                { id: "def_2_2", time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" },
+                { id: "def_2_3", time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" },
+                { id: "def_2_4", time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" }
+            ],
+            3: [
+                { id: "def_3_0", time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" },
+                { id: "def_3_1", time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" },
+                { id: "def_3_2", time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" },
+                { id: "def_3_3", time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" },
+                { id: "def_3_4", time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" },
+                { id: "def_3_5", time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" },
+                { id: "def_3_6", time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" }
+            ],
+            4: [
+                { id: "def_4_0", time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" },
+                { id: "def_4_1", time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" },
+                { id: "def_4_2", time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" },
+                { id: "def_4_3", time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" },
+                { id: "def_4_4", time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" }
+            ],
+            5: [
+                { id: "def_5_0", time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" },
+                { id: "def_5_1", time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" },
+                { id: "def_5_2", time: "14:00 - 14:40", title: "前往 BKK 機場", note: "ARL 機場快線", type: "transport" },
+                { id: "def_5_3", time: "17:50 - 22:40", title: "航班返台", note: "飛抵桃園機場，接送回家", type: "flight" }
+            ]
+        };
+
+        const defaultFoodWishlist = [
+            { id: 'def_fw1', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon 炒河粉" },
+            { id: 'def_fw2', name: "Khao-So-i", note: "Soi Convent 泰北金麵" },
+            { id: 'def_fw3', name: "KHAO", note: "Ekkamai 米其林" },
+            { id: 'def_fw4', name: "潘氏店 (Sae Phun)", note: "百年雞肉飯" },
+            { id: 'def_fw5', name: "Krua Apsorn", note: "Dinso 總店" },
+            { id: 'def_fw6', name: "Fran's Sathorn", note: "人氣早午餐" },
+            { id: 'def_fw7', name: "Factory Coffee", note: "世界冠軍咖啡" }
+        ];
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -775,54 +672,67 @@
                 n.classList.remove('text-lavender-600');
                 n.classList.add('text-lavender-300');
             });
-            
-            const targetTab = document.getElementById('tab-' + tabId);
-            if(targetTab) targetTab.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
             el.classList.add('text-lavender-600');
             el.classList.remove('text-lavender-300');
         }
 
-        async function selectDay(dayNum) {
-            currentDay = dayNum;
+        window.selectDay = function(dayNum) {
+            window.currentDay = dayNum;
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById('btn-day-' + i);
-                if (btn) {
-                    if (i === dayNum) {
-                        btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-[0_8px_16px_rgba(122,107,130,0.35)] text-center transition active:scale-95";
-                        btn.querySelector('.text-lavender-400')?.classList.replace('text-lavender-400', 'text-white/80');
-                    } else {
-                        btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95";
-                        btn.querySelector('.text-white\\/80')?.classList.replace('text-white/80', 'text-lavender-400');
-                    }
+                if (i === dayNum) {
+                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-[0_8px_16px_rgba(122,107,130,0.35)] text-center transition active:scale-95";
+                    btn.querySelector('.text-lavender-400')?.classList.replace('text-lavender-400', 'text-white/80');
+                } else {
+                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95";
+                    btn.querySelector('.text-white\\/80')?.classList.replace('text-white/80', 'text-lavender-400');
                 }
             }
 
-            let allDocs = [];
-            try {
-                allDocs = await dbGetAllDocs();
-            } catch(e) {}
-
-            const docsCountMap = {};
-            allDocs.forEach(d => {
-                if(d && d.itemId) docsCountMap[d.itemId] = (docsCountMap[d.itemId] || 0) + 1;
-            });
+            // 合併預設行程與雲端自訂行程
+            let dayItems = [...(defaultSchedules[dayNum] || [])];
+            const customs = window.sharedCustomSchedules.filter(s => parseInt(s.day) === dayNum);
+            dayItems = dayItems.concat(customs);
+            
+            // 過濾掉已被刪除的行程
+            dayItems = dayItems.filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
+            
+            // 按時間字串排序
+            dayItems.sort((a, b) => a.time.localeCompare(b.time));
 
             const list = document.getElementById('schedule-list');
-            if(!list) return;
             list.innerHTML = '';
-            
-            const dayItems = (scheduleData && scheduleData[dayNum]) ? scheduleData[dayNum] : (getDefaultSchedules()[dayNum] || []);
 
-            dayItems.forEach((item, idx) => {
+            // 渲染當日天氣與導遊按鈕
+            const weather = dailyWeather[dayNum];
+            if (weather) {
+                list.innerHTML += `
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-3.5 mb-3 flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl drop-shadow-sm">${weather.icon}</span>
+                            <div>
+                                <div class="text-[10px] text-indigo-400 font-bold tracking-widest mb-0.5">📍 ${weather.area}</div>
+                                <div class="text-xs font-bold text-indigo-900">${weather.temp} | ${weather.desc}</div>
+                            </div>
+                        </div>
+                        <div class="text-[10px] font-bold text-blue-500 bg-white/60 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-blue-100 flex-none">降雨 ${weather.pop}</div>
+                    </div>
+                    <button onclick="askTourGuide()" class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl p-3 mb-5 flex items-center justify-center gap-2 font-bold shadow-lg shadow-indigo-500/30 hover:opacity-90 active:scale-95 transition">
+                        <span class="text-xl">🧞‍♂️</span> <span class="text-[13px] tracking-wide">導遊 Go！解析今日亮點與美食</span>
+                    </button>
+                `;
+            }
+            
+            dayItems.forEach((item) => {
                 let icon = "📍";
                 if (item.type === 'food') icon = "🍽️";
                 if (item.type === 'transport' || item.type === 'flight') icon = "✈️";
                 if (item.type === 'hotel') icon = "🏨";
                 if (item.type === 'shopping') icon = "🛍️";
 
-                const id = `d${dayNum}_i${idx}`;
-                const savedNote = notesData[id] || '';
-                const docCount = docsCountMap[id] || 0;
+                const savedNote = window.sharedNotes[item.id] || '';
+                const docCount = window.sharedVouchers.filter(v => v.itemId === item.id).length;
                 
                 let displayNoteHtml = '';
                 if (savedNote) {
@@ -833,15 +743,15 @@
                 let voucherBadgeHtml = '';
                 if (docCount > 0) {
                     voucherBadgeHtml = `
-                        <div onclick="event.stopPropagation(); openNoteModal('${dayNum}', '${idx}', '${item.title}', '${item.time}')" class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 hover:bg-dustypink-200 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2 shadow-sm transition active:scale-95 cursor-pointer">
-                            <span>📄 已附加憑證 (${docCount} 份 - 點擊查看)</span>
+                        <div class="inline-flex items-center gap-1.5 bg-dustypink-100 text-dustypink-600 px-2.5 py-1 rounded-lg text-[11px] font-bold mt-2 shadow-sm">
+                            <span>☁️ 雲端已附 ${docCount} 份憑證</span>
                         </div>
                     `;
                 }
 
                 list.innerHTML += `
-                    <div class="card-3d p-4 rounded-2xl relative cursor-pointer" onclick="openNoteModal('${dayNum}', '${idx}', '${item.title}', '${item.time}')">
-                        <button onclick="deleteSchedule(${dayNum}, ${idx}, event)" class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center bg-lavender-50 text-lavender-300 rounded-full hover:bg-dustypink-100 hover:text-dustypink-500 transition text-sm z-10">✕</button>
+                    <div class="card-3d p-4 rounded-2xl relative cursor-pointer" onclick="openNoteModal('${item.id}', '${dayNum}', '${item.title}', '${item.time}')">
+                        <button onclick="deleteSchedule('${item.id}', event)" class="absolute top-3 right-3 w-7 h-7 flex items-center justify-center bg-lavender-50 text-lavender-300 rounded-full hover:bg-dustypink-100 hover:text-dustypink-500 transition text-sm z-10">✕</button>
                         <div class="flex gap-3 items-start">
                             <div class="font-serif font-bold text-dustypink-500 text-[13px] w-16 flex-none pt-0.5 leading-tight">${item.time.replace(' - ', '<br>')}</div>
                             <div class="flex-1 w-full pr-6">
@@ -864,15 +774,18 @@
             `;
         }
 
-        function deleteSchedule(dayNum, idx, event) {
+        window.deleteSchedule = async function(itemId, event) {
             event.stopPropagation();
-            if(scheduleData[dayNum]) {
-                scheduleData[dayNum].splice(idx, 1);
-                try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
-                if (window.syncToCloud) window.syncToCloud();
-                selectDay(dayNum);
-                showToast('已刪除該筆行程');
-            }
+            if (!window.currentUser) { showToast('未連線，無法刪除'); return; }
+            
+            try {
+                if (itemId.startsWith('def_')) {
+                    await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'deletedSchedules', itemId), { timestamp: Date.now() });
+                } else {
+                    await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'customSchedules', itemId));
+                }
+                showToast('🗑️ 行程已刪除並同步');
+            } catch (e) { console.error(e); }
         }
 
         function openAddModal(dayNum) {
@@ -887,58 +800,53 @@
             document.getElementById('add-schedule-modal').classList.remove('active');
         }
 
-        function saveNewSchedule() {
+        window.saveNewSchedule = async function() {
+            if (!window.currentUser) { showToast('請等候雲端連線'); return; }
             const dayNum = parseInt(document.getElementById('add-s-day').value);
             const time = document.getElementById('add-s-time').value.trim();
             const title = document.getElementById('add-s-title').value.trim();
             const type = document.getElementById('add-s-type').value;
             const note = document.getElementById('add-s-note').value.trim();
 
-            if (!time || !title) {
-                showToast('請填寫時間與行程標題'); return;
-            }
+            if (!time || !title) { showToast('請填寫時間與行程標題'); return; }
 
-            if(!scheduleData[dayNum]) scheduleData[dayNum] = [];
-            scheduleData[dayNum].push({ time, title, type, note });
-            try { localStorage.setItem('bk26_schedule_v2', JSON.stringify(scheduleData)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            
-            closeAddModal();
-            selectDay(dayNum);
-            showToast('行程新增成功');
+            try {
+                await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'customSchedules'), {
+                    day: dayNum, time, title, type, note, createdAt: Date.now()
+                });
+                closeAddModal();
+                showToast('☁️ 行程新增成功！同行夥伴也會立刻看見。');
+            } catch (e) { console.error(e); showToast('新增失敗'); }
         }
 
-        async function openNoteModal(dayNum, idx, title, time) {
-            const id = `d${dayNum}_i${idx}`;
+        window.openNoteModal = function(itemId, dayNum, title, time) {
             document.getElementById('m-title').innerText = title;
             document.getElementById('m-time').innerText = time;
             document.getElementById('m-day').value = dayNum;
-            document.getElementById('m-idx').value = idx;
-            document.getElementById('m-note').value = notesData[id] || '';
+            document.getElementById('m-item-id').value = itemId;
+            document.getElementById('m-note').value = window.sharedNotes[itemId] || '';
             document.getElementById('note-modal').classList.add('active');
-            
-            await renderModalDocs(id);
+            window.renderModalDocs(itemId);
         }
 
         function closeNoteModal() {
             document.getElementById('note-modal').classList.remove('active');
         }
 
-        async function renderModalDocs(itemId) {
+        window.renderModalDocs = function(itemId) {
             const listEl = document.getElementById('m-doc-list');
-            if(!listEl) return;
             listEl.innerHTML = '';
-            const docs = await dbGetDocs(itemId);
+            const docs = window.sharedVouchers.filter(v => v.itemId === itemId);
 
             if (docs.length === 0) {
-                listEl.innerHTML = '<div class="text-[11px] text-lavender-400 italic py-1 text-center">尚未上傳任何憑證</div>';
+                listEl.innerHTML = '<div class="text-[11px] text-lavender-400 italic py-1 text-center">尚未上傳任何共享憑證</div>';
                 return;
             }
 
             docs.forEach(doc => {
                 const isPdf = doc.type.includes('pdf');
                 const icon = isPdf ? '📄' : '🖼️';
-
+                
                 listEl.innerHTML += `
                     <div class="flex items-center justify-between bg-white border border-lavender-200 p-2.5 rounded-xl shadow-sm">
                         <div class="flex items-center gap-2 overflow-hidden flex-1 mr-2">
@@ -947,210 +855,186 @@
                         </div>
                         <div class="flex items-center gap-1.5 flex-none">
                             <button onclick="viewDoc('${doc.id}')" class="px-2.5 py-1 bg-lavender-500 text-white rounded-lg text-[10px] font-bold hover:bg-lavender-600 transition active:scale-95 shadow-sm">查看</button>
-                            <button onclick="removeDoc('${doc.id}', '${itemId}')" class="w-6 h-6 flex items-center justify-center text-lavender-300 hover:text-red-500 rounded transition text-xs">✕</button>
+                            <button onclick="removeDoc('${doc.id}', '${doc.storagePath}')" class="w-6 h-6 flex items-center justify-center text-lavender-300 hover:text-red-500 rounded transition text-xs">✕</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        async function handleDocUpload(event) {
+        window.handleDocUpload = async function(event) {
+            if (!window.currentUser) { showToast('尚未連線雲端，無法上傳檔案'); return; }
             const file = event.target.files[0];
             if (!file) return;
 
-            if (file.size > 800 * 1024) {
-                showToast('⚠️ 憑證檔案需小於 800KB，請改用截圖或壓縮後上傳！');
-                event.target.value = '';
-                return;
+            // 限制大小 3MB
+            if (file.size > 3 * 1024 * 1024) {
+                showToast('❌ 檔案過大，請上傳小於 3MB 的檔案'); return;
             }
 
-            const dayNum = document.getElementById('m-day').value;
-            const idx = document.getElementById('m-idx').value;
-            const itemId = `d${dayNum}_i${idx}`;
+            const itemId = document.getElementById('m-item-id').value;
+            const uniqueName = Date.now() + '_' + file.name;
+            const storagePath = `artifacts/bangkok-trip-2026/public/vouchers/${uniqueName}`;
+            
+            showToast('🔄 雲端上傳中，請稍候...');
+            
+            try {
+                const storageRef = window.fbSRef(window.fbStorage, storagePath);
+                await window.fbUploadBytes(storageRef, file);
+                const downloadUrl = await window.fbGetDownloadURL(storageRef);
 
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64Data = e.target.result;
-                const docObj = {
-                    id: 'doc_' + Date.now(),
-                    itemId: itemId,
-                    name: file.name,
-                    type: file.type || 'application/pdf',
-                    base64Data: base64Data,
-                    createdAt: Date.now()
-                };
-
-                await dbSaveDoc(docObj);
-                if (window.saveVoucherToCloud) {
-                    await window.saveVoucherToCloud(docObj);
-                }
-
-                event.target.value = '';
-                await renderModalDocs(itemId);
-                selectDay(parseInt(dayNum));
-                showToast('憑證上傳成功，已同步至雲端！');
-            };
-            reader.readAsDataURL(file);
+                await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'vouchers'), {
+                    itemId: itemId, name: file.name, type: file.type || 'application/pdf',
+                    url: downloadUrl, storagePath: storagePath, createdAt: Date.now()
+                });
+                
+                event.target.value = ''; 
+                showToast('☁️ 憑證已上傳至雲端共享空間！');
+            } catch (e) {
+                console.error(e);
+                showToast('❌ 上傳失敗，請檢查網路');
+            }
         }
 
-        let activeBlobUrl = null;
+        window.viewDoc = function(docId) {
+            const doc = window.sharedVouchers.find(d => d.id === docId);
+            if (!doc) { showToast('找不到檔案'); return; }
 
-        async function viewDoc(docId) {
             const titleEl = document.getElementById('pv-title');
             const bodyEl = document.getElementById('pv-body');
             const dlBtn = document.getElementById('pv-download-btn');
 
-            if (activeBlobUrl) {
-                URL.revokeObjectURL(activeBlobUrl);
-                activeBlobUrl = null;
-            }
-
-            const allDocs = await dbGetAllDocs();
-            const doc = allDocs.find(d => d.id === docId);
-            if (!doc) {
-                showToast('找不到該憑證檔案');
-                return;
-            }
-
-            let fileUrl = doc.base64Data;
-            if (!fileUrl && doc.blob) {
-                activeBlobUrl = URL.createObjectURL(doc.blob);
-                fileUrl = activeBlobUrl;
-            }
-
             titleEl.innerText = doc.name;
-            dlBtn.href = fileUrl;
+            dlBtn.href = doc.url;
             dlBtn.download = doc.name;
 
-            const isPdf = doc.type.includes('pdf');
-            const isImage = doc.type.includes('image');
-
-            if (isImage) {
-                bodyEl.innerHTML = `<img src="${fileUrl}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="憑證圖檔">`;
-            } else if (isPdf) {
+            if (doc.type.includes('image')) {
+                bodyEl.innerHTML = `<img src="${doc.url}" class="max-w-full max-h-[55vh] object-contain rounded-xl shadow-sm mx-auto" alt="預覽圖">`;
+            } else if (doc.type.includes('pdf')) {
                 bodyEl.innerHTML = `
-                    <object data="${fileUrl}" type="application/pdf" class="w-full h-[55vh] rounded-xl">
-                        <iframe src="${fileUrl}" class="w-full h-[55vh] rounded-xl border-0">
-                            <div class="p-4 text-center text-xs text-lavender-600">
-                                手機瀏覽器限制內嵌顯示 PDF<br>
-                                <a href="${fileUrl}" download="${doc.name}" target="_blank" class="text-dustypink-600 underline font-bold mt-2 inline-block">點此直接開啟 / 下載 PDF</a>
-                            </div>
-                        </iframe>
+                    <object data="${doc.url}" type="application/pdf" class="w-full h-[55vh] rounded-xl z-10 relative">
+                        <iframe src="${doc.url}" class="w-full h-[55vh] rounded-xl border-0 relative z-10"></iframe>
                     </object>
-                `;
-            } else {
-                bodyEl.innerHTML = `
-                    <div class="text-center p-6">
-                        <div class="text-4xl mb-2">📄</div>
-                        <div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-0">
+                        <span class="text-3xl mb-2">📄</span>
+                        <p class="text-xs text-lavender-500">若畫面空白，請點擊下方按鈕直接下載或開啟 PDF 原檔。</p>
                     </div>
                 `;
+            } else {
+                bodyEl.innerHTML = `<div class="text-center p-6"><div class="text-4xl mb-2">📄</div><div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div></div>`;
             }
 
             document.getElementById('doc-preview-modal').classList.add('active');
         }
 
-        function closeDocPreview() {
+        window.closeDocPreview = function() {
             document.getElementById('doc-preview-modal').classList.remove('active');
+            document.getElementById('pv-body').innerHTML = ''; // 清除 iframe，避免背景耗能
         }
 
-        async function removeDoc(docId, itemId) {
-            await dbDeleteDoc(docId);
-            if (window.deleteVoucherFromCloud) {
-                await window.deleteVoucherFromCloud(docId);
+        window.removeDoc = async function(docId, storagePath) {
+            if (!window.currentUser) return;
+            if (!confirm('確定要從雲端刪除此檔案嗎？')) return;
+            try {
+                await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'vouchers', docId));
+                const sRef = window.fbSRef(window.fbStorage, storagePath);
+                await window.fbDeleteObject(sRef);
+                showToast('已從雲端刪除憑證');
+            } catch(e) {
+                console.error(e);
             }
-            await renderModalDocs(itemId);
-            const dayNum = parseInt(document.getElementById('m-day').value);
-            selectDay(dayNum);
-            showToast('憑證已刪除（同步雲端）');
         }
 
-        function saveNote() {
-            const dayNum = document.getElementById('m-day').value;
-            const idx = document.getElementById('m-idx').value;
-            const id = `d${dayNum}_i${idx}`;
+        window.saveNote = async function() {
+            if (!window.currentUser) { showToast('未連線，無法儲存'); return; }
+            const itemId = document.getElementById('m-item-id').value;
             const text = document.getElementById('m-note').value.trim();
             
-            if (text === '') { delete notesData[id]; } 
-            else { notesData[id] = text; }
-            
-            try { localStorage.setItem('bk26_notes', JSON.stringify(notesData)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            closeNoteModal();
-            selectDay(parseInt(dayNum));
-            showToast('行程資訊已更新');
+            try {
+                if (text === '') {
+                    await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'notes', itemId));
+                } else {
+                    await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'notes', itemId), { text });
+                }
+                closeNoteModal();
+                showToast('☁️ 筆記已更新並同步！');
+            } catch (e) { console.error(e); }
         }
 
-        function renderFood() {
+        window.renderFood = function() {
             const list = document.getElementById('food-list');
             if(!list) return;
             list.innerHTML = '';
             
-            foodWishlist.forEach((f, index) => {
-                const checked = foodData[f.id] ? 'bg-dustypink-50/70 border-dustypink-200' : 'bg-white border-lavender-200';
-                const textColor = foodData[f.id] ? 'text-lavender-400 line-through' : 'text-lavender-800';
-                const checkMark = foodData[f.id] ? '<div class="w-5 h-5 bg-lavender-500 rounded flex items-center justify-center text-white text-xs font-bold">✓</div>' : '<div class="w-5 h-5 border-2 border-lavender-300 rounded"></div>';
+            let allFood = [...defaultFoodWishlist, ...window.sharedCustomFood];
+            allFood = allFood.filter(f => !window.sharedDeletedFoods.includes(f.id));
+
+            allFood.forEach((f) => {
+                const isChecked = window.sharedFoodStatus[f.id];
+                const checkedClass = isChecked ? 'bg-dustypink-50/70 border-dustypink-200' : 'bg-white border-lavender-200';
+                const textColor = isChecked ? 'text-lavender-400 line-through' : 'text-lavender-800';
+                const checkMark = isChecked ? '<div class="w-5 h-5 bg-lavender-500 rounded flex items-center justify-center text-white text-xs font-bold">✓</div>' : '<div class="w-5 h-5 border-2 border-lavender-300 rounded"></div>';
                 
                 list.innerHTML += `
-                    <div class="p-4 rounded-2xl border ${checked} flex items-center justify-between transition-all shadow-sm">
-                        <div class="flex items-center gap-3 cursor-pointer flex-1" onclick="toggleFood('${f.id}')">
+                    <div class="p-4 rounded-2xl border ${checkedClass} flex items-center justify-between transition-all shadow-sm">
+                        <div class="flex items-center gap-3 cursor-pointer flex-1" onclick="toggleFood('${f.id}', ${!isChecked})">
                             ${checkMark}
                             <div>
                                 <div class="text-[15px] font-bold ${textColor}">${f.name}</div>
                                 <div class="text-[11px] text-lavender-500 mt-0.5">${f.note}</div>
                             </div>
                         </div>
-                        <button onclick="deleteFood(${index})" class="w-8 h-8 flex items-center justify-center text-lavender-300 hover:text-dustypink-500 rounded-full hover:bg-white transition text-sm">✕</button>
+                        <button onclick="deleteFood('${f.id}')" class="w-8 h-8 flex items-center justify-center text-lavender-300 hover:text-dustypink-500 rounded-full hover:bg-white transition text-sm">✕</button>
                     </div>
                 `;
             });
         }
 
-        function toggleFood(id) {
-            foodData[id] = !foodData[id];
-            try { localStorage.setItem('bk26_food', JSON.stringify(foodData)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            renderFood();
+        window.toggleFood = async function(id, newState) {
+            if (!window.currentUser) return;
+            try {
+                await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'foodStatus', id), { checked: newState });
+            } catch (e) { console.error(e); }
         }
 
-        function addCustomFood() {
+        window.addCustomFood = async function() {
+            if (!window.currentUser) { showToast('雲端未連線'); return; }
             const name = document.getElementById('new-food-name').value.trim();
             const note = document.getElementById('new-food-note').value.trim();
             if (!name) { showToast('請輸入餐廳名稱'); return; }
             
-            const newId = 'fw_c_' + Date.now();
-            foodWishlist.push({ id: newId, name, note });
-            try { localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            
-            document.getElementById('new-food-name').value = '';
-            document.getElementById('new-food-note').value = '';
-            renderFood();
-            showToast('已加入願望清單');
+            try {
+                await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'customFood'), { name, note });
+                document.getElementById('new-food-name').value = '';
+                document.getElementById('new-food-note').value = '';
+                showToast('已加入共享清單');
+            } catch(e) {}
         }
 
-        function deleteFood(index) {
-            foodWishlist.splice(index, 1);
-            try { localStorage.setItem('bk26_custom_food', JSON.stringify(foodWishlist)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            renderFood();
+        window.deleteFood = async function(id) {
+            if (!window.currentUser) return;
+            try {
+                if(id.startsWith('def_')) {
+                    await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'deletedFoods', id), { timestamp: Date.now() });
+                } else {
+                    await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'customFood', id));
+                }
+            } catch (e) {}
         }
 
-        function saveFlights() {
+        window.saveFlights = async function() {
+            if (!window.currentUser) { showToast('雲端未連線'); return; }
             const data = {
-                goN: document.getElementById('f-go-no')?.value || '', 
-                goT: document.getElementById('f-go-dep')?.value || '', 
-                goA: document.getElementById('f-go-arr')?.value || '',
-                bkN: document.getElementById('f-back-no')?.value || '', 
-                bkT: document.getElementById('f-back-dep')?.value || '', 
-                bkA: document.getElementById('f-back-arr')?.value || ''
+                goN: document.getElementById('f-go-no').value, goT: document.getElementById('f-go-dep').value, goA: document.getElementById('f-go-arr').value,
+                bkN: document.getElementById('f-back-no').value, bkT: document.getElementById('f-back-dep').value, bkA: document.getElementById('f-back-arr').value
             };
-            try { localStorage.setItem('bk26_flight', JSON.stringify(data)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            showToast('航班資訊儲存成功');
+            try {
+                await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'settings', 'flights'), data);
+                showToast('☁️ 航班資訊已全體同步！');
+            } catch (e) { console.error(e); }
         }
 
-        function speakThai(text) {
+        window.speakThai = function(text) {
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'th-TH';
@@ -1160,52 +1044,49 @@
             }
         }
 
-        function speakCustomThai() {
+        window.speakCustomThai = function() {
             const text = document.getElementById('custom-thai-text').value.trim();
             if(text) speakThai(text);
             else showToast('請先貼上泰文');
         }
 
-        let expenses = [];
-        function loadExpenses() {
-            try { expenses = JSON.parse(localStorage.getItem('bk26_expense')) || []; } catch(e) { expenses = []; }
-            renderExpenses();
-        }
-
-        function addExpense() {
+        window.addExpense = async function() {
+            if (!window.currentUser) { showToast('請等候雲端連線'); return; }
             const name = document.getElementById('exp-name').value.trim();
             const amt = parseFloat(document.getElementById('exp-amount').value);
             if(!name || isNaN(amt) || amt <= 0) { showToast('請輸入正確項目與金額'); return; }
             
-            expenses.unshift({ id: Date.now(), name, amt });
-            try { localStorage.setItem('bk26_expense', JSON.stringify(expenses)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            document.getElementById('exp-name').value = ''; document.getElementById('exp-amount').value = '';
-            renderExpenses();
-            showToast('已記錄一筆花費');
+            try {
+                await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'expenses'), {
+                    name, amt, createdAt: Date.now()
+                });
+                document.getElementById('exp-name').value = ''; 
+                document.getElementById('exp-amount').value = '';
+                showToast('☁️ 已記錄並同步給同行夥伴');
+            } catch(e) { console.error(e); }
         }
 
-        function delExpense(id) {
-            expenses = expenses.filter(e => e.id !== id);
-            try { localStorage.setItem('bk26_expense', JSON.stringify(expenses)); } catch(e){}
-            if (window.syncToCloud) window.syncToCloud();
-            renderExpenses();
-            showToast('記錄已刪除');
+        window.delExpense = async function(id) {
+            if (!window.currentUser) return;
+            try {
+                await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'expenses', id));
+                showToast('記錄已刪除');
+            } catch (e) {}
         }
 
-        function renderExpenses() {
+        window.renderExpenses = function() {
             const list = document.getElementById('expense-list');
             if(!list) return;
             list.innerHTML = '';
             let total = 0;
-            expenses.forEach(e => {
+            window.sharedExpenses.forEach(e => {
                 total += e.amt;
                 list.innerHTML += `
                     <div class="bg-white p-4 rounded-2xl border border-lavender-200 flex justify-between items-center shadow-sm">
                         <div class="font-bold text-sm text-lavender-700">${e.name}</div>
                         <div class="flex items-center gap-4">
                             <span class="font-serif font-bold text-lavender-600 text-lg">฿ ${e.amt.toLocaleString()}</span>
-                            <button onclick="delExpense(${e.id})" class="text-lavender-300 hover:text-dustypink-500 bg-lavender-50 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button>
+                            <button onclick="delExpense('${e.id}')" class="text-lavender-300 hover:text-dustypink-500 bg-lavender-50 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button>
                         </div>
                     </div>
                 `;
@@ -1214,6 +1095,67 @@
             const twdEl = document.getElementById('total-twd');
             if(thbEl) thbEl.innerText = total.toLocaleString();
             if(twdEl) twdEl.innerText = Math.round(total * 0.92).toLocaleString();
+        }
+
+        window.closeTourGuideModal = function() {
+            document.getElementById('tour-guide-modal').classList.remove('active');
+        }
+
+        window.askTourGuide = async function() {
+            document.getElementById('tour-guide-modal').classList.add('active');
+            const contentDiv = document.getElementById('tour-guide-content');
+            
+            // 載入中動畫
+            contentDiv.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-48 text-center">
+                    <div class="text-4xl mb-4 animate-bounce">🧞‍♂️</div>
+                    <div class="text-sm font-bold text-lavender-700 mb-1">導遊正在幫您掃描行程...</div>
+                    <div class="text-[11px] text-lavender-500">正在為您整理必吃、必買與歷史小故事！<br>請稍候約 3~5 秒鐘 ⏳</div>
+                </div>
+            `;
+
+            // 搜集當日行程字串
+            let dayItems = [...(defaultSchedules[window.currentDay] || [])];
+            const customs = window.sharedCustomSchedules.filter(s => parseInt(s.day) === window.currentDay);
+            dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
+            dayItems.sort((a, b) => a.time.localeCompare(b.time));
+
+            if (dayItems.length === 0) {
+                contentDiv.innerHTML = '<div class="text-center mt-10 font-bold text-lavender-600">這天目前沒有行程可以分析喔！快去新增一些景點吧！</div>';
+                return;
+            }
+
+            const scheduleText = dayItems.map(item => `${item.time} ${item.title} (${item.note || '無備註'})`).join('\n');
+            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。你的任務是根據旅客提供的每日行程，給出專屬的旅遊建議。";
+            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請幫我：\n1. 簡短點評一兩句今天的行程規劃。\n2. 根據這些地點，推薦附近絕對不能錯過的「必吃美食」與「必買伴手禮」。\n3. 挑選行程中1~2個景點，分享有趣的歷史小知識或冷知識。\n4. 提醒當天的天氣注意事項(如防曬、帶傘等)。\n\n字數控制在350字內，多使用Emoji，段落分明，並使用Markdown加粗重點字。語氣要像朋友一樣熱情，不要講廢話。`;
+
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                };
+                const apiKey = ""; // Canvas 內建會自動處理 API Key
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "導遊似乎迷路了，請稍後再試。";
+
+                // 將 Markdown 語法轉換為 HTML 顯示
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-700 font-bold">$1</strong>');
+                text = text.replace(/\*/g, '• ');
+                text = text.replace(/\n/g, '<br>');
+
+                contentDiv.innerHTML = text;
+            } catch (e) {
+                console.error(e);
+                contentDiv.innerHTML = '<div class="text-red-500 font-bold text-center mt-10">抱歉，呼叫導遊失敗 😢<br>請檢查網路狀態或稍後再試。</div>';
+            }
         }
     </script>
 </body>
