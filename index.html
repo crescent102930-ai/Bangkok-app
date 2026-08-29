@@ -81,7 +81,6 @@
         .card-3d:hover { box-shadow: 0 14px 30px -4px rgba(66, 51, 74, 0.12), 0 8px 16px -4px rgba(66, 51, 74, 0.08); transform: translateY(-2px); }
         .card-3d:active { transform: scale(0.985); box-shadow: 0 4px 12px -2px rgba(66, 51, 74, 0.1); }
 
-        /* 隱藏原生數字輸入框箭頭 */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; appearance: none; }
@@ -112,15 +111,9 @@
         </p>
 
         <div class="flex gap-2 mt-5 overflow-x-auto no-scrollbar pb-1">
-            <a href="https://stream-chime-32f.notion.site/b6278536002d838abbfc8120cf613fcb" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
-                📖 泰國吃吃集合
-            </a>
-            <a href="https://stream-chime-32f.notion.site/3a678536002d837289748103a7dc38b8" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
-                💰 所有花費
-            </a>
-            <a href="https://stream-chime-32f.notion.site/4a978536002d821dae1e01f45d7e91e6" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
-                🎒 打包清單
-            </a>
+            <a href="https://stream-chime-32f.notion.site/b6278536002d838abbfc8120cf613fcb" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">📖 泰國吃吃集合</a>
+            <a href="https://stream-chime-32f.notion.site/3a678536002d837289748103a7dc38b8" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">💰 所有花費</a>
+            <a href="https://stream-chime-32f.notion.site/4a978536002d821dae1e01f45d7e91e6" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">🎒 打包清單</a>
             <button onclick="manualRefresh()" title="重新整理" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
                 <span id="refresh-icon" class="inline-block transition-transform duration-300">🔄</span> 重整
             </button>
@@ -152,7 +145,6 @@
                 </button>
             </div>
 
-            <!-- 行程列表與天氣/導遊容器 -->
             <div id="schedule-list" class="space-y-4 pb-6"></div>
         </div>
 
@@ -161,7 +153,6 @@
                 <h2 class="font-serif text-2xl text-lavender-700 mb-0.5">Food Wishlist</h2>
                 <p class="text-xs text-lavender-500">待吃清單與打卡紀錄 (雲端即時同步)</p>
             </div>
-
             <div class="bg-white p-4 rounded-2xl border border-lavender-200 shadow-sm mb-5">
                 <div class="text-[11px] font-bold text-lavender-600 mb-2">＋ 臨時新增想吃的餐廳</div>
                 <div class="grid grid-cols-7 gap-2">
@@ -176,95 +167,47 @@
         <div id="tab-flight" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Flight Info</h2>
             <p class="text-xs text-lavender-500 mb-5">自訂輸入與儲存航班資訊 (雲端同步)</p>
-
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 shadow-sm mb-4 relative overflow-hidden">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-xl">🛫</span>
-                    <span class="font-bold text-lavender-700 text-sm">去程 (TPE → BKK)</span>
-                </div>
+                <div class="flex items-center gap-2 mb-4"><span class="text-xl">🛫</span><span class="font-bold text-lavender-700 text-sm">去程 (TPE → BKK)</span></div>
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">航班號碼</label>
-                        <input type="text" id="f-go-no" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI833">
-                    </div>
+                    <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">航班號碼</label><input type="text" id="f-go-no" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI833"></div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">起飛時間與機場</label>
-                            <input type="text" id="f-go-dep" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="07:00 桃園">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">抵達時間與機場</label>
-                            <input type="text" id="f-go-arr" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="09:45 曼谷">
-                        </div>
+                        <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">起飛時間與機場</label><input type="text" id="f-go-dep" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="07:00 桃園"></div>
+                        <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-medium">抵達時間與機場</label><input type="text" id="f-go-arr" class="w-full bg-lavender-50 border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="09:45 曼谷"></div>
                     </div>
                 </div>
             </div>
-
             <div class="bg-white p-5 rounded-2xl border border-dustypink-200 shadow-sm mb-6 relative overflow-hidden">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-xl">🛬</span>
-                    <span class="font-bold text-dustypink-600 text-sm">回程 (BKK → TPE)</span>
-                </div>
+                <div class="flex items-center gap-2 mb-4"><span class="text-xl">🛬</span><span class="font-bold text-dustypink-600 text-sm">回程 (BKK → TPE)</span></div>
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">航班號碼</label>
-                        <input type="text" id="f-back-no" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI834">
-                    </div>
+                    <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">航班號碼</label><input type="text" id="f-back-no" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI834"></div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">起飛時間與機場</label>
-                            <input type="text" id="f-back-dep" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="17:50 曼谷">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">抵達時間與機場</label>
-                            <input type="text" id="f-back-arr" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="22:40 桃園">
-                        </div>
+                        <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">起飛時間與機場</label><input type="text" id="f-back-dep" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="17:50 曼谷"></div>
+                        <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-medium">抵達時間與機場</label><input type="text" id="f-back-arr" class="w-full bg-dustypink-50 border border-dustypink-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="22:40 桃園"></div>
                     </div>
                 </div>
             </div>
-            <button onclick="saveFlights()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">
-                ☁️ 儲存航班資訊至雲端
-            </button>
+            <button onclick="saveFlights()" class="w-full bg-lavender-500 text-white font-medium py-3 rounded-xl shadow-lg shadow-lavender-500/30 hover:bg-lavender-600 active:scale-95 transition">☁️ 儲存航班資訊至雲端</button>
         </div>
         
         <div id="tab-transport" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Transport</h2>
             <p class="text-xs text-lavender-500 mb-5">交通指南與泰文語音發音助手</p>
-
-            <a href="tel:0800085095" class="block w-full bg-red-50 border border-red-200 text-red-600 text-center font-bold py-3.5 rounded-2xl mb-5 shadow-sm active:scale-95 transition">
-                🚨 外交部急難救助專線: 0800-085-095
-            </a>
-
+            <a href="tel:0800085095" class="block w-full bg-red-50 border border-red-200 text-red-600 text-center font-bold py-3.5 rounded-2xl mb-5 shadow-sm active:scale-95 transition">🚨 外交部急難救助專線: 0800-085-095</a>
             <div class="grid grid-cols-3 gap-2 mb-6">
-                <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
-                    <div class="text-2xl sm:text-3xl mb-1.5">🗺️</div>
-                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Google 地圖</div>
-                </a>
-                <a href="https://www.google.com/maps/d/u/1/edit?mid=1a9X8KcYLAFFrqUhJQlcyU4C69tySuI4&usp=sharing" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
-                    <div class="text-2xl sm:text-3xl mb-1.5">📌</div>
-                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">旅遊地圖</div>
-                </a>
-                <a href="https://www.grab.com/th/" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
-                    <div class="text-2xl sm:text-3xl mb-1.5">🚖</div>
-                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Grab 叫車</div>
-                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition"><div class="text-2xl sm:text-3xl mb-1.5">🗺️</div><div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Google 地圖</div></a>
+                <a href="https://www.google.com/maps/d/u/1/edit?mid=1a9X8KcYLAFFrqUhJQlcyU4C69tySuI4&usp=sharing" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition"><div class="text-2xl sm:text-3xl mb-1.5">📌</div><div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">旅遊地圖</div></a>
+                <a href="https://www.grab.com/th/" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition"><div class="text-2xl sm:text-3xl mb-1.5">🚖</div><div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Grab 叫車</div></a>
             </div>
-
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 shadow-sm mb-5">
                 <h3 class="font-bold text-sm text-lavender-700 mb-3 flex items-center gap-1.5">🗣️ 泰文語音助手</h3>
                 <div class="space-y-3 mb-4">
                     <div class="flex justify-between items-center bg-lavender-50 p-3 rounded-xl border border-lavender-200">
-                        <div>
-                            <div class="text-[11px] text-lavender-500 mb-0.5">飯店地址</div>
-                            <div class="text-xs font-bold text-lavender-700">โรงแรม แกรนด์ เซนเตอร์ พอยต์ สุรวงศ์</div>
-                        </div>
+                        <div><div class="text-[11px] text-lavender-500 mb-0.5">飯店地址</div><div class="text-xs font-bold text-lavender-700">โรงแรม แกรนด์ เซนเตอร์ พอยต์ สุรวงศ์</div></div>
                         <button onclick="speakThai('โรงแรม แกรนด์ เซนเตอร์ พอยต์ สุรวงศ์')" class="w-8 h-8 flex items-center justify-center bg-dustypink-400 text-white rounded-full shadow-md active:scale-90 transition">🔊</button>
                     </div>
                     <div class="flex justify-between items-center bg-lavender-50 p-3 rounded-xl border border-lavender-200">
-                        <div>
-                            <div class="text-[11px] text-lavender-500 mb-0.5">請跳錶 (Meter)</div>
-                            <div class="text-xs font-bold text-lavender-700">กรุณาเปิดมิเตอร์ด้วยครับ / ค่ะ</div>
-                        </div>
+                        <div><div class="text-[11px] text-lavender-500 mb-0.5">請跳錶 (Meter)</div><div class="text-xs font-bold text-lavender-700">กรุณาเปิดมิเตอร์ด้วยครับ / ค่ะ</div></div>
                         <button onclick="speakThai('กรุณาเปิดมิเตอร์ด้วยครับ')" class="w-8 h-8 flex items-center justify-center bg-dustypink-400 text-white rounded-full shadow-md active:scale-90 transition">🔊</button>
                     </div>
                 </div>
@@ -281,20 +224,14 @@
                 <div class="font-serif text-[42px] mb-1 leading-none mt-2">฿ <span id="total-thb">0</span></div>
                 <div class="text-xs text-dustypink-200 mt-2 bg-black/10 inline-block px-3 py-1 rounded-full">約 NT$ <span id="total-twd">0</span></div>
             </div>
-
             <div class="bg-white p-5 rounded-2xl border border-lavender-200 mb-6 shadow-sm">
-                <div class="text-[11px] font-bold text-lavender-600 mb-3 flex justify-between">
-                    <span>＋ 新增消費 (雲端即時同步)</span>
-                </div>
+                <div class="text-[11px] font-bold text-lavender-600 mb-3 flex justify-between"><span>＋ 新增消費 (雲端即時同步)</span></div>
                 <div class="grid grid-cols-5 gap-2.5 mb-3">
                     <input type="text" id="exp-name" class="col-span-3 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="項目 (例: 泰奶)">
                     <input type="number" id="exp-amount" class="col-span-2 w-full min-w-0 bg-lavender-50 border border-lavender-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-dustypink-400" placeholder="泰銖 ฿">
                 </div>
-                <button onclick="addExpense()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">
-                    記一筆 ☁️
-                </button>
+                <button onclick="addExpense()" class="w-full bg-dustypink-400 text-white font-medium py-3 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">記一筆 ☁️</button>
             </div>
-
             <div class="text-[11px] font-bold text-lavender-500 mb-3 px-1 tracking-wider uppercase">Expense History</div>
             <div id="expense-list" class="space-y-3 pb-10"></div>
         </div>
@@ -310,9 +247,7 @@
             <textarea id="m-note" class="w-full h-20 bg-lavender-50 border border-lavender-200 rounded-xl p-3 text-sm focus:outline-none focus:border-dustypink-400 resize-none mb-4" placeholder="輸入筆記 (貼上網址自動轉為連結)"></textarea>
             
             <div class="border-t border-lavender-100 pt-4 mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-[11px] text-lavender-700 font-bold flex items-center gap-1">☁️ 雲端共享憑證 (同行者皆可見)</label>
-                </div>
+                <div class="flex justify-between items-center mb-2"><label class="text-[11px] text-lavender-700 font-bold flex items-center gap-1">☁️ 雲端共享憑證 (同行者皆可見)</label></div>
                 <div id="m-doc-list" class="space-y-2 mb-3"></div>
                 <label class="w-full flex items-center justify-center gap-2 py-2.5 bg-lavender-50 border border-dashed border-lavender-300 hover:border-dustypink-400 hover:bg-dustypink-50 text-lavender-600 rounded-xl cursor-pointer text-xs font-bold transition active:scale-95">
                     <span>📄 ＋ 上傳 PDF 或圖片憑證</span>
@@ -325,7 +260,7 @@
         </div>
     </div>
 
-    <!-- 憑證圖片/PDF 內嵌預覽視窗 -->
+    <!-- 預覽彈跳窗 -->
     <div id="doc-preview-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm sm:max-w-md rounded-3xl p-5 shadow-2xl relative max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center mb-3 pb-2 border-b border-lavender-100">
@@ -361,31 +296,33 @@
         </div>
     </div>
 
-    <!-- 導遊go AI 彈跳窗 (純手工繪製 卡娜赫拉粉紅兔兔 Usagi) -->
+    <!-- 導遊go AI 彈跳窗 -->
     <div id="tour-guide-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
             <button onclick="closeTourGuideModal()" class="absolute top-4 right-5 text-2xl text-lavender-300 hover:text-lavender-700 transition leading-none">&times;</button>
             <div class="flex items-center gap-3 mb-4">
-                <!-- SVG: 卡娜赫拉兔兔 (Usagi) -->
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 flex-none drop-shadow-sm">
-                    <!-- 身體 -->
-                    <path d="M 20 60 Q 15 85 25 95 Q 50 100 75 95 Q 85 85 80 60 Q 80 30 50 30 Q 20 30 20 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linejoin="round"/>
-                    <!-- 左耳 -->
-                    <path d="M 30 35 Q 25 10 35 15 Q 40 25 45 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    <!-- 右耳 -->
-                    <path d="M 70 35 Q 75 10 65 15 Q 60 25 55 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    <!-- 腮紅 -->
-                    <circle cx="30" cy="58" r="8" fill="#F8BBD0"/>
-                    <circle cx="70" cy="58" r="8" fill="#F8BBD0"/>
-                    <!-- 眼睛 (黑點) -->
-                    <circle cx="40" cy="50" r="2.5" fill="#4A3026"/>
-                    <circle cx="60" cy="50" r="2.5" fill="#4A3026"/>
-                    <!-- 小 V 嘴巴 -->
-                    <path d="M 47 55 Q 50 58 53 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                    <!-- 祈求小手 -->
-                    <path d="M 38 72 L 45 65 L 50 70 M 62 72 L 55 65 L 50 70" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <!-- 閃亮星星 -->
-                    <path d="M 85 70 L 87 75 L 92 77 L 87 79 L 85 84 L 83 79 L 78 77 L 83 75 Z" fill="#FFD700" stroke="#4A3026" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- SVG: 卡娜赫拉兔兔 (草帽筆電版) -->
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 flex-none drop-shadow-sm">
+                    <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                    <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                    <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                    <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
+                    <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                    <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                    <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                    <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
+                    <rect x="30" y="74" width="60" height="20" fill="#263238"/>
+                    <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
+                    <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
                 </svg>
                 <div>
                     <div class="text-[10px] tracking-widest text-lavender-500 uppercase font-bold mb-0.5">AI Tour Guide</div>
@@ -394,7 +331,7 @@
             </div>
             <div id="tour-guide-content" class="flex-1 overflow-y-auto no-scrollbar bg-lavender-50/70 rounded-2xl p-4 border border-lavender-100 text-[13.5px] text-lavender-800 leading-relaxed shadow-inner"></div>
             <div class="mt-4 pt-3 border-t border-lavender-100 flex justify-center">
-                <span class="text-[10px] text-lavender-400 font-medium">✨ Powered by 兔兔智能助手</span>
+                <span class="text-[10px] text-lavender-400 font-medium">✨ Powered by AI 智慧在地推薦</span>
             </div>
         </div>
     </div>
@@ -408,6 +345,7 @@
         <button onclick="switchTab('ledger', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-xl mb-0.5">💰</span><span class="text-[10px] font-bold">記帳</span></button>
     </nav>
 
+    <!-- 核心 JS 邏輯區 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -552,8 +490,8 @@
             if (weather) {
                 // 純線條風天氣卡片 (無底色，線條框)
                 let hourlyHtml = weather.hourly.map(h => `
-                    <div class="flex flex-col items-center justify-center bg-transparent rounded-xl py-2 px-3 min-w-[65px] border border-lavender-300 flex-none transition">
-                        <span class="text-[10px] text-lavender-600 font-bold mb-1.5">${h.time}</span>
+                    <div class="flex flex-col items-center justify-center bg-transparent rounded-xl py-2.5 px-3 min-w-[70px] border border-lavender-400 flex-none transition">
+                        <span class="text-[10px] text-lavender-700 font-bold mb-1.5">${h.time}</span>
                         ${iconSvg[h.icon]}
                         <span class="text-[13px] font-bold text-lavender-800">${h.temp}</span>
                         <span class="text-[9px] text-lavender-500 font-medium mt-0.5 flex items-center gap-0.5">💧 ${h.pop}</span>
@@ -561,7 +499,7 @@
                 `).join('');
 
                 list.innerHTML += `
-                    <div class="bg-lavender-50/50 border border-lavender-200 rounded-2xl p-4 mb-4 relative overflow-hidden">
+                    <div class="bg-lavender-50/50 border border-lavender-300 rounded-2xl p-4 mb-4 relative overflow-hidden shadow-sm">
                         <div class="text-[11px] text-lavender-700 font-bold tracking-widest mb-3 flex items-center gap-1.5">
                             <span>📍 ${weather.area}</span> <span class="text-lavender-300">|</span> <span>每小時預報</span>
                         </div>
@@ -571,16 +509,27 @@
                     </div>
                     
                     <button onclick="askTourGuide()" class="w-full bg-gradient-to-r from-dustypink-400 to-lavender-500 text-white rounded-2xl p-3 mb-5 flex items-center justify-center gap-3 font-bold shadow-lg shadow-lavender-500/30 hover:opacity-90 active:scale-95 transition border border-white/20">
-                        <svg viewBox="0 0 100 100" class="w-8 h-8 flex-none drop-shadow-sm">
-                            <path d="M 20 60 Q 15 85 25 95 Q 50 100 75 95 Q 85 85 80 60 Q 80 30 50 30 Q 20 30 20 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linejoin="round"/>
-                            <path d="M 30 35 Q 25 10 35 15 Q 40 25 45 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M 70 35 Q 75 10 65 15 Q 60 25 55 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                            <circle cx="30" cy="58" r="8" fill="#F8BBD0"/>
-                            <circle cx="70" cy="58" r="8" fill="#F8BBD0"/>
-                            <circle cx="40" cy="50" r="2.5" fill="#4A3026"/>
-                            <circle cx="60" cy="50" r="2.5" fill="#4A3026"/>
-                            <path d="M 47 55 Q 50 58 53 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                            <path d="M 38 72 L 45 65 L 50 70 M 62 72 L 55 65 L 50 70" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 flex-none drop-shadow-sm">
+                            <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
+                            <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                            <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                            <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                            <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
+                            <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                            <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                            <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                            <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                            <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
+                            <rect x="30" y="74" width="60" height="20" fill="#263238"/>
+                            <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
+                            <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
                         </svg>
                         <span class="text-[13px] tracking-wide">兔兔導遊 Go！行程解析</span>
                     </button>
@@ -612,7 +561,7 @@
                     `;
                 }
 
-                // 移除縮排與時間軸線，改為全寬極簡卡片
+                // 移除縮排與垂直線，全寬卡片
                 list.innerHTML += `
                     <div class="mb-4 group cursor-pointer" onclick="openNoteModal('${item.id}', '${dayNum}', '${item.title}', '${item.time}')">
                         <div class="card-3d bg-white p-4 rounded-2xl relative border border-lavender-100">
@@ -730,15 +679,17 @@
         window.closeTourGuideModal = function() { document.getElementById('tour-guide-modal').classList.remove('active'); }
 
         // ============================================================
-        // 「兔兔導遊 Go！」— 已改用 Gemini Google Search Grounding
-        // 重要：請在下方 GEMINI_API_KEY 填入你自己「新申請」的金鑰
-        // 申請處：https://aistudio.google.com/apikey
-        // 提醒：金鑰會出現在前端原始碼中，任何人都看得到，
-        // 建議到 Google Cloud Console 為此金鑰設定「HTTP 參照網址限制」，
-        // 只允許你部署此頁面的網域呼叫，降低被盜用風險。
+        // 「兔兔導遊 Go！」— 模型自動切換無敵外掛
         // ============================================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6IYyzuFxHXrJKanT1DEKgQZFq51dx5vS3hklsHQ6ki60A";
-        const GEMINI_MODEL = "gemini-2.5-flash";
+        const GEMINI_API_KEY = "請在這裡貼上您的_AIza_開頭金鑰";
+        
+        // 兔兔會依照順序嘗試以下模型，解決所有的 404 找不到模型錯誤
+        const MODELS_TO_TRY = [
+            "gemini-1.5-flash-latest",
+            "gemini-1.5-flash",
+            "gemini-1.5-pro-latest",
+            "gemini-pro"
+        ];
 
         window.askTourGuide = async function() {
             document.getElementById('tour-guide-modal').classList.add('active');
@@ -746,23 +697,35 @@
             
             contentDiv.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-48 text-center">
-                    <svg viewBox="0 0 100 100" class="w-16 h-16 mb-4 animate-bounce">
-                        <path d="M 20 60 Q 15 85 25 95 Q 50 100 75 95 Q 85 85 80 60 Q 80 30 50 30 Q 20 30 20 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="3"/>
-                        <path d="M 30 35 Q 25 10 35 15 Q 40 25 45 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3"/>
-                        <path d="M 70 35 Q 75 10 65 15 Q 60 25 55 31" fill="#FCE4EC" stroke="#4A3026" stroke-width="3"/>
-                        <circle cx="30" cy="58" r="8" fill="#F8BBD0"/>
-                        <circle cx="70" cy="58" r="8" fill="#F8BBD0"/>
-                        <circle cx="40" cy="50" r="2.5" fill="#4A3026"/>
-                        <circle cx="60" cy="50" r="2.5" fill="#4A3026"/>
-                        <path d="M 47 55 Q 50 58 53 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 animate-bounce">
+                        <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                        <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                        <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
+                        <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
+                        <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                        <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
+                        <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
+                        <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
+                        <rect x="30" y="74" width="60" height="20" fill="#263238"/>
+                        <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
+                        <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
                     </svg>
-                    <div class="text-sm font-bold text-lavender-700 mb-1">兔兔正在上網幫您查資料...</div>
-                    <div class="text-[11px] text-lavender-500">正在搜尋必吃、必買與景點小故事！<br>請稍候約 5~10 秒鐘 ⏳</div>
+                    <div class="text-sm font-bold text-lavender-700 mb-1">工程兔兔連線中...</div>
+                    <div class="text-[11px] text-lavender-500">正在自動配對模型並整理必吃必買攻略！<br>請稍候約 5~10 秒鐘 ⏳</div>
                 </div>
             `;
 
-            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('在這裡貼上')) {
-                contentDiv.innerHTML = `<div class="text-center mt-10 px-2"><div class="text-3xl mb-3">🔑</div><div class="font-bold text-lavender-700 mb-2">尚未設定 API Key</div><div class="text-[12px] text-lavender-500 leading-relaxed">請先到 <a href="https://aistudio.google.com/apikey" target="_blank" class="underline text-dustypink-500">Google AI Studio</a> 申請一組新的 Gemini API Key，並貼到程式碼中的 <code class="bg-lavender-100 px-1 rounded">GEMINI_API_KEY</code> 變數。</div></div>`;
+            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('請在這裡貼上您的_AIza_開頭金鑰')) {
+                contentDiv.innerHTML = `<div class="text-center mt-10 font-bold text-red-500">尚未設定 API 金鑰！</div>`;
                 return;
             }
 
@@ -777,94 +740,75 @@
             }
 
             const scheduleText = dayItems.map(item => `${item.time} ${item.title}（${item.note || '無備註'}）`).join('\n');
-            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。你會善用 Google 搜尋工具查詢即時、準確的當地資訊，絕不憑印象瞎猜，尤其是店家評價、營業狀況與景點小知識，都要以搜尋結果為準。";
-            const userQuery = `以下是我今天的曼谷行程：
+            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。如果可以使用搜尋工具，請善用它查最新資訊。請重點推薦必吃美食和必買清單。";
+            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請你針對我的行程提供以下資訊（越詳細、越有在地感越好）：\n\n1. 🗓️ 行程順暢度點評。\n2. 🍜 行程地點周邊「必吃在地美食」或特色餐廳（含必點菜色）。\n3. 🛍️ 行程附近適合的「必買伴手禮」或購物點。\n4. 📖 挑選1~2個景點分享冷知識或歷史。\n5. ☀️ 旅遊注意事項。\n\n請保持簡短扼要，用 Markdown 的 ** 星號 ** 標記重點。`;
 
-${scheduleText}
+            let success = false;
+            let lastError = "";
+            let finalHtml = "";
 
-請你「務必使用網路搜尋」查詢行程中提到的地點、店家與周邊資訊後，再回答（不要單憑記憶瞎猜，資訊要盡量新）：
+            // 自動測試模型清單
+            for (const model of MODELS_TO_TRY) {
+                try {
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY.trim()}`;
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        tools: [{ googleSearch: {} }] // 包含 Google Search
+                    };
 
-1. 🗓️ 簡短點評一兩句今天的行程規劃是否順暢。
-2. 🍜 搜尋並推薦行程地點「附近」的必吃美食（優先參考近期評價高的店家）。
-3. 🛍️ 搜尋並推薦附近適合的必買伴手禮。
-4. 📖 挑選這天行程中 1~2 個景點，搜尋分享簡短的歷史背景或有趣冷知識。
-5. ☀️ 提醒當天曼谷天氣可能需要注意的事項（例如午後雷陣雨機率）。
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if(!response.ok) {
+                        const errData = await response.json();
+                        throw new Error(`${response.status} - ${errData.error?.message || '連線遭拒'}`);
+                    }
+                    
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    let text = candidate?.content?.parts?.map(p => p.text || '').join('') || '';
+                    if(!text) throw new Error("API 未回傳內容");
 
-請保持「簡短扼要」，字數控制在 350 字內，多用 Emoji 分段，用 Markdown 的 ** 星號 ** 標記重點關鍵字。語氣要像熟悉當地的朋友在聊天，不要用條列式的死板格式。`;
+                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dustypink-600 font-bold">$1</strong>');
+                    text = text.replace(/(?<!\*)\*(?!\*)/g, '• ');
+                    text = text.replace(/\n/g, '<br>');
 
-            try {
-                // AQ. 開頭的新版 Auth key，目前只有「Interactions API」這個新端點
-                // 正式支援，舊版 generateContent 端點會回傳 401 拒絕存取。
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/interactions`;
-                const combinedInput = `${systemPrompt}\n\n${userQuery}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'x-goog-api-key': GEMINI_API_KEY
-                    },
-                    body: JSON.stringify({
-                        model: GEMINI_MODEL,
-                        input: combinedInput,
-                        tools: [{ type: "google_search" }]
-                    })
-                });
-                
-                if(!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(`${response.status} - ${errData.error?.message || '連線遭拒'}`);
-                }
-                
-                const result = await response.json();
-
-                // Interactions API 回傳的是 steps 陣列，
-                // 文字內容與搜尋來源都要從 model_output 這個 step 裡取出。
-                let text = '';
-                const citations = [];
-                const seenUrls = new Set();
-                for (const step of (result.steps || [])) {
-                    if (step.type === 'model_output') {
-                        for (const block of (step.content || [])) {
-                            if (block.type === 'text') {
-                                text += block.text || '';
-                                for (const ann of (block.annotations || [])) {
-                                    if (ann.type === 'url_citation' && ann.url && !seenUrls.has(ann.url)) {
-                                        seenUrls.add(ann.url);
-                                        citations.push(ann);
-                                    }
-                                }
-                            }
+                    // 擷取 Grounding 來源
+                    const chunks = candidate?.groundingMetadata?.groundingChunks || [];
+                    if (chunks.length > 0) {
+                        const seen = new Set();
+                        const sourceLinks = chunks
+                            .filter(c => c.web?.uri && !seen.has(c.web.uri) && seen.add(c.web.uri))
+                            .slice(0, 5) 
+                            .map(c => `<a href="${c.web.uri}" target="_blank" rel="noopener" class="underline text-dustypink-500 hover:text-dustypink-600">${(c.web.title || '參考來源').slice(0, 16)}...</a>`)
+                            .join(' ・ ');
+                        if (sourceLinks) {
+                            text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">🔍 <strong class="text-lavender-500">Google 搜尋來源：</strong><br>${sourceLinks}</div>`;
                         }
                     }
+
+                    finalHtml = text;
+                    success = true;
+                    console.log(`成功使用模型: ${model}`);
+                    break; // 只要一個成功就跳出迴圈！
+                } catch (e) {
+                    console.warn(`嘗試模型 ${model} 失敗:`, e.message);
+                    lastError = e.message; // 記錄最後一個錯誤
                 }
-                if(!text) throw new Error("API 未回傳內容");
+            }
 
-                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dustypink-600 font-bold">$1</strong>');
-                text = text.replace(/(?<!\*)\*(?!\*)/g, '• ');
-                text = text.replace(/\n/g, '<br>');
-
-                // 附上 Google 搜尋來源（符合 Grounding 使用規範，須顯示來源）
-                if (citations.length > 0) {
-                    const sourceLinks = citations
-                        .slice(0, 5)
-                        .map(c => `<a href="${c.url}" target="_blank" rel="noopener" class="underline text-dustypink-500 hover:text-dustypink-600">${(c.title || '參考來源').slice(0, 16)}</a>`)
-                        .join(' ・ ');
-                    text += `<div class="mt-3 pt-2 border-t border-lavender-200 text-[10px] text-lavender-400 leading-relaxed">🔍 <strong class="text-lavender-500">搜尋來源：</strong>${sourceLinks}</div>`;
-                }
-
-                contentDiv.innerHTML = text;
-
-            } catch (e) {
-                console.error("Gemini API 失敗:", e);
+            if (success) {
+                contentDiv.innerHTML = finalHtml;
+            } else {
+                // 如果全部失敗，顯示備用方案
                 contentDiv.innerHTML = `
-                    <div class="text-red-500 font-bold text-center mt-4 mb-2">抱歉，兔兔導遊連線失敗 😢</div>
+                    <div class="text-red-500 font-bold text-center mt-4 mb-2">抱歉，兔兔工程師抓 Bug 失敗 😢</div>
                     <div class="text-[11px] text-lavender-700 bg-red-50 p-3 rounded-xl text-left shadow-inner border border-red-100 mb-4 break-all">
-                        <strong>真實失敗原因：</strong> ${e.message}<br><br>
-                        💡 <strong>可能的原因：</strong><br>
-                        1. 若為 400 API Key not valid，代表金鑰格式錯誤、被刪除或還沒填入。<br>
-                        2. 若為 403，代表 Google API 在當前網路環境（如公司內網）被阻擋，或該金鑰尚未啟用 Generative Language API。<br>
-                        3. 新申請的 Key 可能需要幾分鐘才會生效。<br>
+                        <strong>連線錯誤：</strong> ${lastError}
                     </div>
                     <div class="relative py-2">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-lavender-200"></div></div>
@@ -887,3 +831,4 @@ ${scheduleText}
     </script>
 </body>
 </html>
+```eof
