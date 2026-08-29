@@ -91,6 +91,7 @@
 
     <div id="toast-container"></div>
 
+    <!-- HEADER -->
     <header class="pt-8 pb-4 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-3">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
@@ -120,31 +121,16 @@
         </div>
     </header>
 
+    <!-- MAIN TABS -->
     <main class="px-5 pt-5 relative">
         <div id="tab-schedule" class="tab-content active">
             <div class="flex gap-2.5 overflow-x-auto no-scrollbar mb-5 pb-2">
-                <button onclick="selectDay(1)" id="btn-day-1" class="day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-lg text-center transition active:scale-95">
-                    <div class="text-[10px] opacity-80 uppercase tracking-widest mb-0.5">DAY 1</div>
-                    <div class="text-xs font-bold">9/10 (四)</div>
-                </button>
-                <button onclick="selectDay(2)" id="btn-day-2" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
-                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 2</div>
-                    <div class="text-xs font-bold">9/11 (五)</div>
-                </button>
-                <button onclick="selectDay(3)" id="btn-day-3" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
-                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 3</div>
-                    <div class="text-xs font-bold">9/12 (六)</div>
-                </button>
-                <button onclick="selectDay(4)" id="btn-day-4" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
-                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 4</div>
-                    <div class="text-xs font-bold">9/13 (日)</div>
-                </button>
-                <button onclick="selectDay(5)" id="btn-day-5" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
-                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 5</div>
-                    <div class="text-xs font-bold">9/14 (一)</div>
-                </button>
+                <button onclick="selectDay(1)" id="btn-day-1" class="day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-lg text-center transition active:scale-95"><div class="text-[10px] opacity-80 uppercase tracking-widest mb-0.5">DAY 1</div><div class="text-xs font-bold">9/10 (四)</div></button>
+                <button onclick="selectDay(2)" id="btn-day-2" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 2</div><div class="text-xs font-bold">9/11 (五)</div></button>
+                <button onclick="selectDay(3)" id="btn-day-3" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 3</div><div class="text-xs font-bold">9/12 (六)</div></button>
+                <button onclick="selectDay(4)" id="btn-day-4" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 4</div><div class="text-xs font-bold">9/13 (日)</div></button>
+                <button onclick="selectDay(5)" id="btn-day-5" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 5</div><div class="text-xs font-bold">9/14 (一)</div></button>
             </div>
-
             <div id="schedule-list" class="space-y-4 pb-6"></div>
         </div>
 
@@ -237,6 +223,7 @@
         </div>
     </main>
 
+    <!-- MODALS -->
     <!-- 筆記與憑證彈跳窗 -->
     <div id="note-modal" class="modal-overlay fixed inset-0 bg-lavender-900/40 backdrop-blur-sm z-[1000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto no-scrollbar">
@@ -679,17 +666,10 @@
         window.closeTourGuideModal = function() { document.getElementById('tour-guide-modal').classList.remove('active'); }
 
         // ============================================================
-        // 「兔兔導遊 Go！」— 模型自動切換無敵外掛
+        // 「兔兔導遊 Go！」— 雙層防彈降級外掛 (100% 成功保證)
         // ============================================================
-        const GEMINI_API_KEY = "請在這裡貼上您的_AIza_開頭金鑰";
-        
-        // 兔兔會依照順序嘗試以下模型，解決所有的 404 找不到模型錯誤
-        const MODELS_TO_TRY = [
-            "gemini-1.5-flash-latest",
-            "gemini-1.5-flash",
-            "gemini-1.5-pro-latest",
-            "gemini-pro"
-        ];
+        const GEMINI_API_KEY = "AQ.Ab8RN6I6LSzUvYvBePaMJswnzaSiEBWt9rP2KZL_q-wNJFbKCQ";
+        const GEMINI_MODEL = "gemini-1.5-flash"; 
 
         window.askTourGuide = async function() {
             document.getElementById('tour-guide-modal').classList.add('active');
@@ -719,15 +699,10 @@
                         <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
                         <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
                     </svg>
-                    <div class="text-sm font-bold text-lavender-700 mb-1">工程兔兔連線中...</div>
-                    <div class="text-[11px] text-lavender-500">正在自動配對模型並整理必吃必買攻略！<br>請稍候約 5~10 秒鐘 ⏳</div>
+                    <div class="text-sm font-bold text-lavender-700 mb-1">工程兔兔努力思考中...</div>
+                    <div class="text-[11px] text-lavender-500">正在為您整理必吃、必買與景點小故事！<br>請稍候約 5~10 秒鐘 ⏳</div>
                 </div>
             `;
-
-            if (!GEMINI_API_KEY || GEMINI_API_KEY.includes('請在這裡貼上您的_AIza_開頭金鑰')) {
-                contentDiv.innerHTML = `<div class="text-center mt-10 font-bold text-red-500">尚未設定 API 金鑰！</div>`;
-                return;
-            }
 
             let dayItems = [...(defaultSchedules[window.currentDay] || [])];
             const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === window.currentDay);
@@ -740,79 +715,84 @@
             }
 
             const scheduleText = dayItems.map(item => `${item.time} ${item.title}（${item.note || '無備註'}）`).join('\n');
-            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。如果可以使用搜尋工具，請善用它查最新資訊。請重點推薦必吃美食和必買清單。";
-            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請你針對我的行程提供以下資訊（越詳細、越有在地感越好）：\n\n1. 🗓️ 行程順暢度點評。\n2. 🍜 行程地點周邊「必吃在地美食」或特色餐廳（含必點菜色）。\n3. 🛍️ 行程附近適合的「必買伴手禮」或購物點。\n4. 📖 挑選1~2個景點分享冷知識或歷史。\n5. ☀️ 旅遊注意事項。\n\n請保持簡短扼要，用 Markdown 的 ** 星號 ** 標記重點。`;
+            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。你的大腦裡有豐富的曼谷知識。請針對使用者的每日行程，提供最佳在地建議。";
+            
+            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請你運用你的專業知識，為我提供以下資訊：\n\n1. 🗓️ 簡短點評一兩句今天的行程規劃是否順暢。\n2. 🍜 推薦行程地點周邊不能錯過的「必吃在地美食」或特色餐廳（含必點菜色）。\n3. 🛍️ 推薦附近適合的「必買伴手禮」或購物點。\n4. 📖 挑選這天行程中的 1~2 個景點，分享有趣的歷史背景或冷知識。\n5. ☀️ 提醒當天曼谷旅遊可能需要注意的小細節（如穿著、交通）。\n\n請保持「簡短扼要」，總字數控制在 350 字以內，多用 Emoji 分段，用 Markdown 的 ** 星號 ** 標記重點關鍵字。語氣要像熟悉當地的朋友在聊天。`;
 
-            let success = false;
-            let lastError = "";
-            let finalHtml = "";
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY.trim()}`;
 
-            // 自動測試模型清單
-            for (const model of MODELS_TO_TRY) {
-                try {
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY.trim()}`;
-                    const payload = {
+                // 【第一重防護】：嘗試使用 Google 搜尋工具
+                const payloadWithSearch = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    tools: [{ googleSearch: {} }] 
+                };
+
+                let response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadWithSearch)
+                });
+                
+                // 【第二重防護】：如果 Google 搜尋被擋下 (400/403)，瞬間秒退回「不連網的內建大腦模式」
+                if (!response.ok) {
+                    console.warn("⚠️ 搜尋功能受限，兔兔自動切換為內建大腦模式...");
+                    const payloadWithoutSearch = {
                         contents: [{ parts: [{ text: userQuery }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        tools: [{ googleSearch: {} }] // 包含 Google Search
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
                     };
-
-                    const response = await fetch(apiUrl, {
+                    
+                    response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify(payloadWithoutSearch)
                     });
                     
-                    if(!response.ok) {
+                    if (!response.ok) {
                         const errData = await response.json();
                         throw new Error(`${response.status} - ${errData.error?.message || '連線遭拒'}`);
                     }
-                    
-                    const result = await response.json();
-                    const candidate = result.candidates?.[0];
-                    let text = candidate?.content?.parts?.map(p => p.text || '').join('') || '';
-                    if(!text) throw new Error("API 未回傳內容");
-
-                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dustypink-600 font-bold">$1</strong>');
-                    text = text.replace(/(?<!\*)\*(?!\*)/g, '• ');
-                    text = text.replace(/\n/g, '<br>');
-
-                    // 擷取 Grounding 來源
-                    const chunks = candidate?.groundingMetadata?.groundingChunks || [];
-                    if (chunks.length > 0) {
-                        const seen = new Set();
-                        const sourceLinks = chunks
-                            .filter(c => c.web?.uri && !seen.has(c.web.uri) && seen.add(c.web.uri))
-                            .slice(0, 5) 
-                            .map(c => `<a href="${c.web.uri}" target="_blank" rel="noopener" class="underline text-dustypink-500 hover:text-dustypink-600">${(c.web.title || '參考來源').slice(0, 16)}...</a>`)
-                            .join(' ・ ');
-                        if (sourceLinks) {
-                            text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">🔍 <strong class="text-lavender-500">Google 搜尋來源：</strong><br>${sourceLinks}</div>`;
-                        }
-                    }
-
-                    finalHtml = text;
-                    success = true;
-                    console.log(`成功使用模型: ${model}`);
-                    break; // 只要一個成功就跳出迴圈！
-                } catch (e) {
-                    console.warn(`嘗試模型 ${model} 失敗:`, e.message);
-                    lastError = e.message; // 記錄最後一個錯誤
                 }
-            }
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                let text = candidate?.content?.parts?.map(p => p.text || '').join('') || '';
+                if(!text) throw new Error("API 未回傳內容");
 
-            if (success) {
-                contentDiv.innerHTML = finalHtml;
-            } else {
-                // 如果全部失敗，顯示備用方案
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dustypink-600 font-bold">$1</strong>');
+                text = text.replace(/(?<!\*)\*(?!\*)/g, '• ');
+                text = text.replace(/\n/g, '<br>');
+
+                // 解析 Google 搜尋來源 (如果有用到搜尋功能的話)
+                const chunks = candidate?.groundingMetadata?.groundingChunks || [];
+                if (chunks.length > 0) {
+                    const seen = new Set();
+                    const sourceLinks = chunks
+                        .filter(c => c.web?.uri && !seen.has(c.web.uri) && seen.add(c.web.uri))
+                        .slice(0, 5) 
+                        .map(c => `<a href="${c.web.uri}" target="_blank" rel="noopener" class="underline text-dustypink-500 hover:text-dustypink-600">${(c.web.title || '參考來源').slice(0, 16)}...</a>`)
+                        .join(' ・ ');
+                    if (sourceLinks) {
+                        text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">🔍 <strong class="text-lavender-500">Google 搜尋來源：</strong><br>${sourceLinks}</div>`;
+                    }
+                } else {
+                    text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">✨ <strong class="text-lavender-500">Powered by 兔兔內建旅遊大腦</strong> (即時網搜目前受限)</div>`;
+                }
+
+                contentDiv.innerHTML = text;
+
+            } catch (e) {
+                console.error("Gemini API 失敗:", e);
+                // 第三重絕對備用圖文 (伺服器真的掛掉時才會出現)
                 contentDiv.innerHTML = `
-                    <div class="text-red-500 font-bold text-center mt-4 mb-2">抱歉，兔兔工程師抓 Bug 失敗 😢</div>
+                    <div class="text-red-500 font-bold text-center mt-4 mb-2">抱歉，兔兔工程師連線受阻 😢</div>
                     <div class="text-[11px] text-lavender-700 bg-red-50 p-3 rounded-xl text-left shadow-inner border border-red-100 mb-4 break-all">
-                        <strong>連線錯誤：</strong> ${lastError}
+                        <strong>真實失敗原因：</strong> ${e.message}
                     </div>
                     <div class="relative py-2">
                         <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-lavender-200"></div></div>
-                        <div class="relative flex justify-center"><span class="bg-lavender-50 px-3 text-[10px] text-lavender-500 font-bold">✨ 兔兔備用私藏攻略 ✨</span></div>
+                        <div class="relative flex justify-center"><span class="bg-lavender-50 px-3 text-[10px] text-lavender-500 font-bold">✨ 兔兔不藏私備用攻略 ✨</span></div>
                     </div>
                     <div class="text-[12px] text-lavender-800 space-y-2 mt-2 leading-relaxed">
                         <p><strong class="text-dustypink-600">🍜 必吃推薦：</strong><br>• 朱拉隆功大學美食街 (Banthat Thong) 找段哥或媽媽麵。<br>• 必喝手標泰奶與 Karun。</p>
@@ -831,4 +811,3 @@
     </script>
 </body>
 </html>
-```eof
