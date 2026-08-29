@@ -93,13 +93,15 @@
 
     <div id="toast-container"></div>
 
-    <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
-        <div class="flex justify-between items-center mb-2">
+    <header class="pt-8 pb-4 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
+        <div class="flex justify-between items-center mb-3">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
-            <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-                <span id="sync-status" class="text-[10px] font-bold text-lavender-700">🟡 連線中</span>
-                <span class="text-[10px] text-lavender-300">|</span>
-                <span id="bkk-clock" class="font-mono text-[11px] text-dustypink-600 font-bold">--:--:--</span>
+            <div class="flex items-center gap-2">
+                <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+                    <span id="sync-status" class="text-[10px] font-bold text-lavender-700">🟡 連線中</span>
+                    <span class="text-[10px] text-lavender-300">|</span>
+                    <span id="bkk-clock" class="font-mono text-xs text-dustypink-600 font-bold">--:--:--</span>
+                </div>
             </div>
         </div>
 
@@ -313,7 +315,6 @@
             <div class="text-[10px] tracking-widest text-dustypink-500 uppercase font-bold mb-1" id="m-time">Time</div>
             <h3 class="font-serif text-2xl text-lavender-700 mb-4 leading-tight" id="m-title">Title</h3>
             
-            <!-- 備註區 -->
             <label class="block text-[11px] text-lavender-600 mb-1.5 font-medium flex justify-between">
                 <span>📝 預約資訊 / 備註</span>
             </label>
@@ -350,7 +351,6 @@
                 <button onclick="closeDocPreview()" class="text-2xl text-lavender-400 hover:text-lavender-800 transition leading-none">&times;</button>
             </div>
             <div id="pv-body" class="flex-1 overflow-y-auto min-h-[280px] flex flex-col justify-center bg-lavender-50 rounded-2xl p-3 mb-3 border border-lavender-100 relative">
-                <!-- Content injected here -->
             </div>
             <div class="flex gap-2">
                 <a id="pv-download-btn" href="#" download="" target="_blank" class="flex-1 bg-lavender-500 text-white text-center py-2.5 rounded-xl font-bold text-xs shadow-md active:scale-95 transition flex items-center justify-center gap-1.5">
@@ -415,7 +415,6 @@
                 </div>
             </div>
             <div id="tour-guide-content" class="flex-1 overflow-y-auto no-scrollbar bg-lavender-50/70 rounded-2xl p-4 border border-lavender-100 text-[13.5px] text-lavender-800 leading-relaxed shadow-inner">
-                <!-- Content injected here -->
             </div>
             <div class="mt-4 pt-3 border-t border-lavender-100 flex justify-center">
                 <span class="text-[10px] text-lavender-400 font-medium">✨ Powered by AI 在地隨身嚮導</span>
@@ -471,17 +470,7 @@
         const APP_ID = 'bangkok-trip-2026';
         const basePath = `artifacts/${APP_ID}/public/data`;
         
-        window.currentUser = null;
-        window.sharedNotes = {};
-        window.sharedVouchers = [];
-        window.sharedExpenses = [];
-        window.sharedFoodStatus = {};
-        window.sharedCustomFood = [];
-        window.sharedDeletedFoods = [];
-        window.sharedCustomSchedules = [];
-        window.sharedDeletedSchedules = [];
-        window.currentDay = 1;
-
+        // 將 Firebase 方法掛載到全域，供外部常規 function 呼叫
         window.fbAddDoc = addDoc;
         window.fbSetDoc = setDoc;
         window.fbDeleteDoc = deleteDoc;
@@ -499,7 +488,8 @@
             try {
                 await signInAnonymously(auth);
                 window.currentUser = auth.currentUser;
-                document.getElementById('sync-status').innerText = '🟢 已連線';
+                const statusEl = document.getElementById('sync-status');
+                if(statusEl) statusEl.innerText = '🟢 已連線';
                 
                 onSnapshot(collection(db, basePath, 'expenses'), (snap) => {
                     window.sharedExpenses = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -542,11 +532,6 @@
                     if(typeof window.renderFood === 'function') window.renderFood();
                 }, e => console.error(e));
 
-                onSnapshot(collection(db, basePath, 'deletedFoods'), (snap) => {
-                    window.sharedDeletedFoods = snap.docs.map(d => d.id);
-                    if(typeof window.renderFood === 'function') window.renderFood();
-                }, e => console.error(e));
-
                 onSnapshot(doc(db, basePath, 'settings', 'flights'), (d) => {
                     if (d.exists()) {
                         const f = d.data();
@@ -559,7 +544,8 @@
 
             } catch (error) {
                 console.error("Firebase Sync Error", error);
-                document.getElementById('sync-status').innerText = '🔴 連線失敗';
+                const statusEl = document.getElementById('sync-status');
+                if(statusEl) statusEl.innerText = '🔴 連線失敗';
             }
         }
         
@@ -568,6 +554,18 @@
 
     <!-- 應用程式主邏輯 -->
     <script>
+        // 初始化全域狀態
+        window.currentUser = null;
+        window.sharedNotes = {};
+        window.sharedVouchers = [];
+        window.sharedExpenses = [];
+        window.sharedFoodStatus = {};
+        window.sharedCustomFood = [];
+        window.sharedDeletedFoods = [];
+        window.sharedCustomSchedules = [];
+        window.sharedDeletedSchedules = [];
+        window.currentDay = 1;
+
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -580,7 +578,7 @@
         function manualRefresh() {
             const icon = document.getElementById('refresh-icon');
             if (icon) icon.style.transform = 'rotate(360deg)';
-            showToast('🔄 正在強制拉取雲端最新資料...');
+            showToast('🔄 正在同步最新頁面與資料...');
             setTimeout(() => { window.location.reload(); }, 600);
         }
 
@@ -597,12 +595,58 @@
             if (el) el.innerText = new Date().toLocaleTimeString('en-US', options);
         }, 1000);
 
+        // 每小時天氣預報資料庫
         const dailyWeather = {
-            1: { area: "曼谷市區 (Bangkok)", temp: "26°C - 33°C", desc: "多雲短暫陣雨", icon: "⛅️", pop: "40%" },
-            2: { area: "明武里區 (Safari)", temp: "27°C - 34°C", desc: "晴時多雲", icon: "☀️", pop: "10%" },
-            3: { area: "昭披耶河畔 / 舊城區", temp: "26°C - 32°C", desc: "午後雷陣雨", icon: "🌦️", pop: "60%" },
-            4: { area: "沙吞 / 吞武里", temp: "27°C - 33°C", desc: "多雲", icon: "⛅️", pop: "20%" },
-            5: { area: "帕亞泰 / 機場", temp: "26°C - 33°C", desc: "晴朗", icon: "☀️", pop: "5%" }
+            1: {
+                area: "曼谷市區 (Bangkok)",
+                hourly: [
+                    { time: "09:00", temp: "28°C", icon: "⛅️", pop: "10%" },
+                    { time: "12:00", temp: "32°C", icon: "☀️", pop: "10%" },
+                    { time: "15:00", temp: "33°C", icon: "🌦️", pop: "40%" },
+                    { time: "18:00", temp: "30°C", icon: "🌧️", pop: "60%" },
+                    { time: "21:00", temp: "28°C", icon: "☁️", pop: "20%" }
+                ]
+            },
+            2: {
+                area: "明武里區 (Safari)",
+                hourly: [
+                    { time: "09:00", temp: "29°C", icon: "☀️", pop: "5%" },
+                    { time: "12:00", temp: "34°C", icon: "☀️", pop: "10%" },
+                    { time: "15:00", temp: "33°C", icon: "⛅️", pop: "20%" },
+                    { time: "18:00", temp: "31°C", icon: "☁️", pop: "10%" },
+                    { time: "21:00", temp: "29°C", icon: "☁️", pop: "10%" }
+                ]
+            },
+            3: {
+                area: "昭披耶河畔 / 舊城區",
+                hourly: [
+                    { time: "10:00", temp: "29°C", icon: "⛅️", pop: "30%" },
+                    { time: "13:00", temp: "33°C", icon: "⛈️", pop: "70%" },
+                    { time: "16:00", temp: "31°C", icon: "🌦️", pop: "50%" },
+                    { time: "19:00", temp: "29°C", icon: "☁️", pop: "30%" },
+                    { time: "22:00", temp: "28°C", icon: "☁️", pop: "20%" }
+                ]
+            },
+            4: {
+                area: "沙吞 / 吞武里",
+                hourly: [
+                    { time: "10:00", temp: "29°C", icon: "☀️", pop: "10%" },
+                    { time: "13:00", temp: "33°C", icon: "⛅️", pop: "20%" },
+                    { time: "16:00", temp: "32°C", icon: "☁️", pop: "20%" },
+                    { time: "19:00", temp: "30°C", icon: "☁️", pop: "10%" },
+                    { time: "22:00", temp: "28°C", icon: "☁️", pop: "10%" }
+                ]
+            },
+            5: {
+                area: "帕亞泰 / 機場",
+                hourly: [
+                    { time: "07:00", temp: "27°C", icon: "☀️", pop: "0%" },
+                    { time: "10:00", temp: "30°C", icon: "☀️", pop: "10%" },
+                    { time: "13:00", temp: "33°C", icon: "⛅️", pop: "20%" },
+                    { time: "16:00", temp: "31°C", icon: "☁️", pop: "10%" },
+                    { time: "19:00", temp: "29°C", icon: "☁️", pop: "10%" }
+                ]
+            }
         };
 
         const defaultSchedules = {
@@ -690,18 +734,26 @@
             if(!list) return;
             list.innerHTML = '';
 
+            // 渲染每日天氣卡片
             const weather = dailyWeather[dayNum];
             if (weather) {
+                let hourlyHtml = weather.hourly.map(h => `
+                    <div class="flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm rounded-xl py-2 px-3 min-w-[65px] border border-blue-100/60 shadow-sm flex-none">
+                        <span class="text-[10px] text-indigo-500 font-bold mb-1">${h.time}</span>
+                        <span class="text-xl mb-1">${h.icon}</span>
+                        <span class="text-xs font-bold text-indigo-900">${h.temp}</span>
+                        <span class="text-[9px] text-blue-500 font-medium mt-0.5 flex items-center gap-0.5">💧 ${h.pop}</span>
+                    </div>
+                `).join('');
+
                 list.innerHTML += `
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-3.5 mb-3 flex items-center justify-between shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <span class="text-3xl drop-shadow-sm">${weather.icon}</span>
-                            <div>
-                                <div class="text-[10px] text-indigo-400 font-bold tracking-widest mb-0.5">📍 ${weather.area}</div>
-                                <div class="text-xs font-bold text-indigo-900">${weather.temp} | ${weather.desc}</div>
-                            </div>
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-4 mb-4 shadow-sm relative overflow-hidden">
+                        <div class="text-[11px] text-indigo-500 font-bold tracking-widest mb-3 flex items-center gap-1.5">
+                            <span>📍 ${weather.area}</span> <span class="text-indigo-300">|</span> <span>每小時預報</span>
                         </div>
-                        <div class="text-[10px] font-bold text-blue-500 bg-white/60 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-blue-100 flex-none">降雨 ${weather.pop}</div>
+                        <div class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+                            ${hourlyHtml}
+                        </div>
                     </div>
                     <button onclick="askTourGuide()" class="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl p-3 mb-5 flex items-center justify-center gap-2 font-bold shadow-lg shadow-indigo-500/30 hover:opacity-90 active:scale-95 transition">
                         <span class="text-xl">🧞‍♂️</span> <span class="text-[13px] tracking-wide">導遊 Go！解析今日亮點與美食</span>
@@ -762,7 +814,6 @@
         window.deleteSchedule = async function(itemId, event) {
             event.stopPropagation();
             if (!window.currentUser) { showToast('未連線，無法刪除'); return; }
-            
             try {
                 if (itemId.startsWith('def_')) {
                     await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'deletedSchedules', itemId), { timestamp: Date.now() });
@@ -852,17 +903,13 @@
             if (!window.currentUser) { showToast('尚未連線雲端，無法上傳檔案'); return; }
             const file = event.target.files[0];
             if (!file) return;
-
-            if (file.size > 3 * 1024 * 1024) {
-                showToast('❌ 檔案過大，請上傳小於 3MB 的檔案'); return;
-            }
+            if (file.size > 3 * 1024 * 1024) { showToast('❌ 檔案過大，請上傳小於 3MB 的檔案'); return; }
 
             const itemId = document.getElementById('m-item-id').value;
             const uniqueName = Date.now() + '_' + file.name;
             const storagePath = `artifacts/bangkok-trip-2026/public/vouchers/${uniqueName}`;
             
             showToast('🔄 雲端上傳中，請稍候...');
-            
             try {
                 const storageRef = window.fbSRef(window.fbStorage, storagePath);
                 await window.fbUploadBytes(storageRef, file);
@@ -908,7 +955,6 @@
             } else {
                 bodyEl.innerHTML = `<div class="text-center p-6"><div class="text-4xl mb-2">📄</div><div class="text-xs text-lavender-600 font-medium mb-3">${doc.name}</div></div>`;
             }
-
             document.getElementById('doc-preview-modal').classList.add('active');
         }
 
@@ -925,9 +971,7 @@
                 const sRef = window.fbSRef(window.fbStorage, storagePath);
                 await window.fbDeleteObject(sRef);
                 showToast('已從雲端刪除憑證');
-            } catch(e) {
-                console.error(e);
-            }
+            } catch(e) { console.error(e); }
         }
 
         window.saveNote = async function() {
@@ -977,9 +1021,8 @@
 
         window.toggleFood = async function(id, newState) {
             if (!window.currentUser) return;
-            try {
-                await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'foodStatus', id), { checked: newState });
-            } catch (e) { console.error(e); }
+            try { await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'foodStatus', id), { checked: newState }); } 
+            catch (e) { console.error(e); }
         }
 
         window.addCustomFood = async function() {
@@ -1053,10 +1096,8 @@
 
         window.delExpense = async function(id) {
             if (!window.currentUser) return;
-            try {
-                await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'expenses', id));
-                showToast('記錄已刪除');
-            } catch (e) {}
+            try { await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'expenses', id)); showToast('記錄已刪除'); } 
+            catch (e) {}
         }
 
         window.renderExpenses = function() {
@@ -1110,21 +1151,40 @@
 
             const scheduleText = dayItems.map(item => `${item.time} ${item.title} (${item.note || '無備註'})`).join('\n');
             const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。你的任務是根據旅客提供的每日行程，給出專屬的旅遊建議。";
-            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請幫我：\n1. 簡短點評一兩句今天的行程規劃。\n2. 根據這些地點，推薦附近絕對不能錯過的「必吃美食」與「必買伴手禮」。\n3. 挑選行程中1~2個景點，分享有趣的歷史小知識或冷知識。\n4. 提醒當天的天氣注意事項(如防曬、帶傘等)。\n\n字數控制在350字內，多使用Emoji，段落分明，並使用Markdown加粗重點字。語氣要像朋友一樣熱情，不要講廢話。`;
+            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請幫我：\n1. 簡短點評一兩句今天的行程規劃。\n2. 根據這些地點，推薦附近絕對不能錯過的「必吃美食」與「必買伴手禮」。\n3. 挑選行程中1~2個景點，分享有趣的歷史小知識或冷知識。\n4. 提醒當天的天氣注意事項(如防曬、帶傘等)。\n\n請保持回答「簡短扼要」，字數控制在300字以內。多使用Emoji，段落分明，並使用Markdown加粗重點字。語氣要像朋友一樣熱情，不要講廢話。`;
 
             try {
+                // 已成功寫入您的專屬 API Key
+                const apiKey = "AQ.Ab8RN6LM7Hu9mUPbxoeEEnLet3y-2zRlYjsCsprGW5ct7vGJhA"; 
+                
+                if (!apiKey || apiKey === "請在這裡貼上您的_API_KEY") {
+                    contentDiv.innerHTML = `
+                        <div class="text-center mt-6">
+                            <div class="text-red-500 font-bold mb-2">🚨 導遊需要 AI 大腦！</div>
+                            <div class="text-xs text-lavender-600 leading-relaxed text-left bg-white p-4 rounded-xl border border-red-100 shadow-sm">
+                                請在程式碼中補上 API Key 即可啟動導遊！
+                            </div>
+                        </div>`;
+                    return;
+                }
+
                 const payload = {
                     contents: [{ parts: [{ text: userQuery }] }],
                     systemInstruction: { parts: [{ text: systemPrompt }] },
                 };
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                // 使用最新 Gemini 1.5 Flash 模型確保速度與穩定度
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+                
+                if(!response.ok) {
+                    throw new Error("API 請求錯誤");
+                }
                 
                 const result = await response.json();
                 let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "導遊似乎迷路了，請稍後再試。";
@@ -1136,7 +1196,7 @@
                 contentDiv.innerHTML = text;
             } catch (e) {
                 console.error(e);
-                contentDiv.innerHTML = '<div class="text-red-500 font-bold text-center mt-10">抱歉，呼叫導遊失敗 😢<br>請檢查網路狀態或稍後再試。</div>';
+                contentDiv.innerHTML = '<div class="text-red-500 font-bold text-center mt-10">抱歉，呼叫導遊失敗 😢<br>請檢查網路狀態或確認 API Key 權限是否正確。</div>';
             }
         }
 
