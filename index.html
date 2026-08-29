@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="泰國漫游26">
     <title>2026 泰國漫游 | BANGKOK JOURNAL</title>
-    <link rel="apple-touch-icon" href="icon.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -738,7 +737,7 @@
         // 建議到 Google Cloud Console 為此金鑰設定「HTTP 參照網址限制」，
         // 只允許你部署此頁面的網域呼叫，降低被盜用風險。
         // ============================================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6LnZaHqW1bF7nbER4Ct9ErzXa4ESKILvbKIyK5SwL6eGQ";
+        const GEMINI_API_KEY = "AQ.Ab8RN6JaNQiNe_tEcYugfJaOBGYrsBwVULHWwRXXgILEwTHbeQ";
         const GEMINI_MODEL = "gemini-2.0-flash";
 
         window.askTourGuide = async function() {
@@ -794,11 +793,16 @@ ${scheduleText}
 請保持「簡短扼要」，字數控制在 350 字內，多用 Emoji 分段，用 Markdown 的 ** 星號 ** 標記重點關鍵字。語氣要像熟悉當地的朋友在聊天，不要用條列式的死板格式。`;
 
             try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+                // 新版 Auth key（AQ. 開頭）不能放在網址的 ?key= 參數，
+                // 必須改放在 HTTP Header 的 x-goog-api-key 欄位。
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': GEMINI_API_KEY
+                    },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: userQuery }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
