@@ -94,7 +94,7 @@
     <div id="toast-container"></div>
 
     <header class="pt-8 pb-5 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
-        <div class="flex justify-between items-center mb-1.5">
+        <div class="flex justify-between items-center mb-2">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
             <div class="bg-white/90 border border-lavender-200 px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
                 <span id="sync-status" class="text-[10px] font-bold text-lavender-700">🟡 連線中</span>
@@ -103,14 +103,14 @@
             </div>
         </div>
 
-        <h1 class="font-serif text-[34px] font-semibold text-lavender-700 tracking-tight leading-none mb-1.5 mt-1">
+        <h1 class="font-serif text-[34px] font-semibold text-lavender-700 tracking-tight leading-none mb-1 mt-1">
             BANGKOK <span class="italic text-dustypink-400 font-normal">Journal</span>
         </h1>
-        <p class="text-[11px] text-lavender-600 font-medium flex items-center justify-center gap-1.5 mt-1">
+        <p class="text-[11px] text-lavender-600 font-medium flex items-center justify-center gap-1.5 mt-2">
             📍 Grande Centre Point Surawong Bangkok
         </p>
 
-        <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar pb-1">
+        <div class="flex gap-2 mt-5 overflow-x-auto no-scrollbar pb-1">
             <a href="https://stream-chime-32f.notion.site/b6278536002d838abbfc8120cf613fcb?v=a1078536002d83629b7a88b158e3f08e" target="_blank" class="flex-none bg-white border border-lavender-200 px-3 py-1.5 rounded-xl text-[11px] font-medium text-lavender-700 shadow-sm hover:bg-lavender-50 transition flex items-center gap-1 active:scale-95">
                 📖 泰國吃吃集合
             </a>
@@ -229,6 +229,7 @@
                 ☁️ 儲存航班資訊至雲端
             </button>
         </div>
+        
         <!-- TAB 4: 交通 -->
         <div id="tab-transport" class="tab-content">
             <h2 class="font-serif text-2xl text-lavender-700 mb-1">Transport</h2>
@@ -241,15 +242,15 @@
             <div class="grid grid-cols-3 gap-2 mb-6">
                 <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
                     <div class="text-2xl sm:text-3xl mb-1.5">🗺️</div>
-                    <div class="font-bold text-xs text-lavender-700 leading-tight">Google 地圖</div>
+                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Google 地圖</div>
                 </a>
                 <a href="https://www.google.com/maps/d/u/1/edit?mid=1a9X8KcYLAFFrqUhJQlcyU4C69tySuI4&usp=sharing" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
                     <div class="text-2xl sm:text-3xl mb-1.5">📌</div>
-                    <div class="font-bold text-xs text-lavender-700 leading-tight">旅遊地圖</div>
+                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">旅遊地圖</div>
                 </a>
                 <a href="https://www.grab.com/th/" target="_blank" class="block p-3.5 bg-white rounded-2xl border border-lavender-200 shadow-sm text-center active:scale-95 transition">
                     <div class="text-2xl sm:text-3xl mb-1.5">🚖</div>
-                    <div class="font-bold text-xs text-lavender-700 leading-tight">Grab 叫車</div>
+                    <div class="font-bold text-[11px] sm:text-xs text-lavender-700 leading-tight">Grab 叫車</div>
                 </a>
             </div>
 
@@ -321,14 +322,14 @@
             <div class="border-t border-lavender-100 pt-4 mb-4">
                 <div class="flex justify-between items-center mb-2">
                     <label class="text-[11px] text-lavender-700 font-bold flex items-center gap-1">
-                        ☁️ 雲端共享憑證 (所有同行者可見)
+                        ☁️ 雲端共享憑證 (同行者皆可見)
                     </label>
                 </div>
 
                 <div id="m-doc-list" class="space-y-2 mb-3"></div>
 
                 <label class="w-full flex items-center justify-center gap-2 py-2.5 bg-lavender-50 border border-dashed border-lavender-300 hover:border-dustypink-400 hover:bg-dustypink-50 text-lavender-600 rounded-xl cursor-pointer text-xs font-bold transition active:scale-95">
-                    <span>📄 ＋ 上傳 PDF 或圖片</span>
+                    <span>📄 ＋ 上傳 PDF 或圖片憑證</span>
                     <input type="file" id="m-doc-upload" accept="application/pdf,image/*" onchange="handleDocUpload(event)" class="hidden">
                 </label>
             </div>
@@ -453,7 +454,6 @@
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // 用戶提供的專屬資料庫鑰匙
         const firebaseConfig = {
             apiKey: "AIzaSyAq1YGhqmkBv-r4WjgfmHccAitV8VS0q3g",
             authDomain: "bangkok2026-ad367.firebaseapp.com",
@@ -468,11 +468,9 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // 共用雲端路徑 (綁定 App ID 避免衝突)
         const APP_ID = 'bangkok-trip-2026';
         const basePath = `artifacts/${APP_ID}/public/data`;
         
-        // 全域狀態儲存 (即時同步用)
         window.currentUser = null;
         window.sharedNotes = {};
         window.sharedVouchers = [];
@@ -484,7 +482,6 @@
         window.sharedDeletedSchedules = [];
         window.currentDay = 1;
 
-        // 導出給全域使用的 Firebase 函式
         window.fbAddDoc = addDoc;
         window.fbSetDoc = setDoc;
         window.fbDeleteDoc = deleteDoc;
@@ -504,66 +501,61 @@
                 window.currentUser = auth.currentUser;
                 document.getElementById('sync-status').innerText = '🟢 已連線';
                 
-                // 啟動 5 大資料庫即時監聽 (Real-time listeners)
-                
-                // 1. 監聽花費
                 onSnapshot(collection(db, basePath, 'expenses'), (snap) => {
                     window.sharedExpenses = snap.docs.map(d => ({id: d.id, ...d.data()}));
                     window.sharedExpenses.sort((a,b) => b.createdAt - a.createdAt);
-                    if(window.renderExpenses) window.renderExpenses();
+                    if(typeof window.renderExpenses === 'function') window.renderExpenses();
                 }, e => console.error(e));
 
-                // 2. 監聽憑證檔案
                 onSnapshot(collection(db, basePath, 'vouchers'), (snap) => {
                     window.sharedVouchers = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                    if(window.selectDay) window.selectDay(window.currentDay);
+                    if(typeof window.selectDay === 'function') window.selectDay(window.currentDay);
                     if(document.getElementById('note-modal').classList.contains('active')) {
                         window.renderModalDocs(document.getElementById('m-item-id').value);
                     }
                 }, e => console.error(e));
 
-                // 3. 監聽筆記
                 onSnapshot(collection(db, basePath, 'notes'), (snap) => {
                     window.sharedNotes = {};
                     snap.docs.forEach(d => { window.sharedNotes[d.id] = d.data().text; });
-                    if(window.selectDay) window.selectDay(window.currentDay);
+                    if(typeof window.selectDay === 'function') window.selectDay(window.currentDay);
                 }, e => console.error(e));
 
-                // 4. 監聽自訂行程與刪除狀態
                 onSnapshot(collection(db, basePath, 'customSchedules'), (snap) => {
                     window.sharedCustomSchedules = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                    if(window.selectDay) window.selectDay(window.currentDay);
-                });
+                    if(typeof window.selectDay === 'function') window.selectDay(window.currentDay);
+                }, e => console.error(e));
+
                 onSnapshot(collection(db, basePath, 'deletedSchedules'), (snap) => {
                     window.sharedDeletedSchedules = snap.docs.map(d => d.id);
-                    if(window.selectDay) window.selectDay(window.currentDay);
-                });
+                    if(typeof window.selectDay === 'function') window.selectDay(window.currentDay);
+                }, e => console.error(e));
 
-                // 5. 監聽美食與航班
                 onSnapshot(collection(db, basePath, 'foodStatus'), (snap) => {
                     window.sharedFoodStatus = {};
                     snap.docs.forEach(d => { window.sharedFoodStatus[d.id] = d.data().checked; });
-                    if(window.renderFood) window.renderFood();
-                });
+                    if(typeof window.renderFood === 'function') window.renderFood();
+                }, e => console.error(e));
+
                 onSnapshot(collection(db, basePath, 'customFood'), (snap) => {
                     window.sharedCustomFood = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                    if(window.renderFood) window.renderFood();
-                });
+                    if(typeof window.renderFood === 'function') window.renderFood();
+                }, e => console.error(e));
+
                 onSnapshot(collection(db, basePath, 'deletedFoods'), (snap) => {
                     window.sharedDeletedFoods = snap.docs.map(d => d.id);
-                    if(window.renderFood) window.renderFood();
-                });
+                    if(typeof window.renderFood === 'function') window.renderFood();
+                }, e => console.error(e));
 
                 onSnapshot(doc(db, basePath, 'settings', 'flights'), (d) => {
                     if (d.exists()) {
                         const f = d.data();
                         ['goN', 'goT', 'goA', 'bkN', 'bkT', 'bkA'].forEach(k => {
-                            if(document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`)) {
-                                document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`).value = f[k] || '';
-                            }
+                            const el = document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`);
+                            if(el) el.value = f[k] || '';
                         });
                     }
-                });
+                }, e => console.error(e));
 
             } catch (error) {
                 console.error("Firebase Sync Error", error);
@@ -571,7 +563,6 @@
             }
         }
         
-        // 確保視窗載入後立即啟動雲端連線
         window.addEventListener('load', initCloudSync);
     </script>
 
@@ -602,10 +593,10 @@
 
         setInterval(() => {
             const options = { timeZone: 'Asia/Bangkok', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('bkk-clock').innerText = new Date().toLocaleTimeString('en-US', options);
+            const el = document.getElementById('bkk-clock');
+            if (el) el.innerText = new Date().toLocaleTimeString('en-US', options);
         }, 1000);
 
-        // 泰國 9 月分區天氣預報數據
         const dailyWeather = {
             1: { area: "曼谷市區 (Bangkok)", temp: "26°C - 33°C", desc: "多雲短暫陣雨", icon: "⛅️", pop: "40%" },
             2: { area: "明武里區 (Safari)", temp: "27°C - 34°C", desc: "晴時多雲", icon: "☀️", pop: "10%" },
@@ -614,7 +605,6 @@
             5: { area: "帕亞泰 / 機場", temp: "26°C - 33°C", desc: "晴朗", icon: "☀️", pop: "5%" }
         };
 
-        // 預設行程資料 (賦予唯一固定 ID 方便同步修改與刪除)
         const defaultSchedules = {
             1: [
                 { id: "def_1_0", time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" },
@@ -682,7 +672,7 @@
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById('btn-day-' + i);
                 if (i === dayNum) {
-                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-[0_8px_16px_rgba(122,107,130,0.35)] text-center transition active:scale-95";
+                    btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-lg text-center transition active:scale-95";
                     btn.querySelector('.text-lavender-400')?.classList.replace('text-lavender-400', 'text-white/80');
                 } else {
                     btn.className = "day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95";
@@ -690,21 +680,16 @@
                 }
             }
 
-            // 合併預設行程與雲端自訂行程
             let dayItems = [...(defaultSchedules[dayNum] || [])];
-            const customs = window.sharedCustomSchedules.filter(s => parseInt(s.day) === dayNum);
+            const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === dayNum);
             dayItems = dayItems.concat(customs);
-            
-            // 過濾掉已被刪除的行程
             dayItems = dayItems.filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
-            
-            // 按時間字串排序
             dayItems.sort((a, b) => a.time.localeCompare(b.time));
 
             const list = document.getElementById('schedule-list');
+            if(!list) return;
             list.innerHTML = '';
 
-            // 渲染當日天氣與導遊按鈕
             const weather = dailyWeather[dayNum];
             if (weather) {
                 list.innerHTML += `
@@ -731,8 +716,8 @@
                 if (item.type === 'hotel') icon = "🏨";
                 if (item.type === 'shopping') icon = "🛍️";
 
-                const savedNote = window.sharedNotes[item.id] || '';
-                const docCount = window.sharedVouchers.filter(v => v.itemId === item.id).length;
+                const savedNote = (window.sharedNotes || {})[item.id] || '';
+                const docCount = (window.sharedVouchers || []).filter(v => v.itemId === item.id).length;
                 
                 let displayNoteHtml = '';
                 if (savedNote) {
@@ -824,7 +809,7 @@
             document.getElementById('m-time').innerText = time;
             document.getElementById('m-day').value = dayNum;
             document.getElementById('m-item-id').value = itemId;
-            document.getElementById('m-note').value = window.sharedNotes[itemId] || '';
+            document.getElementById('m-note').value = (window.sharedNotes || {})[itemId] || '';
             document.getElementById('note-modal').classList.add('active');
             window.renderModalDocs(itemId);
         }
@@ -835,8 +820,9 @@
 
         window.renderModalDocs = function(itemId) {
             const listEl = document.getElementById('m-doc-list');
+            if(!listEl) return;
             listEl.innerHTML = '';
-            const docs = window.sharedVouchers.filter(v => v.itemId === itemId);
+            const docs = (window.sharedVouchers || []).filter(v => v.itemId === itemId);
 
             if (docs.length === 0) {
                 listEl.innerHTML = '<div class="text-[11px] text-lavender-400 italic py-1 text-center">尚未上傳任何共享憑證</div>';
@@ -867,7 +853,6 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            // 限制大小 3MB
             if (file.size > 3 * 1024 * 1024) {
                 showToast('❌ 檔案過大，請上傳小於 3MB 的檔案'); return;
             }
@@ -897,7 +882,7 @@
         }
 
         window.viewDoc = function(docId) {
-            const doc = window.sharedVouchers.find(d => d.id === docId);
+            const doc = (window.sharedVouchers || []).find(d => d.id === docId);
             if (!doc) { showToast('找不到檔案'); return; }
 
             const titleEl = document.getElementById('pv-title');
@@ -929,7 +914,7 @@
 
         window.closeDocPreview = function() {
             document.getElementById('doc-preview-modal').classList.remove('active');
-            document.getElementById('pv-body').innerHTML = ''; // 清除 iframe，避免背景耗能
+            document.getElementById('pv-body').innerHTML = ''; 
         }
 
         window.removeDoc = async function(docId, storagePath) {
@@ -966,11 +951,11 @@
             if(!list) return;
             list.innerHTML = '';
             
-            let allFood = [...defaultFoodWishlist, ...window.sharedCustomFood];
-            allFood = allFood.filter(f => !window.sharedDeletedFoods.includes(f.id));
+            let allFood = [...defaultFoodWishlist, ...(window.sharedCustomFood || [])];
+            allFood = allFood.filter(f => !(window.sharedDeletedFoods || []).includes(f.id));
 
             allFood.forEach((f) => {
-                const isChecked = window.sharedFoodStatus[f.id];
+                const isChecked = (window.sharedFoodStatus || {})[f.id];
                 const checkedClass = isChecked ? 'bg-dustypink-50/70 border-dustypink-200' : 'bg-white border-lavender-200';
                 const textColor = isChecked ? 'text-lavender-400 line-through' : 'text-lavender-800';
                 const checkMark = isChecked ? '<div class="w-5 h-5 bg-lavender-500 rounded flex items-center justify-center text-white text-xs font-bold">✓</div>' : '<div class="w-5 h-5 border-2 border-lavender-300 rounded"></div>';
@@ -1079,7 +1064,7 @@
             if(!list) return;
             list.innerHTML = '';
             let total = 0;
-            window.sharedExpenses.forEach(e => {
+            (window.sharedExpenses || []).forEach(e => {
                 total += e.amt;
                 list.innerHTML += `
                     <div class="bg-white p-4 rounded-2xl border border-lavender-200 flex justify-between items-center shadow-sm">
@@ -1105,7 +1090,6 @@
             document.getElementById('tour-guide-modal').classList.add('active');
             const contentDiv = document.getElementById('tour-guide-content');
             
-            // 載入中動畫
             contentDiv.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-48 text-center">
                     <div class="text-4xl mb-4 animate-bounce">🧞‍♂️</div>
@@ -1114,9 +1098,8 @@
                 </div>
             `;
 
-            // 搜集當日行程字串
             let dayItems = [...(defaultSchedules[window.currentDay] || [])];
-            const customs = window.sharedCustomSchedules.filter(s => parseInt(s.day) === window.currentDay);
+            const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === window.currentDay);
             dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
             dayItems.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -1134,7 +1117,7 @@
                     contents: [{ parts: [{ text: userQuery }] }],
                     systemInstruction: { parts: [{ text: systemPrompt }] },
                 };
-                const apiKey = ""; // Canvas 內建會自動處理 API Key
+                const apiKey = ""; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -1146,7 +1129,6 @@
                 const result = await response.json();
                 let text = result.candidates?.[0]?.content?.parts?.[0]?.text || "導遊似乎迷路了，請稍後再試。";
 
-                // 將 Markdown 語法轉換為 HTML 顯示
                 text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-700 font-bold">$1</strong>');
                 text = text.replace(/\*/g, '• ');
                 text = text.replace(/\n/g, '<br>');
@@ -1157,6 +1139,13 @@
                 contentDiv.innerHTML = '<div class="text-red-500 font-bold text-center mt-10">抱歉，呼叫導遊失敗 😢<br>請檢查網路狀態或稍後再試。</div>';
             }
         }
+
+        // 強制初始化渲染 (避免等待雲端資料庫連線過久導致畫面空白)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.selectDay === 'function') window.selectDay(1);
+            if (typeof window.renderFood === 'function') window.renderFood();
+            if (typeof window.renderExpenses === 'function') window.renderExpenses();
+        });
     </script>
 </body>
 </html>
