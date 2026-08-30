@@ -315,6 +315,7 @@
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
         import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-ai.js";
+        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app-check.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAq1YGhqmkBv-r4WjgfmHccAitV8VS0q3g",
@@ -326,6 +327,14 @@
         };
 
         const app = initializeApp(firebaseConfig);
+
+        // App Check：AI 導遊功能需要這一段驗證才能呼叫 Gemini
+        // ⚠️ 請把下面 "6Le6JaAtAAAAACoeANy2n9tSIuKzLlhW6JO5kTIC" 換成你在 reCAPTCHA 後台申請到的「網站金鑰 (Site Key)」
+        initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider('PASTE_YOUR_RECAPTCHA_V3_SITE_KEY_HERE'),
+            isTokenAutoRefreshEnabled: true
+        });
+
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
