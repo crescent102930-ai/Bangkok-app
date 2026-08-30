@@ -331,7 +331,7 @@
         // App Check：AI 導遊功能需要這一段驗證才能呼叫 Gemini
         // ⚠️ 請把下面 "PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE" 換成你在 Google Cloud Console 申請到的 reCAPTCHA Enterprise「金鑰」
         initializeAppCheck(app, {
-            provider: new ReCaptchaEnterpriseProvider('6LejFaAtAAAAAJdfSy4EYW4npW0e6-_kr2Beh5ZM'),
+            provider: new ReCaptchaEnterpriseProvider('PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE'),
             isTokenAutoRefreshEnabled: true
         });
 
@@ -437,12 +437,94 @@
             { id: 'def_fw1', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon 炒河粉" }, { id: 'def_fw2', name: "Khao-So-i", note: "Soi Convent 泰北金麵" }, { id: 'def_fw3', name: "KHAO", note: "Ekkamai 米其林" }, { id: 'def_fw4', name: "潘氏店 (Sae Phun)", note: "百年雞肉飯" }, { id: 'def_fw5', name: "Krua Apsorn", note: "Dinso 總店" }, { id: 'def_fw6', name: "Fran's Sathorn", note: "人氣早午餐" }, { id: 'def_fw7', name: "Factory Coffee", note: "世界冠軍咖啡" }
         ];
 
+        // 預先準備好的 AI 導遊內容（不需要呼叫 AI，開啟就能看到，最穩定）
+        const staticAiGuide = {
+            "def_1_3": {
+                story: "此站有兩個熱門選擇：Pad Thai Fai Ta Lu（火焰版打拋泰式炒河粉）在曼谷老城區以「起火拋鍋」的表演式炒法聞名，使用黑豚肉版本泰式炒河粉，曾獲米其林必比登推薦；另一選擇 Khao-So-i（Soi Convent 分店）源自清邁的北泰咖哩麵老店，將道地北泰口味帶入曼谷市中心。",
+                mustEat: ["火焰泰式炒河粉", "北泰咖哩雞麵", "酥炸豬皮配咖哩麵"],
+                mustOrder: ["Pad Thai with Pork（黑豚肉炒河粉）", "Khao Soi Kai（雞肉咖哩麵）", "Khao Soi Neua（牛肉咖哩麵）"],
+                mustBuy: []
+            },
+            "def_1_4": {
+                story: "Molly House 是曼谷市區提供泰式傳統服飾租借與攝影服務的工作室，讓遊客能穿上泰式宮廷風或復古服裝拍攝紀念照片，是許多情侶及旅客體驗「泰式變裝」的熱門選擇。",
+                mustEat: [], mustOrder: [], mustBuy: []
+            },
+            "def_1_5": {
+                story: "Here Duan（段哥餐館）位於朱拉隆功大學旁的 Banthat Thong 美食街，是當地深夜排隊名店，以蒜香海鮮歐姆蛋飯聞名，近年在台灣旅客間口碑迅速擴散。",
+                mustEat: ["蒜味蟹肉歐姆蛋飯", "蒜味蝦仁歐姆蛋飯", "泰式炒海鮮"],
+                mustOrder: ["Crab Meat Omelette Rice（蟹肉歐姆蛋飯）", "Prawn Omelette Rice（蝦仁歐姆蛋飯）", "Pad Kra Pao（打拋豬/雞肉飯）"],
+                mustBuy: []
+            },
+            "def_2_1": {
+                story: "Safari World 曼谷野生動物園創立於1988年，是東南亞規模數一數二的開放式野生動物園，分為可搭車近距離觀賞獅子、長頸鹿的「Safari Park」，以及海豚秀、猩猩拳擊秀等明星動物表演的「Marine Park」。",
+                mustEat: [], mustOrder: [], mustBuy: []
+            },
+            "def_2_2": {
+                story: "ICONSIAM 暹羅天地是曼谷昭披耶河畔最具指標性的購物中心，2018年開幕；地下樓層的 SookSiam 以「室內水上市場」為概念，重現泰國77府傳統市集風貌與街頭小吃，可從 BTS 金色線 Charoen Nakhon 站直達。",
+                mustEat: ["泰式米粉船麵", "泰式芒果糯米飯", "椰漿小煎餅 Khanom Krok"],
+                mustOrder: ["Boat Noodle（船麵）", "Mango Sticky Rice（芒果糯米飯）", "Pad Thai（傳統手炒泰式炒河粉）"],
+                mustBuy: ["泰式手工藝品/紀念品", "泰國各府特色伴手禮", "天然椰子製品/泰式零食"]
+            },
+            "def_3_1": {
+                story: "Sae Phun（潘氏店）位於曼谷老城區，是已有超過80年歷史的家族小吃店，以招牌燉雞肉飯（滷汁燉煮至軟嫩入味的雞腿肉配白飯）聞名，連續多年獲米其林指南必比登推薦。",
+                mustEat: ["招牌燉雞肉飯", "燉豬腳飯", "泰式滷味拼盤"],
+                mustOrder: ["Stewed Chicken Rice（燉雞肉飯）", "Khao Kha Moo（燉豬腳飯）", "滷蛋"],
+                mustBuy: []
+            },
+            "def_3_2": {
+                story: "大皇宮建於1782年拉瑪一世遷都曼谷之初，是泰國王室正式宮殿建築群；其中玉佛寺供奉著整塊玉髓雕成的玉佛，泰皇每逢換季會親自為玉佛更換袈裟，是泰國最神聖的佛教聖地。",
+                mustEat: [], mustOrder: [],
+                mustBuy: ["玉佛寺周邊佛牌/護身符", "泰式金箔紀念品", "宮廷風格明信片與工藝品"]
+            },
+            "def_3_3": {
+                story: "Petit Peyton 位於老城區僧缽村附近，是走懷舊旅行風格的小型咖啡館，以手沖咖啡與精緻甜點聞名；另一備選 SenBeku 公開資料較少，建議出發前用 Google 地圖再次確認實際位置與菜單。",
+                mustEat: ["手沖精品咖啡", "自製甜點"],
+                mustOrder: ["Filter Coffee（手沖咖啡）", "招牌乳酪蛋糕"],
+                mustBuy: []
+            },
+            "def_3_4": {
+                story: "Krua Apsorn 是曼谷家庭式泰菜名店，Dinso Road 為其歷史悠久的總店，因深受泰國王室喜愛而聲名大噪，招牌蓬鬆蟹肉歐姆蛋是店內經典必點菜色。",
+                mustEat: ["蟹肉歐姆蛋", "咖哩粉炒蟹肉", "辣炒鹹魚"],
+                mustOrder: ["Crab Meat Omelette（蟹肉歐姆蛋）", "Stir-Fried Crab Meat with Curry Powder（咖哩粉炒蟹肉）", "Stir-Fried Chili with Salted Fish（辣炒鹹魚）"],
+                mustBuy: []
+            },
+            "def_3_5": {
+                story: "Rajadamnern 拉查達姆能泰拳場於1945年開幕，被譽為「世界第一座標準泰拳擂台」，是曼谷最古老、最具傳統與名望的泰拳競技場之一，許多泰拳傳奇選手皆曾在此登台成名。",
+                mustEat: [], mustOrder: [],
+                mustBuy: ["泰拳場周邊紀念T恤", "泰拳短褲/拳套紀念品"]
+            },
+            "def_4_1": {
+                story: "Fran's 位於 Sathorn 區，是曼谷近年爆紅的人氣早午餐餐廳，以玻璃屋用餐空間搭配戶外花園座位聞名，主打西式早午餐與健康輕食，深受曼谷年輕族群喜愛。",
+                mustEat: ["班尼迪克蛋", "鬆餅/法式吐司", "酪梨吐司"],
+                mustOrder: ["Eggs Benedict（班尼迪克蛋）", "Ricotta Pancakes（瑞可塔起司鬆餅）", "Avocado Toast（酪梨吐司）"],
+                mustBuy: []
+            },
+            "def_4_2": {
+                story: "吞武里一帶的海鮮市場是曼谷人採買及現點現煮海鮮的熱門去處，遊客可直接挑選新鮮蝦蟹魚貝，再交由攤販以泰式做法（清蒸、炭烤、咖哩炒）現場料理享用，體驗道地本地人的海鮮大餐文化。",
+                mustEat: ["清蒸檸檬魚", "咖哩炒螃蟹", "碳烤大頭蝦"],
+                mustOrder: ["Steamed Fish with Lime（檸檬蒸魚）", "Stir-Fried Crab with Curry Powder（黃咖哩炒螃蟹）", "Grilled River Prawn（碳烤河蝦）"],
+                mustBuy: []
+            },
+            "def_4_3": {
+                story: "Dusit Central Park（Central Park Bangkok）於2025年9月首階段開幕，是全新地標型購物中心，以泰國最大的屋頂空中花園為一大亮點，融合購物、餐飲與都市綠地景觀，鄰近 BTS Sala Daeng 站。",
+                mustEat: [], mustOrder: [],
+                mustBuy: ["國際及泰國本地設計品牌服飾", "屋頂花園限定紀念品/文創小物"]
+            },
+            "def_5_1": {
+                story: "Factory Coffee BKK 位於 Phaya Thai 區，是曼谷數一數二的精品咖啡代表店家，由曾獲全國咖啡賽事佳績的咖啡師團隊經營，以精品淺焙咖啡與嚴謹沖煮技術受咖啡愛好者推崇。",
+                mustEat: ["精品手沖單品咖啡", "招牌特調咖啡"],
+                mustOrder: ["Filter Coffee（手沖咖啡）", "Signature Espresso 招牌咖啡特調"],
+                mustBuy: ["自家烘焙咖啡豆"]
+            }
+        };
+
         // ===== AI 導遊：自動分析每日行程 =====
         window.ensureAIGuide = function(dayNum, dayItems) {
             if (!window.aiModel || !window.currentUser) return;
             if (window.sharedAiGuides[`day${dayNum}`]) return; // 已有快取，不重複呼叫
             if (window.aiGuideLoading[dayNum]) return; // 正在分析中
-            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type));
+            // 只針對「沒有內建導覽內容」的項目（例如你們自己新增的行程）才呼叫即時 AI
+            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type) && !staticAiGuide[it.id]);
             if (relevant.length === 0) return;
             window.generateAIGuide(dayNum, relevant);
         }
@@ -489,15 +571,15 @@ ${itemList}`;
             let dayItems = [...(defaultSchedules[dayNum] || [])];
             const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === dayNum);
             dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
-            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type));
-            if (relevant.length === 0) { showToast('本日沒有可分析的景點或美食行程'); return; }
+            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type) && !staticAiGuide[it.id]);
+            if (relevant.length === 0) { showToast('本日行程已是內建導覽內容，沒有需要另外分析的新項目'); return; }
             showToast('🔄 正在重新請 AI 導遊分析...');
             await window.generateAIGuide(dayNum, relevant);
         }
 
         function renderAiTags(item) {
             const guideDay = window.sharedAiGuides[`day${window.currentDay}`];
-            const info = guideDay && guideDay.items ? guideDay.items[item.id] : null;
+            const info = staticAiGuide[item.id] || (guideDay && guideDay.items ? guideDay.items[item.id] : null);
             if (!info) return '';
             const pill = (text, cls) => `<span class="inline-block ${cls} text-[10px] font-bold px-2.5 py-1 rounded-full mr-1.5 mb-1.5">${text}</span>`;
             let html = '';
@@ -541,8 +623,8 @@ ${itemList}`;
 
             list.innerHTML += `
                 <div class="flex items-center justify-between bg-white/70 border border-dashed border-lavender-300 rounded-2xl px-4 py-2.5 mb-4">
-                    <span id="ai-guide-status" class="text-[11px] font-bold text-lavender-600">🤖 AI 導遊會自動分析本日美食與景點</span>
-                    <button onclick="refreshAIGuide(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-500 bg-dustypink-50 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition">重新分析</button>
+                    <span id="ai-guide-status" class="text-[11px] font-bold text-lavender-600">🤖 AI 導遊已為本日行程準備好導覽內容</span>
+                    <button onclick="refreshAIGuide(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-500 bg-dustypink-50 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition">分析新增行程</button>
                 </div>
             `;
 
