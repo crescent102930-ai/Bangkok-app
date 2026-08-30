@@ -16,7 +16,10 @@
                 extend: {
                     colors: {
                         lavender: { 50: '#F8F6F9', 100: '#F1ECF3', 200: '#E0D6E4', 300: '#BDABC4', 400: '#9B83A4', 500: '#7A6B82', 600: '#5C4A65', 700: '#42334A', 900: '#231828' },
-                        dustypink: { 50: '#FDF8F9', 100: '#F9ECEF', 200: '#EECBD2', 300: '#DCB1BE', 400: '#C98A9B', 500: '#B06F81', 600: '#9B5B6E' }
+                        dustypink: { 50: '#FDF8F9', 100: '#F9ECEF', 200: '#EECBD2', 300: '#DCB1BE', 400: '#C98A9B', 500: '#B06F81', 600: '#9B5B6E' },
+                        sage: { 50: '#F6F8F5', 100: '#EAF0E6', 200: '#D3DECB', 300: '#B7C7AC', 400: '#9CB08D', 500: '#7E9770', 600: '#647A59' },
+                        sand: { 50: '#FBF8F3', 100: '#F5EDE0', 200: '#E9D9BC', 300: '#DCC49A', 400: '#CBA872', 500: '#B58F55', 600: '#93713D' },
+                        mist: { 50: '#F5F8F9', 100: '#E7EFF1', 200: '#C9DBDE', 300: '#A9C2C7', 400: '#87A6AC', 500: '#6C8991', 600: '#546E75' }
                     },
                     fontFamily: {
                         serif: ['Playfair Display', 'serif'],
@@ -91,7 +94,6 @@
 
     <div id="toast-container"></div>
 
-    <!-- HEADER -->
     <header class="pt-8 pb-4 px-6 bg-gradient-to-b from-lavender-100/90 via-lavender-50/60 to-transparent border-b border-lavender-200/60 text-center">
         <div class="flex justify-between items-center mb-3">
             <span class="text-[10px] tracking-[0.25em] text-[#9B5B6E] uppercase font-bold">Vol. 01 • Bangkok 2026</span>
@@ -121,16 +123,31 @@
         </div>
     </header>
 
-    <!-- MAIN TABS -->
     <main class="px-5 pt-5 relative">
         <div id="tab-schedule" class="tab-content active">
             <div class="flex gap-2.5 overflow-x-auto no-scrollbar mb-5 pb-2">
-                <button onclick="selectDay(1)" id="btn-day-1" class="day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-lg text-center transition active:scale-95"><div class="text-[10px] opacity-80 uppercase tracking-widest mb-0.5">DAY 1</div><div class="text-xs font-bold">9/10 (四)</div></button>
-                <button onclick="selectDay(2)" id="btn-day-2" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 2</div><div class="text-xs font-bold">9/11 (五)</div></button>
-                <button onclick="selectDay(3)" id="btn-day-3" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 3</div><div class="text-xs font-bold">9/12 (六)</div></button>
-                <button onclick="selectDay(4)" id="btn-day-4" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 4</div><div class="text-xs font-bold">9/13 (日)</div></button>
-                <button onclick="selectDay(5)" id="btn-day-5" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95"><div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 5</div><div class="text-xs font-bold">9/14 (一)</div></button>
+                <button onclick="selectDay(1)" id="btn-day-1" class="day-btn flex-none py-2 px-4 rounded-2xl bg-lavender-500 text-white shadow-lg text-center transition active:scale-95">
+                    <div class="text-[10px] opacity-80 uppercase tracking-widest mb-0.5">DAY 1</div>
+                    <div class="text-xs font-bold">9/10 (四)</div>
+                </button>
+                <button onclick="selectDay(2)" id="btn-day-2" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
+                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 2</div>
+                    <div class="text-xs font-bold">9/11 (五)</div>
+                </button>
+                <button onclick="selectDay(3)" id="btn-day-3" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
+                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 3</div>
+                    <div class="text-xs font-bold">9/12 (六)</div>
+                </button>
+                <button onclick="selectDay(4)" id="btn-day-4" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
+                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 4</div>
+                    <div class="text-xs font-bold">9/13 (日)</div>
+                </button>
+                <button onclick="selectDay(5)" id="btn-day-5" class="day-btn flex-none py-2 px-4 rounded-2xl bg-white text-lavender-500 border border-lavender-200 text-center transition active:scale-95">
+                    <div class="text-[10px] text-lavender-400 uppercase tracking-widest mb-0.5">DAY 5</div>
+                    <div class="text-xs font-bold">9/14 (一)</div>
+                </button>
             </div>
+
             <div id="schedule-list" class="space-y-4 pb-6"></div>
         </div>
 
@@ -223,7 +240,6 @@
         </div>
     </main>
 
-    <!-- MODALS -->
     <!-- 筆記與憑證彈跳窗 -->
     <div id="note-modal" class="modal-overlay fixed inset-0 bg-lavender-900/40 backdrop-blur-sm z-[1000] items-center justify-center p-4">
         <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto no-scrollbar">
@@ -283,46 +299,6 @@
         </div>
     </div>
 
-    <!-- 導遊go AI 彈跳窗 -->
-    <div id="tour-guide-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[2000] items-center justify-center p-4">
-        <div class="modal-content bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
-            <button onclick="closeTourGuideModal()" class="absolute top-4 right-5 text-2xl text-lavender-300 hover:text-lavender-700 transition leading-none">&times;</button>
-            <div class="flex items-center gap-3 mb-4">
-                <!-- SVG: 卡娜赫拉兔兔 (草帽筆電版) -->
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 flex-none drop-shadow-sm">
-                    <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
-                    <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                    <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                    <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                    <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                    <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
-                    <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                    <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                    <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                    <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
-                    <rect x="30" y="74" width="60" height="20" fill="#263238"/>
-                    <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
-                    <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-                <div>
-                    <div class="text-[10px] tracking-widest text-lavender-500 uppercase font-bold mb-0.5">AI Tour Guide</div>
-                    <h3 class="font-serif text-[22px] text-lavender-800 font-bold leading-tight">兔兔嚮導 Go！</h3>
-                </div>
-            </div>
-            <div id="tour-guide-content" class="flex-1 overflow-y-auto no-scrollbar bg-lavender-50/70 rounded-2xl p-4 border border-lavender-100 text-[13.5px] text-lavender-800 leading-relaxed shadow-inner"></div>
-            <div class="mt-4 pt-3 border-t border-lavender-100 flex justify-center">
-                <span class="text-[10px] text-lavender-400 font-medium">✨ Powered by AI 智慧在地推薦</span>
-            </div>
-        </div>
-    </div>
-
     <!-- 底部選單 -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav px-5 py-2.5 flex justify-between items-center z-50">
         <button onclick="switchTab('schedule', this)" class="nav-btn active flex flex-col items-center justify-center w-[18%] text-lavender-600 transition active:scale-90"><span class="text-xl mb-0.5">🗓️</span><span class="text-[10px] font-bold">行程</span></button>
@@ -332,12 +308,13 @@
         <button onclick="switchTab('ledger', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-xl mb-0.5">💰</span><span class="text-[10px] font-bold">記帳</span></button>
     </nav>
 
-    <!-- 核心 JS 邏輯區 -->
+    <!-- Firebase 邏輯區 -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+        import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
+        import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-ai.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAq1YGhqmkBv-r4WjgfmHccAitV8VS0q3g",
@@ -352,6 +329,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        // AI 導遊：Firebase AI Logic (Gemini) — 金鑰不會外洩，直接由 Firebase 專案管理
+        const ai = getAI(app, { backend: new GoogleAIBackend() });
+        const aiModel = getGenerativeModel(ai, { model: "gemini-3.7-flash" });
+        window.aiModel = aiModel;
 
         const APP_ID = 'bangkok-trip-2026';
         const basePath = `artifacts/${APP_ID}/public/data`;
@@ -373,6 +355,7 @@
                 onSnapshot(collection(db, basePath, 'notes'), (snap) => { window.sharedNotes = {}; snap.docs.forEach(d => { window.sharedNotes[d.id] = d.data().text; }); if(typeof window.selectDay === 'function') window.selectDay(window.currentDay); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'customSchedules'), (snap) => { window.sharedCustomSchedules = snap.docs.map(d => ({id: d.id, ...d.data()})); if(typeof window.selectDay === 'function') window.selectDay(window.currentDay); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'deletedSchedules'), (snap) => { window.sharedDeletedSchedules = snap.docs.map(d => d.id); if(typeof window.selectDay === 'function') window.selectDay(window.currentDay); }, e => console.error(e));
+                onSnapshot(collection(db, basePath, 'aiGuides'), (snap) => { window.sharedAiGuides = {}; snap.docs.forEach(d => { window.sharedAiGuides[d.id] = d.data(); }); if(typeof window.selectDay === 'function') window.selectDay(window.currentDay); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'foodStatus'), (snap) => { window.sharedFoodStatus = {}; snap.docs.forEach(d => { window.sharedFoodStatus[d.id] = d.data().checked; }); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'customFood'), (snap) => { window.sharedCustomFood = snap.docs.map(d => ({id: d.id, ...d.data()})); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'deletedFoods'), (snap) => { window.sharedDeletedFoods = snap.docs.map(d => d.id); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
@@ -386,10 +369,12 @@
         window.addEventListener('load', initCloudSync);
     </script>
 
+    <!-- 一般 UI 邏輯區 -->
     <script>
         window.currentUser = null; window.sharedNotes = {}; window.sharedVouchers = []; window.sharedExpenses = [];
         window.sharedFoodStatus = {}; window.sharedCustomFood = []; window.sharedDeletedFoods = [];
         window.sharedCustomSchedules = []; window.sharedDeletedSchedules = []; window.currentDay = 1;
+        window.sharedAiGuides = {}; window.aiGuideLoading = {};
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
@@ -415,7 +400,6 @@
             if (el) el.innerText = new Date().toLocaleTimeString('en-US', options);
         }, 1000);
 
-        // 莫蘭迪深紫線條風 天氣 SVG 圖示
         const iconSvg = {
             "sun": `<svg viewBox="0 0 24 24" fill="none" stroke="#5C4A65" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 mb-1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
             "cloud-sun": `<svg viewBox="0 0 24 24" fill="none" stroke="#5C4A65" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7 mb-1.5"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>`,
@@ -443,6 +427,79 @@
         const defaultFoodWishlist = [
             { id: 'def_fw1', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon 炒河粉" }, { id: 'def_fw2', name: "Khao-So-i", note: "Soi Convent 泰北金麵" }, { id: 'def_fw3', name: "KHAO", note: "Ekkamai 米其林" }, { id: 'def_fw4', name: "潘氏店 (Sae Phun)", note: "百年雞肉飯" }, { id: 'def_fw5', name: "Krua Apsorn", note: "Dinso 總店" }, { id: 'def_fw6', name: "Fran's Sathorn", note: "人氣早午餐" }, { id: 'def_fw7', name: "Factory Coffee", note: "世界冠軍咖啡" }
         ];
+
+        // ===== AI 導遊：自動分析每日行程 =====
+        window.ensureAIGuide = function(dayNum, dayItems) {
+            if (!window.aiModel || !window.currentUser) return;
+            if (window.sharedAiGuides[`day${dayNum}`]) return; // 已有快取，不重複呼叫
+            if (window.aiGuideLoading[dayNum]) return; // 正在分析中
+            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type));
+            if (relevant.length === 0) return;
+            window.generateAIGuide(dayNum, relevant);
+        }
+
+        window.generateAIGuide = async function(dayNum, items) {
+            window.aiGuideLoading[dayNum] = true;
+            const badge = document.getElementById('ai-guide-status');
+            if (badge) badge.innerText = '🤖 AI 導遊正在分析本日行程...';
+            try {
+                const itemList = items.map(it => `- id:"${it.id}" 標題:"${it.title}" 備註:"${it.note || ''}"`).join('\n');
+                const prompt = `你是一位熟悉泰國曼谷的專業導遊。以下是旅客某一天行程中「景點/餐廳/購物」項目，請針對每一項提供簡短導覽資訊，並嚴格以 JSON 格式回覆（不要加 markdown 語法或多餘文字），格式如下：
+{"items": [ { "id": "項目id", "story": "1-2句該地點/店家的簡介、特色或小故事", "mustEat": ["必吃美食1", "必吃美食2"], "mustOrder": ["必點菜單1", "必點菜單2"], "mustBuy": ["必買伴手禮1"] } ] }
+規則：
+1. mustEat / mustOrder 只在該項目與餐廳、美食、小吃街有關時填寫，否則給空陣列 []。
+2. mustBuy 只在該項目與購物、市場、伴手禮相關，或該景點有知名紀念品時填寫，否則給空陣列 []。
+3. 每個陣列最多 3 項，內容要具體（例如具體菜名，而非「美食」這種空泛字眼）。
+4. story 一定要填寫，即使是純逛街或景點也要給簡短介紹。
+5. 全部使用繁體中文。
+
+行程項目：
+${itemList}`;
+
+                const result = await window.aiModel.generateContent(prompt);
+                let text = result.response.text().trim();
+                text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+                const parsed = JSON.parse(text);
+                const itemsMap = {};
+                (parsed.items || []).forEach(it => { itemsMap[it.id] = it; });
+
+                await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'aiGuides', `day${dayNum}`), {
+                    items: itemsMap, generatedAt: Date.now()
+                });
+                showToast('🤖 AI 導遊分析完成！');
+            } catch (e) {
+                console.error('AI Guide Error', e);
+                showToast('❌ AI 導遊分析失敗，請稍後點「重新分析」再試');
+            } finally {
+                window.aiGuideLoading[dayNum] = false;
+            }
+        }
+
+        window.refreshAIGuide = async function(dayNum) {
+            if (!window.currentUser) { showToast('請等候雲端連線'); return; }
+            let dayItems = [...(defaultSchedules[dayNum] || [])];
+            const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === dayNum);
+            dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
+            const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type));
+            if (relevant.length === 0) { showToast('本日沒有可分析的景點或美食行程'); return; }
+            showToast('🔄 正在重新請 AI 導遊分析...');
+            await window.generateAIGuide(dayNum, relevant);
+        }
+
+        function renderAiTags(item) {
+            const guideDay = window.sharedAiGuides[`day${window.currentDay}`];
+            const info = guideDay && guideDay.items ? guideDay.items[item.id] : null;
+            if (!info) return '';
+            const pill = (text, cls) => `<span class="inline-block ${cls} text-[10px] font-bold px-2.5 py-1 rounded-full mr-1.5 mb-1.5">${text}</span>`;
+            let html = '';
+            if (info.story) html += `<div class="text-[11px] text-lavender-600 bg-lavender-50/60 border border-lavender-100 rounded-xl p-2.5 mt-2 leading-relaxed">🤖 <span class="font-bold text-lavender-700">AI導遊：</span>${info.story}</div>`;
+            let tagsHtml = '';
+            (info.mustEat || []).forEach(t => tagsHtml += pill('🍜 ' + t, 'bg-sage-100 text-sage-600 border border-sage-200'));
+            (info.mustOrder || []).forEach(t => tagsHtml += pill('⭐ ' + t, 'bg-sand-100 text-sand-600 border border-sand-200'));
+            (info.mustBuy || []).forEach(t => tagsHtml += pill('🎁 ' + t, 'bg-mist-100 text-mist-600 border border-mist-200'));
+            if (tagsHtml) html += `<div class="mt-2 flex flex-wrap">${tagsHtml}</div>`;
+            return html;
+        }
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -473,6 +530,13 @@
             if(!list) return;
             list.innerHTML = '';
 
+            list.innerHTML += `
+                <div class="flex items-center justify-between bg-white/70 border border-dashed border-lavender-300 rounded-2xl px-4 py-2.5 mb-4">
+                    <span id="ai-guide-status" class="text-[11px] font-bold text-lavender-600">🤖 AI 導遊會自動分析本日美食與景點</span>
+                    <button onclick="refreshAIGuide(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-500 bg-dustypink-50 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition">重新分析</button>
+                </div>
+            `;
+
             const weather = dailyWeather[dayNum];
             if (weather) {
                 // 純線條風天氣卡片 (無底色，線條框)
@@ -494,32 +558,6 @@
                             ${hourlyHtml}
                         </div>
                     </div>
-                    
-                    <button onclick="askTourGuide()" class="w-full bg-gradient-to-r from-dustypink-400 to-lavender-500 text-white rounded-2xl p-3 mb-5 flex items-center justify-center gap-3 font-bold shadow-lg shadow-lavender-500/30 hover:opacity-90 active:scale-95 transition border border-white/20">
-                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 flex-none drop-shadow-sm">
-                            <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
-                            <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                            <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                            <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                            <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                            <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
-                            <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                            <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                            <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                            <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                            <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
-                            <rect x="30" y="74" width="60" height="20" fill="#263238"/>
-                            <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
-                            <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
-                            <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
-                            <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
-                            <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                            <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                        </svg>
-                        <span class="text-[13px] tracking-wide">兔兔導遊 Go！行程解析</span>
-                    </button>
                 `;
             }
             
@@ -559,6 +597,7 @@
                             </div>
                             ${item.note ? `<div class="text-[11px] text-lavender-500 mb-1">${item.note}</div>` : ''}
                             ${voucherBadgeHtml}
+                            ${renderAiTags(item)}
                             ${displayNoteHtml}
                         </div>
                     </div>
@@ -570,6 +609,8 @@
                     ＋ 新增行程
                 </button>
             `;
+
+            window.ensureAIGuide(dayNum, dayItems);
         }
 
         window.deleteSchedule = async function(itemId, event) {
@@ -646,6 +687,7 @@
         window.addCustomFood = async function() { if (!window.currentUser) return; const name = document.getElementById('new-food-name').value.trim(); const note = document.getElementById('new-food-note').value.trim(); if (name) { try { await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'customFood'), { name, note }); document.getElementById('new-food-name').value = ''; document.getElementById('new-food-note').value = ''; showToast('已加入'); } catch(e) {} } }
         window.deleteFood = async function(id) { if (window.currentUser) try { if(id.startsWith('def_')) await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'deletedFoods', id), { timestamp: Date.now() }); else await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'customFood', id)); } catch (e) {} }
         window.saveFlights = async function() { if (window.currentUser) { const data = { goN: document.getElementById('f-go-no').value, goT: document.getElementById('f-go-dep').value, goA: document.getElementById('f-go-arr').value, bkN: document.getElementById('f-back-no').value, bkT: document.getElementById('f-back-dep').value, bkA: document.getElementById('f-back-arr').value }; try { await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'settings', 'flights'), data); showToast('☁️ 航班已同步'); } catch (e) {} } }
+        
         window.speakThai = function(text) { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'th-TH'; speechSynthesis.speak(utterance); } }
         window.speakCustomThai = function() { const t = document.getElementById('custom-thai-text').value.trim(); if(t) speakThai(t); }
 
@@ -661,146 +703,6 @@
                 list.innerHTML += `<div class="bg-white p-4 rounded-2xl border border-lavender-200 flex justify-between items-center shadow-sm"><div class="font-bold text-sm text-lavender-700">${e.name}</div><div class="flex items-center gap-4"><span class="font-serif font-bold text-lavender-600 text-lg">฿ ${e.amt.toLocaleString()}</span><button onclick="delExpense('${e.id}')" class="text-lavender-300 hover:text-dustypink-500 bg-lavender-50 w-7 h-7 rounded-full flex items-center justify-center transition">✕</button></div></div>`;
             });
             if(document.getElementById('total-thb')) document.getElementById('total-thb').innerText = total.toLocaleString(); if(document.getElementById('total-twd')) document.getElementById('total-twd').innerText = Math.round(total * 0.92).toLocaleString();
-        }
-
-        window.closeTourGuideModal = function() { document.getElementById('tour-guide-modal').classList.remove('active'); }
-
-        // ============================================================
-        // 「兔兔導遊 Go！」— 雙層防彈降級外掛 (100% 成功保證)
-        // ============================================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6I6LSzUvYvBePaMJswnzaSiEBWt9rP2KZL_q-wNJFbKCQ";
-        const GEMINI_MODEL = "gemini-1.5-flash"; 
-
-        window.askTourGuide = async function() {
-            document.getElementById('tour-guide-modal').classList.add('active');
-            const contentDiv = document.getElementById('tour-guide-content');
-            
-            contentDiv.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-48 text-center">
-                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 animate-bounce">
-                        <path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/>
-                        <path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                        <path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                        <ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                        <path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/>
-                        <path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/>
-                        <circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                        <circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/>
-                        <line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/>
-                        <rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/>
-                        <rect x="30" y="74" width="60" height="20" fill="#263238"/>
-                        <rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/>
-                        <line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
-                        <line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
-                        <line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/>
-                        <line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                    <div class="text-sm font-bold text-lavender-700 mb-1">工程兔兔努力思考中...</div>
-                    <div class="text-[11px] text-lavender-500">正在為您整理必吃、必買與景點小故事！<br>請稍候約 5~10 秒鐘 ⏳</div>
-                </div>
-            `;
-
-            let dayItems = [...(defaultSchedules[window.currentDay] || [])];
-            const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === window.currentDay);
-            dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
-            dayItems.sort((a, b) => a.time.localeCompare(b.time));
-
-            if (dayItems.length === 0) {
-                contentDiv.innerHTML = '<div class="text-center mt-10 font-bold text-lavender-600">這天目前沒有行程可以分析喔！快去新增一些景點吧！</div>';
-                return;
-            }
-
-            const scheduleText = dayItems.map(item => `${item.time} ${item.title}（${item.note || '無備註'}）`).join('\n');
-            const systemPrompt = "你是一位熱情、幽默且非常專業的泰國在地中文導遊。你的大腦裡有豐富的曼谷知識。請針對使用者的每日行程，提供最佳在地建議。";
-            
-            const userQuery = `以下是我今天的曼谷行程：\n\n${scheduleText}\n\n請你運用你的專業知識，為我提供以下資訊：\n\n1. 🗓️ 簡短點評一兩句今天的行程規劃是否順暢。\n2. 🍜 推薦行程地點周邊不能錯過的「必吃在地美食」或特色餐廳（含必點菜色）。\n3. 🛍️ 推薦附近適合的「必買伴手禮」或購物點。\n4. 📖 挑選這天行程中的 1~2 個景點，分享有趣的歷史背景或冷知識。\n5. ☀️ 提醒當天曼谷旅遊可能需要注意的小細節（如穿著、交通）。\n\n請保持「簡短扼要」，總字數控制在 350 字以內，多用 Emoji 分段，用 Markdown 的 ** 星號 ** 標記重點關鍵字。語氣要像熟悉當地的朋友在聊天。`;
-
-            try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY.trim()}`;
-
-                // 【第一重防護】：嘗試使用 Google 搜尋工具
-                const payloadWithSearch = {
-                    contents: [{ parts: [{ text: userQuery }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    tools: [{ googleSearch: {} }] 
-                };
-
-                let response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payloadWithSearch)
-                });
-                
-                // 【第二重防護】：如果 Google 搜尋被擋下 (400/403)，瞬間秒退回「不連網的內建大腦模式」
-                if (!response.ok) {
-                    console.warn("⚠️ 搜尋功能受限，兔兔自動切換為內建大腦模式...");
-                    const payloadWithoutSearch = {
-                        contents: [{ parts: [{ text: userQuery }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] }
-                    };
-                    
-                    response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payloadWithoutSearch)
-                    });
-                    
-                    if (!response.ok) {
-                        const errData = await response.json();
-                        throw new Error(`${response.status} - ${errData.error?.message || '連線遭拒'}`);
-                    }
-                }
-                
-                const result = await response.json();
-                const candidate = result.candidates?.[0];
-                let text = candidate?.content?.parts?.map(p => p.text || '').join('') || '';
-                if(!text) throw new Error("API 未回傳內容");
-
-                text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dustypink-600 font-bold">$1</strong>');
-                text = text.replace(/(?<!\*)\*(?!\*)/g, '• ');
-                text = text.replace(/\n/g, '<br>');
-
-                // 解析 Google 搜尋來源 (如果有用到搜尋功能的話)
-                const chunks = candidate?.groundingMetadata?.groundingChunks || [];
-                if (chunks.length > 0) {
-                    const seen = new Set();
-                    const sourceLinks = chunks
-                        .filter(c => c.web?.uri && !seen.has(c.web.uri) && seen.add(c.web.uri))
-                        .slice(0, 5) 
-                        .map(c => `<a href="${c.web.uri}" target="_blank" rel="noopener" class="underline text-dustypink-500 hover:text-dustypink-600">${(c.web.title || '參考來源').slice(0, 16)}...</a>`)
-                        .join(' ・ ');
-                    if (sourceLinks) {
-                        text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">🔍 <strong class="text-lavender-500">Google 搜尋來源：</strong><br>${sourceLinks}</div>`;
-                    }
-                } else {
-                    text += `<div class="mt-4 pt-3 border-t border-lavender-200 text-[11px] text-lavender-400 leading-relaxed">✨ <strong class="text-lavender-500">Powered by 兔兔內建旅遊大腦</strong> (即時網搜目前受限)</div>`;
-                }
-
-                contentDiv.innerHTML = text;
-
-            } catch (e) {
-                console.error("Gemini API 失敗:", e);
-                // 第三重絕對備用圖文 (伺服器真的掛掉時才會出現)
-                contentDiv.innerHTML = `
-                    <div class="text-red-500 font-bold text-center mt-4 mb-2">抱歉，兔兔工程師連線受阻 😢</div>
-                    <div class="text-[11px] text-lavender-700 bg-red-50 p-3 rounded-xl text-left shadow-inner border border-red-100 mb-4 break-all">
-                        <strong>真實失敗原因：</strong> ${e.message}
-                    </div>
-                    <div class="relative py-2">
-                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-lavender-200"></div></div>
-                        <div class="relative flex justify-center"><span class="bg-lavender-50 px-3 text-[10px] text-lavender-500 font-bold">✨ 兔兔不藏私備用攻略 ✨</span></div>
-                    </div>
-                    <div class="text-[12px] text-lavender-800 space-y-2 mt-2 leading-relaxed">
-                        <p><strong class="text-dustypink-600">🍜 必吃推薦：</strong><br>• 朱拉隆功大學美食街 (Banthat Thong) 找段哥或媽媽麵。<br>• 必喝手標泰奶與 Karun。</p>
-                        <p><strong class="text-dustypink-600">🛍️ 必買伴手禮：</strong><br>• Big C 的皇家蜂蜜、Bento 魷魚絲。<br>• Karmakamet 香氛錦囊。</p>
-                        <p><strong class="text-dustypink-600">💡 兔兔冷知識：</strong><br>曼谷的泰文全名是全世界最長的地名喔！翻譯過來叫做「天使之城、宏偉之城...」長達160多個字母呢！</p>
-                    </div>
-                `;
-            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
