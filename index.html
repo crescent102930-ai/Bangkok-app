@@ -78,6 +78,17 @@
         @keyframes toastIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
 
+        @keyframes bunnyHop {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-7px) rotate(-10deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-3px) rotate(6deg); }
+        }
+        .bunny-hop { animation: bunnyHop 0.7s ease-in-out infinite; }
+        .search-dots span { animation: bunnyHop 1.2s ease-in-out infinite; display: inline-block; }
+        .search-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .search-dots span:nth-child(3) { animation-delay: 0.3s; }
+
         .card-3d {
             background: #ffffff;
             box-shadow: 0 10px 30px -5px rgba(77, 62, 85, 0.08), 0 4px 10px -3px rgba(77, 62, 85, 0.04);
@@ -405,11 +416,30 @@
         // 🐰 草帽筆電工程兔兔 SVG
         const grassHatBunnySvg = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" class="w-11 h-11 flex-none drop-shadow-sm"><path d="M 30 60 Q 20 90 35 105 Q 60 115 85 105 Q 100 90 90 60 Q 90 30 60 30 Q 30 30 30 60 Z" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linejoin="round"/><path d="M 45 35 Q 40 10 50 5 Q 55 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/><path d="M 75 35 Q 80 10 70 5 Q 65 15 60 25" fill="#FCE4EC" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="60" cy="35" rx="35" ry="12" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/><path d="M 40 33 Q 60 15 80 33" fill="#E6C280" stroke="#4A3026" stroke-width="2.5"/><path d="M 42 32 Q 60 25 78 32 L 79 34 Q 60 28 41 34 Z" fill="#E53935"/><circle cx="45" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/><circle cx="75" cy="55" r="7" fill="#F8BBD0" opacity="0.9"/><line x1="50" y1="48" x2="50" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/><line x1="70" y1="48" x2="70" y2="52" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/><path d="M 58 55 Q 60 58 62 55 M 58 55 Q 60 62 62 55" fill="none" stroke="#4A3026" stroke-width="2.5" stroke-linecap="round"/><rect x="25" y="70" width="70" height="28" rx="3" fill="#B0BEC5" stroke="#4A3026" stroke-width="2"/><rect x="30" y="74" width="60" height="20" fill="#263238"/><rect x="20" y="98" width="80" height="6" rx="2" fill="#CFD8DC" stroke="#4A3026" stroke-width="2"/><line x1="33" y1="78" x2="50" y2="78" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/><line x1="33" y1="83" x2="65" y2="83" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/><line x1="33" y1="88" x2="45" y2="88" stroke="#2196F3" stroke-width="1.5" stroke-linecap="round"/><line x1="48" y1="88" x2="75" y2="88" stroke="#F44336" stroke-width="1.5" stroke-linecap="round"/><path d="M 28 65 Q 15 75 35 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/><path d="M 92 65 Q 105 75 85 85" fill="none" stroke="#4A3026" stroke-width="3" stroke-linecap="round"/></svg>`;
         const grassHatBunnySmallSvg = grassHatBunnySvg.replace('w-11 h-11', 'w-8 h-8');
+        const grassHatBunnyTinySvg = grassHatBunnySvg.replace('w-11 h-11', 'w-5 h-5');
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = message;
             container.appendChild(toast); setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        // 不會自動消失的「載入中」提示（用來搭配兔兔跳動畫），要手動呼叫 removeLoadingToast 移除
+        function showLoadingToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.animation = 'toastIn 0.3s ease-out forwards'; // 不套用 toastOut，維持顯示
+            toast.innerHTML = message;
+            container.appendChild(toast);
+            return toast;
+        }
+        function removeLoadingToast(toast) {
+            if (!toast) return;
+            toast.style.transition = 'opacity 0.25s ease-in, transform 0.25s ease-in';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-20px)';
+            setTimeout(() => toast.remove(), 260);
         }
 
         function manualRefresh() {
@@ -526,7 +556,7 @@
         }
 
         const defaultSchedules = {
-            1: [ { id: "def_1_0", time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" }, { id: "def_1_1", time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" }, { id: "def_1_2", time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" }, { id: "def_1_3", time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" }, { id: "def_1_4", time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" }, { id: "def_1_5", time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" }, { id: "def_1_6", time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" } ],
+            1: [ { id: "def_1_0", time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" }, { id: "def_1_1", time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" }, { id: "def_1_1b", time: "09:45 - 10:30", title: "機場接機", note: "落地後接送前往飯店", type: "transport" }, { id: "def_1_2", time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" }, { id: "def_1_3", time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" }, { id: "def_1_4", time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" }, { id: "def_1_5", time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" }, { id: "def_1_6", time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" } ],
             2: [ { id: "def_2_0", time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" }, { id: "def_2_1", time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" }, { id: "def_2_2", time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" }, { id: "def_2_3", time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" }, { id: "def_2_4", time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" } ],
             3: [ { id: "def_3_0", time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" }, { id: "def_3_1", time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" }, { id: "def_3_2", time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" }, { id: "def_3_3", time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" }, { id: "def_3_4", time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" }, { id: "def_3_5", time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" }, { id: "def_3_6", time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" } ],
             4: [ { id: "def_4_0", time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" }, { id: "def_4_1", time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" }, { id: "def_4_2", time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" }, { id: "def_4_3", time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" }, { id: "def_4_4", time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" } ],
@@ -625,10 +655,10 @@
             if (window.aiGuideLoading[dayNum]) return; // 正在分析中
             const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type) && !staticAiGuide[it.id]);
             if (relevant.length === 0) return;
-            window.generateAIGuide(dayNum, relevant);
+            window.generateAIGuide(dayNum, relevant).catch(() => {}); // 已在函式內處理過提示，這裡只是避免主控台跳未捕捉錯誤
         }
 
-        window.generateAIGuide = async function(dayNum, items) {
+        window.generateAIGuide = async function(dayNum, items, silent) {
             window.aiGuideLoading[dayNum] = true;
             try {
                 const itemList = items.map(it => `- id:"${it.id}" 標題:"${it.title}" 備註:"${it.note || ''}"`).join('\n');
@@ -654,10 +684,11 @@ ${itemList}`;
                 await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'aiGuides', `day${dayNum}`), {
                     items: itemsMap, generatedAt: Date.now()
                 });
-                showToast('🐰 兔兔導遊分析完成！');
+                if (!silent) showToast(`<span class="inline-flex items-center align-middle">${grassHatBunnyTinySvg}</span>&nbsp;兔兔導遊分析完成！`);
             } catch (e) {
                 console.error('AI Guide Error', e);
-                showToast('❌ 兔兔導遊分析失敗，請稍後點「分析新增行程」再試');
+                if (!silent) showToast('❌ 兔兔導遊分析失敗，請稍後點「分析行程」再試');
+                throw e; // 讓呼叫端（例如 refreshAIGuide）也能接手處理錯誤畫面
             } finally {
                 window.aiGuideLoading[dayNum] = false;
             }
@@ -669,9 +700,26 @@ ${itemList}`;
             const customs = (window.sharedCustomSchedules || []).filter(s => parseInt(s.day) === dayNum);
             dayItems = dayItems.concat(customs).filter(item => !(window.sharedDeletedSchedules || []).includes(item.id));
             const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type) && !staticAiGuide[it.id]);
-            if (relevant.length === 0) { showToast('本日行程已是內建導覽內容，沒有需要另外分析的新項目'); return; }
-            showToast('🔄 正在重新請兔兔導遊分析...');
-            await window.generateAIGuide(dayNum, relevant);
+
+            // 先跳出活潑的兔兔搜尋動畫，讓使用者知道真的有在嘗試連線
+            const loadingToast = showLoadingToast(`<span class="bunny-hop inline-flex items-center align-middle">${grassHatBunnyTinySvg}</span>&nbsp; 兔兔導遊努力搜尋中<span class="search-dots"><span>.</span><span>.</span><span>.</span></span>`);
+            try {
+                if (relevant.length > 0) {
+                    await window.generateAIGuide(dayNum, relevant, true); // silent：由這裡統一顯示結果
+                    removeLoadingToast(loadingToast);
+                    showToast(`<span class="inline-flex items-center align-middle">${grassHatBunnyTinySvg}</span>&nbsp;兔兔導遊分析完成！`);
+                } else {
+                    // 沒有新增行程需要分析，但仍實際測試一次連線，讓按鈕感覺是「真的有在做事」
+                    await window.aiModel.generateContent('ping');
+                    removeLoadingToast(loadingToast);
+                    showToast('本日行程已是內建導覽內容，沒有需要另外分析的新項目');
+                }
+            } catch (e) {
+                console.error('AI Guide connectivity error', e);
+                removeLoadingToast(loadingToast);
+                showToast('😢 兔兔導遊目前無法搜尋，可能是網路或 AI 額度問題');
+                setTimeout(() => showToast('本日行程已是內建導覽內容，沒有需要另外分析的新項目'), 1300);
+            }
         }
 
         function switchTab(tabId, el) {
@@ -733,7 +781,7 @@ ${itemList}`;
                         ${grassHatBunnySvg}
                         <span class="text-[11.5px] font-bold text-lavender-800 tracking-wide">兔兔導遊已為本日準備專屬導覽</span>
                     </div>
-                    <button onclick="refreshAIGuide(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-500 bg-dustypink-50 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition">分析新增行程</button>
+                    <button onclick="refreshAIGuide(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-500 bg-dustypink-50 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition">分析行程</button>
                 </div>
             `;
 
