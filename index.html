@@ -337,6 +337,35 @@
         </div>
     </div>
 
+    <!-- 兔兔問答彈跳窗 -->
+    <div id="chat-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[1600] items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-sm rounded-[32px] shadow-2xl relative flex flex-col border border-lavender-100" style="height: 78vh;">
+            <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-lavender-100">
+                <div class="flex items-center gap-2.5">
+                    <span id="chat-header-bunny"></span>
+                    <div>
+                        <div class="text-[10px] tracking-widest text-dustypink-500 uppercase font-bold">Ask Away</div>
+                        <h3 class="font-serif text-[20px] text-lavender-900 font-bold leading-tight">兔兔問答</h3>
+                    </div>
+                </div>
+                <button onclick="closeChatModal()" class="text-3xl text-lavender-300 hover:text-lavender-700 transition leading-none">&times;</button>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto no-scrollbar px-5 py-4 space-y-3.5"></div>
+            <div class="px-4 pb-4 pt-2 border-t border-lavender-100">
+                <div class="flex items-end gap-2">
+                    <textarea id="chat-input" rows="1" placeholder="問問兔兔導遊,例如：曼谷計程車怎麼跳錶？" class="flex-1 bg-lavender-50/80 border border-lavender-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400 resize-none max-h-24" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMessage();}"></textarea>
+                    <button onclick="sendChatMessage()" class="flex-none w-11 h-11 flex items-center justify-center bg-dustypink-400 hover:bg-dustypink-500 text-white rounded-full shadow-md active:scale-90 transition">➤</button>
+                </div>
+                <p class="text-[10px] text-lavender-400 mt-2 text-center">由 Claude 提供回答,內容僅供參考</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 兔兔問答浮動按鈕 -->
+    <button onclick="openChatModal()" class="fixed right-5 bottom-24 z-[900] w-14 h-14 rounded-full bg-white shadow-lg border-[2px] border-dustypink-300 flex items-center justify-center active:scale-90 transition max-w-md mx-auto" style="right: max(1.25rem, calc((100vw - 28rem) / 2 + 1.25rem));">
+        <span id="chat-fab-bunny"></span>
+    </button>
+
     <!-- 底部選單 -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav px-6 py-3 flex justify-between items-center z-50">
         <button onclick="switchTab('schedule', this)" class="nav-btn active flex flex-col items-center justify-center w-[18%] text-lavender-700 transition active:scale-90"><span class="text-[22px] mb-1">🗓️</span><span class="text-[10px] font-bold tracking-wide">行程</span></button>
@@ -774,7 +803,13 @@
         const CLAUDE_API_KEY = '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';
         const CLAUDE_MODEL = 'claude-sonnet-5';
 
-        async function callClaude(promptText) {
+        // promptOrMessages 可以是單一字串（沿用舊用法），也可以是完整的訊息陣列 [{role, content}, ...]（給多輪對話用）
+        async function callClaude(promptOrMessages, systemPrompt) {
+            const messages = typeof promptOrMessages === 'string'
+                ? [{ role: 'user', content: promptOrMessages }]
+                : promptOrMessages;
+            const body = { model: CLAUDE_MODEL, max_tokens: 1024, messages };
+            if (systemPrompt) body.system = systemPrompt;
             const res = await fetch('https://api.anthropic.com/v1/messages', {
                 method: 'POST',
                 headers: {
@@ -783,11 +818,7 @@
                     'anthropic-version': '2023-06-01',
                     'anthropic-dangerous-direct-browser-access': 'true'
                 },
-                body: JSON.stringify({
-                    model: CLAUDE_MODEL,
-                    max_tokens: 1024,
-                    messages: [{ role: 'user', content: promptText }]
-                })
+                body: JSON.stringify(body)
             });
             if (!res.ok) {
                 const errBody = await res.text().catch(() => '');
@@ -797,6 +828,70 @@
             const text = (data.content || []).map(c => c.text || '').join('').trim();
             if (!text) throw new Error('Claude 回應內容為空');
             return text;
+        }
+
+        // ===== 兔兔問答：簡易多輪聊天視窗 =====
+        window.chatHistory = []; // { role: 'user'|'assistant', content: string }
+        const CHAT_SYSTEM_PROMPT = `你是「兔兔導遊」，一位親切、專業、熟悉泰國曼谷的旅遊助理，正在協助一對夫妻進行 2026/9/10-9/14 的曼谷自由行（下榻蘇拉翁賽格蘭德中心大飯店）。請一律使用繁體中文回答，語氣輕鬆自然、簡潔實用（除非使用者要求詳細），優先給具體可執行的建議（例如實際店名、交通方式、大概花費）。如果問題與這趟旅遊或泰國生活資訊無關，也可以正常回答，但盡量保持簡短。`;
+
+        window.openChatModal = function() {
+            document.getElementById('chat-modal').classList.add('active');
+            const bodyEl = document.getElementById('chat-messages');
+            if (window.chatHistory.length === 0) {
+                appendChatBubble('assistant', '哈囉！我是兔兔導遊 🐰 有什麼想問的都可以直接打字給我，像是交通、美食、天氣或行程建議都可以喔～');
+            }
+            document.getElementById('chat-input').focus();
+        }
+        window.closeChatModal = function() { document.getElementById('chat-modal').classList.remove('active'); }
+
+        function appendChatBubble(role, text, isLoading) {
+            const bodyEl = document.getElementById('chat-messages');
+            const bubble = document.createElement('div');
+            if (role === 'user') {
+                bubble.className = 'flex justify-end';
+                bubble.innerHTML = `<div class="max-w-[80%] bg-dustypink-400 text-white text-[13px] leading-relaxed rounded-2xl rounded-br-sm px-4 py-2.5 shadow-sm">${escapeHtml(text)}</div>`;
+            } else {
+                bubble.className = 'flex justify-start gap-2 items-start';
+                bubble.innerHTML = `${grassHatBunnyTinySvg}<div class="max-w-[80%] bg-lavender-50 border border-lavender-200 text-lavender-900 text-[13px] leading-relaxed rounded-2xl rounded-bl-sm px-4 py-2.5 shadow-sm whitespace-pre-wrap">${isLoading ? '<span class="search-dots"><span>.</span><span>.</span><span>.</span></span>' : escapeHtml(text)}</div>`;
+            }
+            if (isLoading) bubble.id = 'chat-loading-bubble';
+            bodyEl.appendChild(bubble);
+            bodyEl.scrollTop = bodyEl.scrollHeight;
+            return bubble;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        window.sendChatMessage = async function() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            if (!CLAUDE_API_KEY || CLAUDE_API_KEY === 'PASTE_YOUR_CLAUDE_API_KEY_HERE') {
+                appendChatBubble('assistant', '兔兔導遊還沒設定好 Claude API 金鑰喔，請先完成金鑰設定才能問問題～');
+                return;
+            }
+            input.value = '';
+            appendChatBubble('user', text);
+            window.chatHistory.push({ role: 'user', content: text });
+            appendChatBubble('assistant', '', true);
+
+            try {
+                // 只帶最近 10 則訊息給 AI，避免每次都送整段歷史造成 token 浪費
+                const recentHistory = window.chatHistory.slice(-10);
+                const reply = await callClaude(recentHistory, CHAT_SYSTEM_PROMPT);
+                window.chatHistory.push({ role: 'assistant', content: reply });
+                document.getElementById('chat-loading-bubble')?.remove();
+                appendChatBubble('assistant', reply);
+            } catch (e) {
+                console.error('Chat error', e);
+                document.getElementById('chat-loading-bubble')?.remove();
+                appendChatBubble('assistant', '😢 兔兔導遊現在回答不了，可能是網路或 AI 額度問題，稍後再試試看。');
+                window.chatHistory.pop(); // 移除這次失敗的使用者訊息，避免下次帶著錯誤上下文
+            }
         }
 
         window.ensureAIGuide = function(dayNum, dayItems) {
@@ -1089,6 +1184,10 @@ ${itemList}`;
             if (typeof window.selectDay === 'function') window.selectDay(1);
             if (typeof window.renderFood === 'function') window.renderFood();
             if (typeof window.renderExpenses === 'function') window.renderExpenses();
+            const fabBunny = document.getElementById('chat-fab-bunny');
+            if (fabBunny) fabBunny.innerHTML = grassHatBunnySmallSvg;
+            const headerBunny = document.getElementById('chat-header-bunny');
+            if (headerBunny) headerBunny.innerHTML = grassHatBunnySmallSvg;
         });
     </script>
 </body>
