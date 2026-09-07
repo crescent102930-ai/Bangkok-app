@@ -328,6 +328,16 @@
         </div>
     </div>
 
+    <!-- 天氣文字預報彈跳窗 -->
+    <div id="weather-modal" class="modal-overlay fixed inset-0 bg-lavender-900/60 backdrop-blur-md z-[1500] items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-sm rounded-[32px] p-7 shadow-2xl relative max-h-[85vh] overflow-y-auto no-scrollbar border border-lavender-100">
+            <button onclick="closeWeatherModal()" class="absolute top-5 right-6 text-3xl text-lavender-300 hover:text-lavender-700 transition leading-none">&times;</button>
+            <div class="text-[10px] tracking-widest text-dustypink-500 uppercase font-bold mb-1.5">Weather Report</div>
+            <h3 class="font-serif text-[24px] text-lavender-900 font-bold mb-5 leading-tight" id="wm-title">文字氣象預報</h3>
+            <div id="wm-body" class="text-[13px] text-lavender-800 leading-relaxed space-y-3.5"></div>
+        </div>
+    </div>
+
     <!-- 底部選單 -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav px-6 py-3 flex justify-between items-center z-50">
         <button onclick="switchTab('schedule', this)" class="nav-btn active flex flex-col items-center justify-center w-[18%] text-lavender-700 transition active:scale-90"><span class="text-[22px] mb-1">🗓️</span><span class="text-[10px] font-bold tracking-wide">行程</span></button>
@@ -360,7 +370,7 @@
         // App Check：AI 導遊功能需要這一段驗證才能呼叫 Gemini
         // ⚠️ 請把下面 "PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE" 換成你在 Google Cloud Console 申請到的 reCAPTCHA Enterprise「金鑰」
         initializeAppCheck(app, {
-            provider: new ReCaptchaEnterpriseProvider('6LejFaAtAAAAAAG4JjaCPgjBg6Ia5Mp6wMeUHR6-'),
+            provider: new ReCaptchaEnterpriseProvider('PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE'),
             isTokenAutoRefreshEnabled: true
         });
 
@@ -480,11 +490,11 @@
 
         // 每一天所在地區的實際座標 + 對應日期，用來跟 Open-Meteo 抓「當天真實」天氣（免費、不需金鑰）
         const dayLocations = {
-            1: { area: "曼谷市區 (Bangkok)", lat: 13.7307, lon: 100.5232, date: "2026-09-10" },
-            2: { area: "明武里區 (Safari)", lat: 13.8236, lon: 100.7183, date: "2026-09-11" },
-            3: { area: "昭披耶河畔 / 舊城區", lat: 13.7500, lon: 100.4913, date: "2026-09-12" },
-            4: { area: "沙吞 / 吞武里", lat: 13.7180, lon: 100.4950, date: "2026-09-13" },
-            5: { area: "帕亞泰 / 機場", lat: 13.6900, lon: 100.7501, date: "2026-09-14" }
+            1: { area: "曼谷舊城區 / 蘇拉翁賽", lat: 13.7307, lon: 100.5232, date: "2026-09-10" },
+            2: { area: "ICONSIAM 昭披耶河畔", lat: 13.7256, lon: 100.5099, date: "2026-09-11" },
+            3: { area: "舊城區 / Dinso Rd", lat: 13.7563, lon: 100.5018, date: "2026-09-12" },
+            4: { area: "明武里區 (Safari)", lat: 13.8236, lon: 100.7183, date: "2026-09-13" },
+            5: { area: "帕亞泰 / 蘇凡納布機場", lat: 13.6900, lon: 100.7501, date: "2026-09-14" }
         };
         const WEATHER_DISPLAY_HOURS = [7, 9, 11, 13, 15, 17, 19, 21];
         window.weatherCache = {};
@@ -513,8 +523,16 @@
             `).join('');
             el.innerHTML = `
                 <div class="bg-lavender-200/80 border border-lavender-300 rounded-2xl p-4.5 mb-6 relative overflow-hidden shadow-sm">
-                    <div class="text-[11px] text-lavender-900 font-bold tracking-widest mb-3.5 flex items-center gap-1.5 uppercase">
-                        <span>📍 ${area}</span> <span class="text-lavender-500">|</span> <span>${isFallback ? '參考預報（即時資料暫時無法取得）' : '即時每小時預報'}</span>
+                    <div class="flex items-center justify-between mb-3.5">
+                        <div class="text-[11px] text-lavender-900 font-bold tracking-widest flex items-center gap-1.5 uppercase">
+                            <span>📍 ${area}</span> <span class="text-lavender-500">|</span> <span>${isFallback ? '參考預報（即時資料暫時無法取得）' : '即時每小時預報'}</span>
+                        </div>
+                        <div class="flex-none flex items-center gap-1.5 ml-2">
+                            <button onclick="refreshWeather(${dayNum})" title="重新整理天氣" class="w-6 h-6 flex-none flex items-center justify-center bg-white/80 border border-lavender-300 rounded-full active:scale-90 transition">
+                                <span id="weather-refresh-icon" class="text-[11px] inline-block transition-transform duration-500">🔄</span>
+                            </button>
+                            <button onclick="openWeatherModal(${dayNum})" class="flex-none text-[10px] font-bold text-dustypink-600 bg-white/80 border border-dustypink-200 px-2.5 py-1 rounded-full active:scale-95 transition whitespace-nowrap">📝 文字預報</button>
+                        </div>
                     </div>
                     <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1.5 px-0.5">
                         ${hourlyHtml}
@@ -523,11 +541,11 @@
             `;
         }
 
-        window.loadWeather = async function(dayNum) {
+        window.loadWeather = async function(dayNum, force) {
             const loc = dayLocations[dayNum];
             if (!loc) return;
             const el = document.getElementById('weather-block');
-            if (window.weatherCache[dayNum]) { renderWeatherBlock(dayNum, loc.area, window.weatherCache[dayNum], false); return; }
+            if (!force && window.weatherCache[dayNum]) { renderWeatherBlock(dayNum, loc.area, window.weatherCache[dayNum], false); return; }
             if (el) el.innerHTML = `<div class="text-[11px] text-lavender-700 bg-white/60 border border-dashed border-lavender-300 rounded-2xl p-4 mb-6 text-center">☁️ 正在取得 ${loc.area} 當天即時天氣...</div>`;
             try {
                 const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&hourly=temperature_2m,precipitation_probability,weather_code&timezone=Asia%2FBangkok&start_date=${loc.date}&end_date=${loc.date}`;
@@ -556,92 +574,192 @@
             }
         }
 
+        // 只刷新天氣卡片(不重整整個頁面)：清掉這天的快取，重新打一次 API
+        window.refreshWeather = async function(dayNum) {
+            const icon = document.getElementById('weather-refresh-icon');
+            if (icon) icon.style.transform = 'rotate(360deg)';
+            delete window.weatherCache[dayNum];
+            await window.loadWeather(dayNum, true);
+            showToast('🔄 天氣已更新');
+        }
+
+        // 天氣文字預報彈跳窗：抓當天整體降雨機率/雨量，搭配氣候背景知識寫成繁中文字說明
+        window.openWeatherModal = function(dayNum) {
+            const loc = dayLocations[dayNum];
+            if (!loc) return;
+            document.getElementById('wm-title').innerText = `${loc.area}・文字氣象預報`;
+            const bodyEl = document.getElementById('wm-body');
+            bodyEl.innerHTML = `<div class="text-center text-lavender-400 text-xs py-6">☁️ 正在整理當天文字預報...</div>`;
+            document.getElementById('weather-modal').classList.add('active');
+            buildWeatherNarrative(dayNum, loc).then(html => { bodyEl.innerHTML = html; });
+        }
+        window.closeWeatherModal = function() { document.getElementById('weather-modal').classList.remove('active'); }
+
+        async function buildWeatherNarrative(dayNum, loc) {
+            const climateNote = `曼谷 9 月正值西南季風全盛期，加上熱帶輻合帶（ITCZ）常徘徊在中南半島上空，是全年降雨最頻繁的月份之一。若這幾天持續下雨，常見成因包含：①西南季風增強，將印度洋水氣源源不絕地輸送進來；②熱帶輻合帶滯留在泰國上空，形成一波波的對流雨帶；③孟加拉灣或南海若有熱帶低氣壓、颱風生成，其外圍環流也可能增強當地雨勢、延長降雨時間。無論成因為何，這個季節的午後雷陣雨來得快去得也快，建議隨身攜帶輕便雨具，戶外行程可安排室內備案。`;
+            // 泰國氣象局(TMD)官方預報頁：沒有公開、可直接被網頁 JS 呼叫的免金鑰 API，
+            // 所以改用連結方式，讓使用者一鍵跳轉查看官方最新文字預報原文（英文版）
+            const tmdLinkHtml = `<a href="https://www.tmd.go.th/en/weather/weatherthailand" target="_blank" onclick="event.stopPropagation()" class="flex items-center justify-center gap-1.5 text-[11px] font-bold text-lavender-700 bg-lavender-50 border border-lavender-200 rounded-xl py-2.5 mt-1 active:scale-95 transition">🔗 查看泰國氣象局 (TMD) 官方預報原文</a>`;
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weather_code,precipitation_sum,precipitation_probability_max,temperature_2m_max,temperature_2m_min&timezone=Asia%2FBangkok&start_date=${loc.date}&end_date=${loc.date}`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('daily weather fetch failed: ' + res.status);
+                const data = await res.json();
+                const d = data.daily;
+                if (!d || !d.time || d.time.length === 0) throw new Error('no daily data');
+                const code = d.weather_code[0];
+                const precipSum = d.precipitation_sum ? d.precipitation_sum[0] : null;
+                const precipProb = d.precipitation_probability_max ? d.precipitation_probability_max[0] : null;
+                const tMax = d.temperature_2m_max ? Math.round(d.temperature_2m_max[0]) : null;
+                const tMin = d.temperature_2m_min ? Math.round(d.temperature_2m_min[0]) : null;
+
+                let condText = '多雲時晴，降雨機會不高';
+                if ([95, 96, 99].includes(code)) condText = '有雷陣雨，甚至可能伴隨強對流雷雨';
+                else if ([80, 81, 82, 51, 53, 55, 56, 57, 61, 63, 65, 66, 67].includes(code)) condText = '有陣雨或間歇性降雨';
+                else if ([45, 48].includes(code)) condText = '較多雲霧，天空陰沉';
+                else if ([1, 2, 3].includes(code)) condText = '多雲為主，偶有陽光';
+                else if (code === 0) condText = '晴朗少雲';
+
+                let intensityLine = '';
+                if (precipSum !== null) {
+                    if (precipSum >= 20) intensityLine = `<p>預估當天累積雨量約 <b>${precipSum} mm</b>，屬於較明顯的降雨，且最高降雨機率達 <b>${precipProb ?? '—'}%</b>，建議備妥雨具、鞋子也盡量選防水材質。</p>`;
+                    else if (precipSum > 0) intensityLine = `<p>預估當天累積雨量約 <b>${precipSum} mm</b>，最高降雨機率 <b>${precipProb ?? '—'}%</b>，多半是午後短暫雷陣雨，出門帶把小雨傘即可。</p>`;
+                    else intensityLine = `<p>預估當天幾乎不會下雨，最高降雨機率僅 <b>${precipProb ?? '—'}%</b>，是適合安排戶外行程的好天氣。</p>`;
+                }
+
+                return `
+                    <p class="font-bold text-lavender-900">${loc.date.slice(5).replace('-', '/')}　${condText}，氣溫約 ${tMin ?? '—'}°C - ${tMax ?? '—'}°C。</p>
+                    ${intensityLine}
+                    <div class="bg-mist-50 border border-mist-200 rounded-xl p-3.5 text-[12px] text-mist-700 leading-relaxed"><span class="font-bold text-mist-800 block mb-1">☔ 為什麼曼谷這幾天容易下雨？</span>${climateNote}</div>
+                    <p class="text-[10px] text-lavender-400 mt-1">＊ 以上為根據即時氣象資料整理之參考說明，實際天氣仍以出發前最新預報為準。</p>
+                    ${tmdLinkHtml}
+                `;
+            } catch (e) {
+                console.error('Weather narrative error', e);
+                return `
+                    <p class="text-lavender-600">目前無法取得當天詳細數據，但根據曼谷 9 月氣候通常如下：</p>
+                    <div class="bg-mist-50 border border-mist-200 rounded-xl p-3.5 text-[12px] text-mist-700 leading-relaxed"><span class="font-bold text-mist-800 block mb-1">☔ 為什麼曼谷這幾天容易下雨？</span>${climateNote}</div>
+                    <p class="text-[10px] text-lavender-400 mt-1">＊ 請於出發前再次查看即時預報。</p>
+                    ${tmdLinkHtml}
+                `;
+            }
+        }
+
         const defaultSchedules = {
-            1: [ { id: "def_1_0", time: "04:30 - 05:00", title: "出發前往桃園機場", note: "接送車", type: "transport" }, { id: "def_1_1", time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "桃園起飛", type: "flight" }, { id: "def_1_1b", time: "09:45 - 10:30", title: "機場接機", note: "落地後接送前往飯店", type: "transport" }, { id: "def_1_2", time: "10:30 - 11:30", title: "抵達飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店 - 放行李", type: "hotel" }, { id: "def_1_3", time: "11:30 - 14:00", title: "首餐美食巡禮", note: "Pad Thai Fai Ta Lu 或 Khao-So-i", type: "food" }, { id: "def_1_4", time: "14:00 - 17:00", title: "泰服拍照體驗", note: "Molly house", type: "spot" }, { id: "def_1_5", time: "17:00 - 20:00", title: "Here Duan (Banthat Thong)", note: "段哥餐館", type: "food" }, { id: "def_1_6", time: "20:00 - 22:00", title: "返回酒店休整", note: "", type: "hotel" } ],
-            2: [ { id: "def_2_0", time: "07:00 - 08:00", title: "起床整理出門", note: "", type: "hotel" }, { id: "def_2_1", time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" }, { id: "def_2_2", time: "16:20 - 20:00", title: "ICONSIAM 暹羅天地", note: "BTS 金色線 Charoen Nakhon 站 (水上市場美食街)", type: "shopping" }, { id: "def_2_3", time: "20:00 - 21:00", title: "舒壓按摩", note: "放鬆行程", type: "spot" }, { id: "def_2_4", time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" } ],
-            3: [ { id: "def_3_0", time: "08:00 - 11:00", title: "睡到自然醒", note: "享受假期", type: "hotel" }, { id: "def_3_1", time: "11:00 - 13:30", title: "午餐：潘氏店 (Sae Phun)", note: "百年雞肉飯", type: "food" }, { id: "def_3_2", time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "文化巡禮", type: "spot" }, { id: "def_3_3", time: "16:00 - 17:00", title: "下午茶時光", note: "SenBeku 或 Petit Peyton", type: "food" }, { id: "def_3_4", time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "Dinso 總店 / 備選: Here Duan", type: "food" }, { id: "def_3_5", time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "泰拳賽事觀賞", type: "spot" }, { id: "def_3_6", time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" } ],
-            4: [ { id: "def_4_0", time: "10:00 - 11:00", title: "起床準備", note: "", type: "hotel" }, { id: "def_4_1", time: "11:00 - 13:00", title: "早午餐：Fran's", note: "Sathorn 區人氣早午餐", type: "food" }, { id: "def_4_2", time: "13:00 - 16:00", title: "吞武里海鮮市場", note: "享用大餐", type: "food" }, { id: "def_4_3", time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "BTS Sala Daeng 站", type: "shopping" }, { id: "def_4_4", time: "20:00 - 22:00", title: "返回飯店整理行李", note: "", type: "hotel" } ],
-            5: [ { id: "def_5_0", time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" }, { id: "def_5_1", time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" }, { id: "def_5_2", time: "14:00 - 14:40", title: "前往 BKK 機場", note: "ARL 機場快線", type: "transport" }, { id: "def_5_3", time: "17:50 - 22:40", title: "航班返台", note: "飛抵桃園機場，接送回家", type: "flight" } ]
+            1: [
+                { id: "def_1_1", time: "04:30 - 05:00", title: "機場接送→桃園機場", note: "司機:孫明強 0975-792-991・車牌:RCE-9180", type: "transport" },
+                { id: "def_1_2", time: "07:00 - 09:45", title: "飛往曼谷 (BKK)", note: "中華航空 CI833・桃園機場 T1", type: "flight" },
+                { id: "def_1_3", time: "10:30 - 12:00", title: "機場接送→飯店 Check-in", note: "蘇拉翁賽格蘭德中心大飯店・大廳放行李休整", type: "hotel" },
+                { id: "def_1_4", time: "12:00 - 13:45", title: "貪吃 or 按摩", note: "備案:Pad Thai Fai Ta Lu (Mahanakhon Cube 店)・♥♥潘氏店 (Sae Phun)", type: "food" },
+                { id: "def_1_5", time: "13:45 - 16:00", title: "大皇宮 + 玉佛寺半日導覽", note: "或改吞武里海鮮市場 (二選一，需先訂 Klook / 易遊網行程)", type: "spot" },
+                { id: "def_1_6", time: "16:00 - 20:00", title: "晚餐 (待定)", note: "①♥♥♥KHAO (Ekkamai米其林) ②KHAO (Wireless Road)・或♥♥Khao-Sō-i (Soi Convent Silom)", type: "food" },
+                { id: "def_1_7", time: "20:00 - 22:00", title: "返回酒店", note: "", type: "hotel" }
+            ],
+            2: [
+                { id: "def_2_1", time: "07:00 - 12:00", title: "睡到自然醒", note: "", type: "hotel" },
+                { id: "def_2_2", time: "12:00 - 20:00", title: "ICONSIAM 暹羅天地", note: "也可選擇回飯店先休整再決定", type: "shopping" },
+                { id: "def_2_3", time: "20:00 - 21:00", title: "SookSiam 室內水上市場美食街", note: "逛完可按可不按，順路安排舒壓按摩", type: "food" },
+                { id: "def_2_4", time: "21:00 - 21:30", title: "返回酒店", note: "", type: "hotel" }
+            ],
+            3: [
+                { id: "def_3_1", time: "07:30 - 08:20", title: "起床整理出門", note: "", type: "hotel" },
+                { id: "def_3_2", time: "09:00 - 12:00", title: "泰服拍照體驗", note: "@Molly house", type: "spot" },
+                { id: "def_3_3", time: "12:00 - 15:00", title: "早午餐：Fran's Sathorn", note: "", type: "food" },
+                { id: "def_3_4", time: "15:00 - 16:30", title: "回飯店休息", note: "", type: "hotel" },
+                { id: "def_3_5", time: "17:00 - 18:00", title: "晚餐：Krua Apsorn", note: "♥♥♥Dinso 總店・備選♥♥Pad Thai Fai Ta Lu (Dinso Rd) / Here Duan (Banthat Thong)", type: "food" },
+                { id: "def_3_6", time: "18:30 - 22:00", title: "Rajadamnern 泰拳", note: "需先訂易遊網 / Klook 門票", type: "spot" },
+                { id: "def_3_7", time: "22:00 - 23:00", title: "返回酒店", note: "", type: "hotel" }
+            ],
+            4: [
+                { id: "def_4_1", time: "07:00 - 08:00", title: "起床整理出發", note: "", type: "hotel" },
+                { id: "def_4_2", time: "08:20 - 16:00", title: "Safari World 野生動物園", note: "包車", type: "spot" },
+                { id: "def_4_3", time: "16:00 - 20:00", title: "Dusit Central Park 購物", note: "逛伴手禮・順路可安排 Let's Relax 按摩", type: "shopping" },
+                { id: "def_4_4", time: "20:00 - 22:00", title: "返回飯店", note: "", type: "hotel" }
+            ],
+            5: [
+                { id: "def_5_1", time: "06:00 - 10:30", title: "飯店早餐", note: "", type: "hotel" },
+                { id: "def_5_2", time: "10:30 - 14:00", title: "Factory Coffee BKK", note: "曼谷世界冠軍咖啡", type: "food" },
+                { id: "def_5_3", time: "14:00 - 14:40", title: "前往 BKK 機場", note: "", type: "transport" },
+                { id: "def_5_4", time: "14:40 - 17:20", title: "逛機場", note: "", type: "spot" },
+                { id: "def_5_5", time: "17:20 - 17:50", title: "機場登機", note: "星宇航空 JX746・桃園機場 T2", type: "transport" },
+                { id: "def_5_6", time: "17:50 - 22:40", title: "飛返桃園", note: "蘇凡納布 (BKK) → 桃園 (TPE)", type: "flight" },
+                { id: "def_5_7", time: "22:40 - 24:00", title: "賦歸返台", note: "搭車返家", type: "transport" }
+            ]
         };
 
+        const defaultFoodWishlist = [
+            { id: 'def_fw1', name: "潘氏店 (Sae Phun)", note: "百年雞肉飯" },
+            { id: 'def_fw2', name: "Pad Thai Fai Ta Lu", note: "Mahanakhon Cube 火焰炒河粉" },
+            { id: 'def_fw3', name: "KHAO (Ekkamai)", note: "米其林摘星泰菜" },
+            { id: 'def_fw4', name: "Khao-Sō-i", note: "Soi Convent Silom 泰北金麵" },
+            { id: 'def_fw5', name: "Krua Apsorn (Dinso 總店)", note: "王室最愛蟹肉歐姆蛋" },
+            { id: 'def_fw6', name: "Here Duan", note: "Banthat Thong 深夜排隊名店" },
+            { id: 'def_fw7', name: "Fran's Sathorn", note: "人氣早午餐" },
+            { id: 'def_fw8', name: "Factory Coffee BKK", note: "世界冠軍咖啡" }
+        ];
+
         const staticAiGuide = {
-            "def_1_3": {
-                story: "此站有兩個熱門選擇：Pad Thai Fai Ta Lu（火焰版打拋泰式炒河粉）在曼谷老城區以「起火拋鍋」的表演式炒法聞名，曾獲米其林必比登推薦；另一選擇 Khao-So-i（Soi Convent 分店）源自清邁的北泰咖哩麵老店。",
-                mustEat: ["火焰泰式炒河粉", "北泰咖哩雞麵", "酥炸豬皮配咖哩麵"],
-                mustOrder: ["Pad Thai with Pork", "Khao Soi Kai"],
-                mustBuy: []
-            },
             "def_1_4": {
-                story: "Molly House 是曼谷市區提供泰式傳統服飾租借與攝影服務的工作室，讓遊客能穿上泰式宮廷風或復古服裝拍攝紀念照片，體驗「泰式變裝」。",
-                mustEat: [], mustOrder: [], mustBuy: []
+                story: "此時段可二選一：Pad Thai Fai Ta Lu（Mahanakhon Cube 店）以「起火拋鍋」表演式做法聞名，是視覺與美味兼具的打拋炒河粉；或選擇已有80年歷史、米其林必比登推薦的潘氏店（Sae Phun），招牌是燉到入味的雞肉飯。",
+                mustEat: ["火焰泰式炒河粉", "招牌燉雞肉飯", "燉豬腳飯"],
+                mustOrder: ["Pad Thai with Pork", "Stewed Chicken Rice"],
+                mustBuy: []
             },
             "def_1_5": {
-                story: "Here Duan（段哥餐館）位於朱拉隆功大學旁的 Banthat Thong 美食街，是當地深夜排隊名店，以蒜香海鮮歐姆蛋飯聞名。",
-                mustEat: ["蒜味蟹肉歐姆蛋飯", "蒜味蝦仁歐姆蛋飯", "泰式炒海鮮"],
-                mustOrder: ["Crab Meat Omelette Rice", "Pad Kra Pao"],
+                story: "大皇宮建於1782年拉瑪一世遷都曼谷之初，是泰國王室正式宮殿建築群，玉佛寺供奉整塊玉髓雕成的玉佛，是泰國最神聖的佛教聖地；若改走海鮮市場路線，則可在吞武里現點現煮新鮮海產，體驗道地泰式海鮮大餐。記得先在 Klook 或易遊網訂好行程與門票。",
+                mustEat: ["清蒸檸檬魚 (海鮮市場選項)", "咖哩炒螃蟹 (海鮮市場選項)"],
+                mustOrder: [],
+                mustBuy: ["玉佛寺周邊護身符", "宮廷風格明信片"]
+            },
+            "def_1_6": {
+                story: "晚餐推薦米其林摘星名店 KHAO，主打道地泰式家常菜，Ekkamai 店評價最高、Wireless Road 店則離飯店較近；若想換口味，也可選擇源自清邁的北泰咖哩麵老店 Khao-Sō-i（Soi Convent Silom 分店）。",
+                mustEat: ["泰式酸辣蝦湯", "黃咖哩蟹肉", "北泰咖哩雞麵"],
+                mustOrder: ["Tom Yum Goong", "Khao Soi Kai"],
                 mustBuy: []
             },
-            "def_2_1": {
-                story: "Safari World 曼谷野生動物園創立於1988年，是東南亞規模數一數二的開放式野生動物園，分為「Safari Park」與明星動物表演的「Marine Park」。",
-                mustEat: [], mustOrder: [], mustBuy: []
-            },
             "def_2_2": {
-                story: "ICONSIAM 暹羅天地是曼谷昭披耶河畔最具指標性的購物中心；地下樓層的 SookSiam 以「室內水上市場」為概念，重現泰國77府傳統市集風貌與街頭小吃。",
+                story: "ICONSIAM 暹羅天地是曼谷昭披耶河畔最具指標性的購物中心；地下樓層的 SookSiam 以「室內水上市場」為概念，重現泰國77府傳統市集風貌與街頭小吃，晚餐也可以直接在這裡的美食街解決。",
                 mustEat: ["泰式米粉船麵", "芒果糯米飯", "椰漿小煎餅"],
                 mustOrder: ["Boat Noodle", "Mango Sticky Rice"],
                 mustBuy: ["泰國各府特色伴手禮", "天然椰子製品"]
             },
             "def_2_3": {
-                story: "從 ICONSIAM 逛完街到回飯店前，順路安排一場舒壓按摩最剛好。推薦 Let's Relax Spa（Charoen Nakhon分店）就在商場對面，或是 Silom 區的 Bhu Mhai Spa。",
+                story: "在 SookSiam 美食街吃飽逛累後，可以順路安排一場舒壓按摩再回飯店，讓身體徹底放鬆。",
                 mustEat: [], mustOrder: [], mustBuy: [],
-                recommend: ["Let's Relax Spa (商場對面)", "The Prime Massage", "Silom Bodyworks"]
-            },
-            "def_3_1": {
-                story: "Sae Phun（潘氏店）位於曼谷老城區，是已有超過80年歷史的家族小吃店，以招牌燉雞肉飯聞名，連續多年獲米其林指南必比登推薦。",
-                mustEat: ["招牌燉雞肉飯", "燉豬腳飯", "泰式滷味拼盤"],
-                mustOrder: ["Stewed Chicken Rice", "Khao Kha Moo"],
-                mustBuy: []
+                recommend: ["Let's Relax Spa (ICONSIAM 分店)", "The Prime Massage", "Silom Bodyworks"]
             },
             "def_3_2": {
-                story: "大皇宮建於1782年拉瑪一世遷都曼谷之初，是泰國王室正式宮殿建築群；其中玉佛寺供奉著整塊玉髓雕成的玉佛，是泰國最神聖的佛教聖地。",
-                mustEat: [], mustOrder: [],
-                mustBuy: ["玉佛寺周邊護身符", "宮廷風格明信片"]
+                story: "Molly House 是曼谷市區提供泰式傳統服飾租借與攝影服務的工作室，讓遊客能穿上泰式宮廷風或復古服裝拍攝紀念照片，體驗「泰式變裝」。",
+                mustEat: [], mustOrder: [], mustBuy: []
             },
             "def_3_3": {
-                story: "Petit Peyton 位於老城區僧缽村附近，是走懷舊旅行風格的小型咖啡館，以手沖咖啡與精緻甜點聞名。",
-                mustEat: ["手沖精品咖啡", "自製甜點"],
-                mustOrder: ["Filter Coffee", "招牌乳酪蛋糕"],
-                mustBuy: []
-            },
-            "def_3_4": {
-                story: "Krua Apsorn 是曼谷家庭式泰菜名店，因深受泰國王室喜愛而聲名大噪，招牌蓬鬆蟹肉歐姆蛋是店內經典必點菜色。",
-                mustEat: ["蟹肉歐姆蛋", "咖哩粉炒蟹肉", "辣炒鹹魚"],
-                mustOrder: ["Crab Meat Omelette", "Stir-Fried Crab Meat with Curry Powder"],
-                mustBuy: []
-            },
-            "def_3_5": {
-                story: "Rajadamnern 拉查達姆能泰拳場於1945年開幕，被譽為「世界第一座標準泰拳擂台」，許多泰拳傳奇選手皆曾在此登台成名。",
-                mustEat: [], mustOrder: [],
-                mustBuy: ["泰拳場周邊紀念T恤", "泰拳短褲紀念品"]
-            },
-            "def_4_1": {
                 story: "Fran's 位於 Sathorn 區，是曼谷近年爆紅的人氣早午餐餐廳，以玻璃屋用餐空間搭配戶外花園座位聞名。",
                 mustEat: ["班尼迪克蛋", "法式吐司", "酪梨吐司"],
                 mustOrder: ["Eggs Benedict", "Ricotta Pancakes"],
                 mustBuy: []
             },
-            "def_4_2": {
-                story: "吞武里海鮮市場是曼谷人採買及現點現煮海鮮的熱門去處，可挑選新鮮海產交由攤販現場料理，體驗本地人的海鮮大餐文化。",
-                mustEat: ["清蒸檸檬魚", "咖哩炒螃蟹", "碳烤大頭蝦"],
-                mustOrder: ["Steamed Fish with Lime", "Grilled River Prawn"],
+            "def_3_5": {
+                story: "晚餐首選 Krua Apsorn（Dinso 總店），是深受泰國王室喜愛的家庭式泰菜名店，招牌蓬鬆蟹肉歐姆蛋是必點經典；備案則有 Dinso Rd 爆紅的火焰版 Pad Thai Fai Ta Lu，或朱拉隆功大學旁 Banthat Thong 美食街的深夜排隊名店 Here Duan。",
+                mustEat: ["蟹肉歐姆蛋", "咖哩粉炒蟹肉", "蒜味蟹肉歐姆蛋飯 (Here Duan)"],
+                mustOrder: ["Crab Meat Omelette", "Pad Thai with Pork"],
                 mustBuy: []
             },
-            "def_4_3": {
-                story: "Dusit Central Park 於2025下半年開幕，是全新地標型購物中心，以泰國最大的屋頂空中花園為一大亮點，鄰近 BTS Sala Daeng 站。",
+            "def_3_6": {
+                story: "Rajadamnern 拉查達姆能泰拳場於1945年開幕，被譽為「世界第一座標準泰拳擂台」，許多泰拳傳奇選手皆曾在此登台成名，記得先透過易遊網或 Klook 預訂門票。",
                 mustEat: [], mustOrder: [],
-                mustBuy: ["泰國本地設計品牌服飾", "屋頂花園文創小物"]
+                mustBuy: ["泰拳場周邊紀念T恤", "泰拳短褲紀念品"]
             },
-            "def_5_1": {
+            "def_4_2": {
+                story: "Safari World 曼谷野生動物園創立於1988年，是東南亞規模數一數二的開放式野生動物園，分為「Safari Park」與明星動物表演的「Marine Park」。",
+                mustEat: [], mustOrder: [], mustBuy: []
+            },
+            "def_4_3": {
+                story: "Dusit Central Park 於2025下半年開幕，是全新地標型購物中心，以泰國最大的屋頂空中花園為一大亮點；逛街途中也可以順路走一趟 Let's Relax 按摩，替旅程做個舒壓的結尾。",
+                mustEat: [], mustOrder: [],
+                mustBuy: ["泰國本地設計品牌服飾", "屋頂花園文創小物"],
+                recommend: ["Let's Relax Spa (Central 分店)"]
+            },
+            "def_5_2": {
                 story: "Factory Coffee BKK 位於 Phaya Thai 區，是曼谷數一數二的精品咖啡代表店家，由曾獲全國咖啡賽事佳績的咖啡師團隊經營。",
                 mustEat: ["精品手沖單品咖啡", "招牌特調咖啡"],
                 mustOrder: ["Filter Coffee", "Signature Espresso"],
