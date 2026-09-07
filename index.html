@@ -7,7 +7,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="泰國漫游26">
     <title>2026 泰國漫游 | BANGKOK JOURNAL</title>
-    <link rel="apple-touch-icon" href="icon.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -353,8 +352,10 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
-        import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-ai.js";
-        import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app-check.js";
+        // 舊版 AI 導遊改用 Firebase AI Logic (Gemini) 時需要這兩行，目前先停用（改走 Claude 直接呼叫），
+        // 若之後 Gemini 額度 bug 修好想切回來，把下面兩行 import 取消註解、並還原下方 App Check + aiModel 區塊即可
+        // import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-ai.js";
+        // import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app-check.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAq1YGhqmkBv-r4WjgfmHccAitV8VS0q3g",
@@ -367,17 +368,16 @@
 
         const app = initializeApp(firebaseConfig);
 
-        // App Check：AI 導遊功能需要這一段驗證才能呼叫 Gemini
-        // ⚠️ 請把下面 "PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE" 換成你在 Google Cloud Console 申請到的 reCAPTCHA Enterprise「金鑰」
-        initializeAppCheck(app, {
-            provider: new ReCaptchaEnterpriseProvider('6LejFaAtAAAAAAG4JjaCPgjBg6Ia5Mp6wMeUHR6-'),
-            isTokenAutoRefreshEnabled: true
-        });
-
-        // AI 導遊：Firebase AI Logic (Gemini) — 金鑰不會外洩，直接由 Firebase 專案管理
-        const ai = getAI(app, { backend: new GoogleAIBackend() });
-        const aiModel = getGenerativeModel(ai, { model: "gemini-3.7-flash" });
-        window.aiModel = aiModel;
+        // ===== 舊版 Gemini AI 導遊設定（目前停用，保留備用）=====
+        // App Check：當初是為了讓 Firebase AI Logic 能呼叫 Gemini 才加的，Firestore / Storage 本身不需要它
+        // initializeAppCheck(app, {
+        //     provider: new ReCaptchaEnterpriseProvider('PASTE_YOUR_RECAPTCHA_ENTERPRISE_SITE_KEY_HERE'),
+        //     isTokenAutoRefreshEnabled: true
+        // });
+        // const ai = getAI(app, { backend: new GoogleAIBackend() });
+        // const aiModel = getGenerativeModel(ai, { model: "gemini-3.7-flash" });
+        // window.aiModel = aiModel;
+        // ===== Gemini 設定結束 =====
 
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -767,9 +767,40 @@
             }
         };
 
-        // ===== AI 導遊：針對「內建以外」的新增行程，即時呼叫 AI 分析 =====
+        // ===== AI 導遊：改用 Claude API 直接從瀏覽器呼叫（不再使用 Gemini）=====
+        // ⚠️ 請把下面 PASTE_YOUR_CLAUDE_API_KEY_HERE 換成你在 Anthropic Console (console.anthropic.com) 申請的 API 金鑰
+        // 這個做法金鑰會直接寫在網頁原始碼裡，任何看得到原始碼的人理論上都能複製去用；
+        // 因為這個 app 只有你們兩人在用、流量很小，風險通常可控，但金鑰額度被盜用的話要自己留意 Anthropic 後台的用量。
+        const CLAUDE_API_KEY = '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';
+        const CLAUDE_MODEL = 'claude-sonnet-5';
+
+        async function callClaude(promptText) {
+            const res = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-api-key': CLAUDE_API_KEY,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({
+                    model: CLAUDE_MODEL,
+                    max_tokens: 1024,
+                    messages: [{ role: 'user', content: promptText }]
+                })
+            });
+            if (!res.ok) {
+                const errBody = await res.text().catch(() => '');
+                throw new Error(`Claude API 錯誤 ${res.status}: ${errBody}`);
+            }
+            const data = await res.json();
+            const text = (data.content || []).map(c => c.text || '').join('').trim();
+            if (!text) throw new Error('Claude 回應內容為空');
+            return text;
+        }
+
         window.ensureAIGuide = function(dayNum, dayItems) {
-            if (!window.aiModel || !window.currentUser) return;
+            if (!CLAUDE_API_KEY || CLAUDE_API_KEY === 'PASTE_YOUR_CLAUDE_API_KEY_HERE' || !window.currentUser) return;
             if (window.sharedAiGuides[`day${dayNum}`]) return; // 已有快取，不重複呼叫
             if (window.aiGuideLoading[dayNum]) return; // 正在分析中
             const relevant = dayItems.filter(it => ['food', 'spot', 'shopping'].includes(it.type) && !staticAiGuide[it.id]);
@@ -781,7 +812,7 @@
             window.aiGuideLoading[dayNum] = true;
             try {
                 const itemList = items.map(it => `- id:"${it.id}" 標題:"${it.title}" 備註:"${it.note || ''}"`).join('\n');
-                const prompt = `你是一位熟悉泰國曼谷的專業導遊。以下是旅客某一天行程中「景點/餐廳/購物」項目，請針對每一項提供簡短導覽資訊，並嚴格以 JSON 格式回覆（不要加 markdown 語法或多餘文字），格式如下：
+                const prompt = `你是一位熟悉泰國曼谷的專業導遊。以下是旅客某一天行程中「景點/餐廳/購物」項目，請針對每一項提供簡短導覽資訊，並嚴格以 JSON 格式回覆（不要加 markdown 語法或多餘文字，直接輸出 JSON），格式如下：
 {"items": [ { "id": "項目id", "story": "1-2句該地點/店家的簡介、特色或小故事", "mustEat": ["必吃美食1", "必吃美食2"], "mustOrder": ["必點菜單1", "必點菜單2"], "mustBuy": ["必買伴手禮1"] } ] }
 規則：
 1. mustEat / mustOrder 只在該項目與餐廳、美食、小吃街有關時填寫，否則給空陣列 []。
@@ -793,8 +824,7 @@
 行程項目：
 ${itemList}`;
 
-                const result = await window.aiModel.generateContent(prompt);
-                let text = result.response.text().trim();
+                let text = await callClaude(prompt);
                 text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
                 const parsed = JSON.parse(text);
                 const itemsMap = {};
@@ -829,7 +859,7 @@ ${itemList}`;
                     showToast(`<span class="inline-flex items-center align-middle">${grassHatBunnyTinySvg}</span>&nbsp;兔兔導遊分析完成！`);
                 } else {
                     // 沒有新增行程需要分析，但仍實際測試一次連線，讓按鈕感覺是「真的有在做事」
-                    await window.aiModel.generateContent('ping');
+                    await callClaude('ping');
                     removeLoadingToast(loadingToast);
                     showToast('本日行程已是內建導覽內容，沒有需要另外分析的新項目');
                 }
