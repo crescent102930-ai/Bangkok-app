@@ -189,36 +189,6 @@
             <div id="food-list" class="space-y-3 pb-8"></div>
         </div>
 
-        <!-- Flight Tab -->
-        <div id="tab-flight" class="tab-content">
-            <div class="mb-5 text-center">
-                <h2 class="font-serif text-[28px] text-lavender-900 mb-1 font-bold tracking-tight">Flight Info</h2>
-                <div class="w-8 h-[2px] bg-dustypink-400 mx-auto mb-2"></div>
-                <p class="text-[11px] text-lavender-500 tracking-wide uppercase">自訂航班資訊</p>
-            </div>
-            <div class="bg-white p-6 rounded-3xl border border-lavender-100 shadow-sm mb-5 relative overflow-hidden">
-                <div class="flex items-center gap-2.5 mb-5"><span class="text-2xl">🛫</span><span class="font-serif font-bold text-lavender-800 text-lg">Departure <span class="text-[13px] font-sans text-lavender-500 ml-1">(TPE → BKK)</span></span></div>
-                <div class="space-y-4.5">
-                    <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-bold tracking-wider uppercase">Flight No.</label><input type="text" id="f-go-no" class="w-full bg-lavender-50/70 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI833"></div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-bold tracking-wider uppercase">Take off</label><input type="text" id="f-go-dep" class="w-full bg-lavender-50/70 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="07:00 桃園"></div>
-                        <div><label class="block text-[11px] text-lavender-600 mb-1.5 font-bold tracking-wider uppercase">Landing</label><input type="text" id="f-go-arr" class="w-full bg-lavender-50/70 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="09:45 曼谷"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-[#FDF8F9] p-6 rounded-3xl border border-dustypink-200 shadow-sm mb-6 relative overflow-hidden">
-                <div class="flex items-center gap-2.5 mb-5"><span class="text-2xl">🛬</span><span class="font-serif font-bold text-dustypink-600 text-lg">Return <span class="text-[13px] font-sans text-dustypink-400 ml-1">(BKK → TPE)</span></span></div>
-                <div class="space-y-4.5">
-                    <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-bold tracking-wider uppercase">Flight No.</label><input type="text" id="f-back-no" class="w-full bg-white border border-dustypink-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="例: CI834"></div>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-bold tracking-wider uppercase">Take off</label><input type="text" id="f-back-dep" class="w-full bg-white border border-dustypink-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="17:50 曼谷"></div>
-                        <div><label class="block text-[11px] text-dustypink-600 mb-1.5 font-bold tracking-wider uppercase">Landing</label><input type="text" id="f-back-arr" class="w-full bg-white border border-dustypink-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="22:40 桃園"></div>
-                    </div>
-                </div>
-            </div>
-            <button onclick="saveFlights()" class="w-full bg-lavender-600 text-white font-bold tracking-widest py-3.5 rounded-xl shadow-lg shadow-lavender-600/20 hover:bg-lavender-700 active:scale-95 transition">儲存航班資訊至雲端</button>
-        </div>
-        
         <!-- Transport Tab -->
         <div id="tab-transport" class="tab-content">
             <div class="mb-5 text-center">
@@ -227,6 +197,31 @@
                 <p class="text-[11px] text-lavender-500 tracking-wide uppercase">交通指南與泰文語音</p>
             </div>
             <a href="tel:0800085095" class="block w-full bg-red-50 border border-red-200 text-red-600 text-center font-bold py-3.5 rounded-2xl mb-6 shadow-sm active:scale-95 transition tracking-widest">🚨 外交部急難救助專線: 0800-085-095</a>
+            <div class="bg-white p-5 rounded-3xl border border-lavender-100 shadow-sm mb-5">
+                <h3 class="font-bold text-sm text-lavender-800 mb-1 flex items-center gap-2"><span class="text-lg">💵</span> 美金兌換泰銖</h3>
+                <p class="text-[10.5px] text-lavender-400 mb-4 leading-relaxed">匯率每天浮動，點下方按鈕看兩間 Super Rich 的即時匯率，再用下面的試算機快速換算</p>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <a href="https://www.superrich1965.com/" target="_blank" class="block p-3.5 bg-[#FFF3E0] rounded-2xl border border-[#F5C98A] text-center active:scale-95 transition"><div class="text-2xl mb-1">🟠</div><div class="font-bold text-[11px] text-[#B0651A] leading-tight">橘色 Super Rich<br>(1965)</div></a>
+                    <a href="https://www.superrichthailand.com/" target="_blank" class="block p-3.5 bg-[#E9F5EC] rounded-2xl border border-[#A9D8B6] text-center active:scale-95 transition"><div class="text-2xl mb-1">🟢</div><div class="font-bold text-[11px] text-[#3F8256] leading-tight">綠色 Super Rich<br>(SuperRichTH)</div></a>
+                </div>
+                <div class="bg-lavender-50/80 p-4 rounded-2xl border border-lavender-200">
+                    <div class="text-[11px] font-bold tracking-widest text-lavender-500 uppercase mb-3">💱 快速試算</div>
+                    <div class="mb-3">
+                        <label class="block text-[10.5px] text-lavender-500 mb-1.5">今日匯率 (1 USD = ? THB，看完上面網站後手動填入)</label>
+                        <input type="number" step="0.01" id="fx-rate" value="32.8" oninput="window.calcFx()" class="w-full bg-white border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 items-end">
+                        <div>
+                            <label class="block text-[10.5px] text-lavender-500 mb-1.5">美金 USD</label>
+                            <input type="number" id="fx-usd" placeholder="0" oninput="window.calcFx('usd')" class="w-full bg-white border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400">
+                        </div>
+                        <div>
+                            <label class="block text-[10.5px] text-lavender-500 mb-1.5">泰銖 THB</label>
+                            <input type="number" id="fx-thb" placeholder="0" oninput="window.calcFx('thb')" class="w-full bg-white border border-lavender-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-dustypink-400">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="grid grid-cols-3 gap-3 mb-6">
                 <a href="https://www.google.com/maps/search/?api=1&query=Bangkok" target="_blank" class="block p-4 bg-white rounded-2xl border border-lavender-100 shadow-sm text-center active:scale-95 transition hover:border-lavender-300"><div class="text-3xl sm:text-4xl mb-2">🗺️</div><div class="font-bold text-[11px] sm:text-xs text-lavender-800 leading-tight">Google地圖</div></a>
                 <a href="https://www.google.com/maps/d/u/1/edit?mid=1a9X8KcYLAFFrqUhJQlcyU4C69tySuI4&usp=sharing" target="_blank" class="block p-4 bg-white rounded-2xl border border-lavender-100 shadow-sm text-center active:scale-95 transition hover:border-lavender-300"><div class="text-3xl sm:text-4xl mb-2">📌</div><div class="font-bold text-[11px] sm:text-xs text-lavender-800 leading-tight">旅遊地圖</div></a>
@@ -269,6 +264,41 @@
             </div>
             <div class="text-[11px] font-bold text-lavender-500 mb-3 px-2 tracking-[0.15em] uppercase">Expense History</div>
             <div id="expense-list" class="space-y-3 pb-10"></div>
+        </div>
+
+        <!-- Blog Links Tab -->
+        <div id="tab-bloglinks" class="tab-content">
+            <div class="mb-5 text-center">
+                <h2 class="font-serif text-[28px] text-lavender-900 mb-1 font-bold tracking-tight">Notes</h2>
+                <div class="w-8 h-[2px] bg-dustypink-400 mx-auto mb-2"></div>
+                <p class="text-[11px] text-lavender-500 tracking-wide uppercase">網誌／景點連結收藏</p>
+            </div>
+            <div class="bg-white p-5 rounded-3xl border border-lavender-100 mb-6 shadow-sm">
+                <div class="text-[11px] font-bold text-lavender-700 mb-3.5 tracking-widest uppercase">＋ 新增連結</div>
+                <div class="space-y-3 mb-4">
+                    <input type="text" id="bl-url" class="w-full bg-lavender-50/80 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="網址 https://...">
+                    <input type="text" id="bl-title" class="w-full bg-lavender-50/80 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400" placeholder="標題／備註 (例: 這間咖啡廳很好拍)">
+                    <select id="bl-category" class="w-full bg-lavender-50/80 border border-lavender-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-dustypink-400">
+                        <option value="cafe">☕ 咖啡廳</option>
+                        <option value="spot">📍 景點</option>
+                        <option value="food">🍽️ 美食</option>
+                        <option value="shopping">🛍️ 購物</option>
+                        <option value="hotel">🏨 住宿</option>
+                        <option value="other">🏷️ 其他</option>
+                    </select>
+                </div>
+                <button onclick="addBlogLink()" class="w-full bg-dustypink-400 text-white font-bold tracking-widest py-3.5 rounded-xl shadow-md hover:bg-dustypink-500 active:scale-95 transition">加入收藏</button>
+            </div>
+            <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-1" id="bl-filter-row">
+                <button onclick="window.filterBlogLinks('all')" data-cat="all" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-lavender-600 text-white">全部</button>
+                <button onclick="window.filterBlogLinks('cafe')" data-cat="cafe" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">☕ 咖啡廳</button>
+                <button onclick="window.filterBlogLinks('spot')" data-cat="spot" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">📍 景點</button>
+                <button onclick="window.filterBlogLinks('food')" data-cat="food" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">🍽️ 美食</button>
+                <button onclick="window.filterBlogLinks('shopping')" data-cat="shopping" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">🛍️ 購物</button>
+                <button onclick="window.filterBlogLinks('hotel')" data-cat="hotel" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">🏨 住宿</button>
+                <button onclick="window.filterBlogLinks('other')" data-cat="other" class="bl-filter-btn flex-none px-3.5 py-2 rounded-xl text-[11px] font-bold shadow-sm transition active:scale-95 bg-white border border-lavender-200 text-lavender-700">🏷️ 其他</button>
+            </div>
+            <div id="bloglink-list" class="space-y-3 pb-10"></div>
         </div>
     </main>
 
@@ -375,7 +405,7 @@
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass-nav px-6 py-3 flex justify-between items-center z-50">
         <button onclick="switchTab('schedule', this)" class="nav-btn active flex flex-col items-center justify-center w-[18%] text-lavender-700 transition active:scale-90"><span class="text-[22px] mb-1">🗓️</span><span class="text-[10px] font-bold tracking-wide">行程</span></button>
         <button onclick="switchTab('food', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-[22px] mb-1">🍽️</span><span class="text-[10px] font-bold tracking-wide">美食</span></button>
-        <button onclick="switchTab('flight', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-[22px] mb-1">✈️</span><span class="text-[10px] font-bold tracking-wide">航班</span></button>
+        <button onclick="switchTab('bloglinks', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-[22px] mb-1">🔖</span><span class="text-[10px] font-bold tracking-wide">筆記</span></button>
         <button onclick="switchTab('transport', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-[22px] mb-1">🚖</span><span class="text-[10px] font-bold tracking-wide">交通</span></button>
         <button onclick="switchTab('ledger', this)" class="nav-btn flex flex-col items-center justify-center w-[18%] text-lavender-300 transition hover:text-lavender-500 active:scale-90"><span class="text-[22px] mb-1">💰</span><span class="text-[10px] font-bold tracking-wide">記帳</span></button>
     </nav>
@@ -441,7 +471,7 @@
                 onSnapshot(collection(db, basePath, 'foodStatus'), (snap) => { window.sharedFoodStatus = {}; snap.docs.forEach(d => { window.sharedFoodStatus[d.id] = d.data().checked; }); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'customFood'), (snap) => { window.sharedCustomFood = snap.docs.map(d => ({id: d.id, ...d.data()})); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
                 onSnapshot(collection(db, basePath, 'deletedFoods'), (snap) => { window.sharedDeletedFoods = snap.docs.map(d => d.id); if(typeof window.renderFood === 'function') window.renderFood(); }, e => console.error(e));
-                onSnapshot(doc(db, basePath, 'settings', 'flights'), (d) => { if (d.exists()) { const f = d.data(); ['goN', 'goT', 'goA', 'bkN', 'bkT', 'bkA'].forEach(k => { const el = document.getElementById(`f-${k.replace('N','-no').replace('T','-dep').replace('A','-arr')}`); if(el) el.value = f[k] || ''; }); } }, e => console.error(e));
+                onSnapshot(collection(db, basePath, 'blogLinks'), (snap) => { window.sharedBlogLinks = snap.docs.map(d => ({id: d.id, ...d.data()})); window.sharedBlogLinks.sort((a,b) => (b.createdAt||0) - (a.createdAt||0)); if(typeof window.renderBlogLinks === 'function') window.renderBlogLinks(); }, e => console.error(e));
             } catch (error) {
                 console.error("Firebase Sync Error", error);
                 const statusEl = document.getElementById('sync-status');
@@ -453,7 +483,7 @@
 
     <!-- 一般 UI 邏輯區 -->
     <script>
-        window.currentUser = null; window.sharedNotes = {}; window.sharedVouchers = []; window.sharedExpenses = [];
+        window.currentUser = null; window.sharedNotes = {}; window.sharedVouchers = []; window.sharedExpenses = []; window.sharedBlogLinks = [];
         window.sharedFoodStatus = {}; window.sharedCustomFood = []; window.sharedDeletedFoods = [];
         window.sharedCustomSchedules = []; window.sharedDeletedSchedules = []; window.currentDay = 1;
         window.sharedAiGuides = {}; window.aiGuideLoading = {};
@@ -1162,8 +1192,19 @@ ${itemList}`;
         window.toggleFood = async function(id, newState) { if (window.currentUser) try { await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'foodStatus', id), { checked: newState }); } catch (e) {} }
         window.addCustomFood = async function() { if (!window.currentUser) return; const name = document.getElementById('new-food-name').value.trim(); const note = document.getElementById('new-food-note').value.trim(); if (name) { try { await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'customFood'), { name, note }); document.getElementById('new-food-name').value = ''; document.getElementById('new-food-note').value = ''; showToast('已加入'); } catch(e) {} } }
         window.deleteFood = async function(id) { if (window.currentUser) try { if(id.startsWith('def_')) await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'deletedFoods', id), { timestamp: Date.now() }); else await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'customFood', id)); } catch (e) {} }
-        window.saveFlights = async function() { if (window.currentUser) { const data = { goN: document.getElementById('f-go-no').value, goT: document.getElementById('f-go-dep').value, goA: document.getElementById('f-go-arr').value, bkN: document.getElementById('f-back-no').value, bkT: document.getElementById('f-back-dep').value, bkA: document.getElementById('f-back-arr').value }; try { await window.fbSetDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'settings', 'flights'), data); showToast('☁️ 航班已同步'); } catch (e) {} } }
-        
+        window.calcFx = function(source) {
+            const rate = parseFloat(document.getElementById('fx-rate').value) || 0;
+            const usdEl = document.getElementById('fx-usd'); const thbEl = document.getElementById('fx-thb');
+            if (rate <= 0) return;
+            if (source === 'thb') {
+                const thb = parseFloat(thbEl.value);
+                usdEl.value = isNaN(thb) ? '' : (thb / rate).toFixed(2);
+            } else {
+                const usd = parseFloat(usdEl.value);
+                thbEl.value = isNaN(usd) ? '' : (usd * rate).toFixed(2);
+            }
+        }
+
         window.speakThai = function(text) { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'th-TH'; speechSynthesis.speak(utterance); } }
         window.speakCustomThai = function() { const t = document.getElementById('custom-thai-text').value.trim(); if(t) speakThai(t); }
 
@@ -1181,10 +1222,63 @@ ${itemList}`;
             if(document.getElementById('total-thb')) document.getElementById('total-thb').innerText = total.toLocaleString(); if(document.getElementById('total-twd')) document.getElementById('total-twd').innerText = Math.round(total * 0.92).toLocaleString();
         }
 
+        const blCatMeta = {
+            cafe: { label: '咖啡廳', emoji: '☕', bg: 'bg-[#FFF3E0]', text: 'text-[#B0651A]', border: 'border-[#F5C98A]' },
+            spot: { label: '景點', emoji: '📍', bg: 'bg-lavender-50', text: 'text-lavender-700', border: 'border-lavender-200' },
+            food: { label: '美食', emoji: '🍽️', bg: 'bg-[#FDF2F4]', text: 'text-dustypink-600', border: 'border-dustypink-200' },
+            shopping: { label: '購物', emoji: '🛍️', bg: 'bg-[#F1EEFB]', text: 'text-[#6E5FA8]', border: 'border-[#D6CFEF]' },
+            hotel: { label: '住宿', emoji: '🏨', bg: 'bg-[#E9F5EC]', text: 'text-[#3F8256]', border: 'border-[#A9D8B6]' },
+            other: { label: '其他', emoji: '🏷️', bg: 'bg-lavender-50', text: 'text-lavender-500', border: 'border-lavender-200' }
+        };
+        window.blCurrentFilter = 'all';
+        function escapeHtml(s) { return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        window.addBlogLink = async function() {
+            if (!window.currentUser) return;
+            const urlInput = document.getElementById('bl-url').value.trim();
+            const title = document.getElementById('bl-title').value.trim();
+            const category = document.getElementById('bl-category').value;
+            if (!urlInput) { showToast('請輸入網址'); return; }
+            const url = /^https?:\/\//i.test(urlInput) ? urlInput : ('https://' + urlInput);
+            try {
+                await window.fbAddDoc(window.fbCollection(window.fbDb, window.fbBasePath, 'blogLinks'), { url, title, category, createdAt: Date.now() });
+                document.getElementById('bl-url').value = ''; document.getElementById('bl-title').value = '';
+                showToast('☁️ 已加入收藏');
+            } catch (e) {}
+        }
+        window.delBlogLink = async function(id) { if (window.currentUser) try { await window.fbDeleteDoc(window.fbDoc(window.fbDb, window.fbBasePath, 'blogLinks', id)); } catch (e) {} }
+        window.filterBlogLinks = function(cat) {
+            window.blCurrentFilter = cat;
+            document.querySelectorAll('.bl-filter-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) { btn.classList.add('bg-lavender-600', 'text-white'); btn.classList.remove('bg-white', 'border', 'border-lavender-200', 'text-lavender-700'); }
+                else { btn.classList.remove('bg-lavender-600', 'text-white'); btn.classList.add('bg-white', 'border', 'border-lavender-200', 'text-lavender-700'); }
+            });
+            window.renderBlogLinks();
+        }
+        window.renderBlogLinks = function() {
+            const list = document.getElementById('bloglink-list'); if (!list) return;
+            const items = (window.sharedBlogLinks || []).filter(l => window.blCurrentFilter === 'all' || l.category === window.blCurrentFilter);
+            if (items.length === 0) { list.innerHTML = `<div class="text-center text-lavender-300 text-xs py-10">目前沒有收藏的連結</div>`; return; }
+            list.innerHTML = '';
+            items.forEach(l => {
+                const meta = blCatMeta[l.category] || blCatMeta.other;
+                list.innerHTML += `<div class="bg-white p-4 rounded-2xl border-[2px] border-lavender-100 shadow-sm">
+                    <div class="flex justify-between items-start gap-2">
+                        <a href="${escapeHtml(l.url)}" target="_blank" class="flex-1 min-w-0">
+                            <span class="inline-block ${meta.bg} ${meta.text} border ${meta.border} text-[10px] font-bold px-2.5 py-1 rounded-full mb-2">${meta.emoji} ${meta.label}</span>
+                            <div class="text-[13px] font-bold text-lavender-800 leading-snug break-words">${escapeHtml(l.title) || '(未命名)'}</div>
+                            <div class="text-[10.5px] text-lavender-400 mt-1 break-all">${escapeHtml(l.url)}</div>
+                        </a>
+                        <button onclick="delBlogLink('${l.id}')" class="text-lavender-400 hover:text-dustypink-500 bg-lavender-50 w-8 h-8 rounded-full flex items-center justify-center transition shadow-sm flex-none">✕</button>
+                    </div>
+                </div>`;
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             if (typeof window.selectDay === 'function') window.selectDay(1);
             if (typeof window.renderFood === 'function') window.renderFood();
             if (typeof window.renderExpenses === 'function') window.renderExpenses();
+            if (typeof window.renderBlogLinks === 'function') window.renderBlogLinks();
             const fabBunny = document.getElementById('chat-fab-bunny');
             if (fabBunny) fabBunny.innerHTML = grassHatBunnySmallSvg;
             const headerBunny = document.getElementById('chat-header-bunny');
