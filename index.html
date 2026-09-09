@@ -1183,7 +1183,7 @@ ${itemList}`;
         }
 
         // ---- 預覽縮放控制 ----
-        window.pvZoom = { scale: 1, min: 0.5, max: 4 };
+        window.pvZoom = { scale: 1, min: 0.25, max: 4 };
         function pvApplyZoom() {
             const inner = document.getElementById('pv-zoom-inner');
             if (inner) inner.style.transform = `scale(${window.pvZoom.scale})`;
